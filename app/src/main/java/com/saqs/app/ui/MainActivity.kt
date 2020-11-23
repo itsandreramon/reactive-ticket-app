@@ -5,10 +5,11 @@
  * University of Applied Sciences Brandenburg
  */
 
-package com.saqs.app
+package com.saqs.app.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.saqs.app.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
