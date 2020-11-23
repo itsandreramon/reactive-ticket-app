@@ -48,10 +48,4 @@ subprojects {
             licenseHeaderFile project.rootProject.file('spotless/copyright.kt')
         }
     }
-
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
-    }
 }
