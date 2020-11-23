@@ -1,24 +1,24 @@
 plugins {
     id 'com.android.application'
-    id 'dagger.hilt.android.plugin'
-    id 'androidx.navigation.safeargs'
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.20'
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.20'
 }
 
 android {
-    compileSdkVersion 30
     buildToolsVersion "30.0.2"
+    compileSdkVersion buildConfig.compileSdk
 
     defaultConfig {
-        applicationId "com.saqs.app"
-        minSdkVersion 16
-        targetSdkVersion 30
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+
         versionCode 1
         versionName "1.0"
-
+        applicationId "com.saqs.app"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
