@@ -68,6 +68,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun initViewStates() {
+        viewModel.state.counter.onEach { state ->
+            binding.tvCounter.text = state.toString()
+        }.launchIn(lifecycleScope)
     }
 
     private fun showToastMessage() {

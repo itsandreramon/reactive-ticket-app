@@ -17,12 +17,19 @@ import com.saqs.app.ui.home.model.HomeViewEffect
 import com.saqs.app.ui.home.model.HomeViewEffectType.ShowSnackBarEffect
 import com.saqs.app.ui.home.model.HomeViewEvent
 import com.saqs.app.ui.home.model.HomeViewEventType.NavigateHello
+import com.saqs.app.ui.home.model.HomeViewState
 import com.saqs.app.ui.home.model._HomeViewEffect
+import com.saqs.app.ui.home.model._HomeViewState
 import kotlinx.coroutines.launch
 
 class HomeViewModel @ViewModelInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel(), HomeViewEvent {
+
+    private val COUNTER_KEY = "counter"
+
+    private val _state = _HomeViewState()
+    val state = HomeViewState(_state)
 
     private val _effect = _HomeViewEffect()
     val effect = HomeViewEffect(_effect)
@@ -34,6 +41,7 @@ class HomeViewModel @ViewModelInject constructor(
     override fun navigateHello(event: NavigateHello) {
         viewModelScope.launch {
             _effect._showSnackBar.emit(ShowSnackBarEffect)
+            _state._counter.emit(state.counter.value + 1)
         }
     }
 }
