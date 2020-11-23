@@ -7,18 +7,33 @@
 
 package com.saqs.app.ui.home.viewmodel
 
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.saqs.app.ui.home.HomeFragment
+import com.saqs.app.ui.home.model.HomeViewEffect
+import com.saqs.app.ui.home.model.HomeViewEffectType.ShowSnackBarEffect
 import com.saqs.app.ui.home.model.HomeViewEvent
 import com.saqs.app.ui.home.model.HomeViewEventType.NavigateHello
+import com.saqs.app.ui.home.model._HomeViewEffect
+import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel(), HomeViewEvent {
+class HomeViewModel @ViewModelInject constructor(
+    @Assisted private val savedStateHandle: SavedStateHandle
+) : ViewModel(), HomeViewEvent {
+
+    private val _effect = _HomeViewEffect()
+    val effect = HomeViewEffect(_effect)
 
     fun attachEvents(fragment: HomeFragment) {
         fragment.attachViewEvents(this)
     }
 
     override fun navigateHello(event: NavigateHello) {
-        TODO("Not yet implemented")
+        viewModelScope.launch {
+            _effect._showSnackBar.emit(ShowSnackBarEffect)
+        }
     }
 }

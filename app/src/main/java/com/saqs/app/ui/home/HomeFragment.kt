@@ -11,17 +11,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.saqs.app.databinding.FragmentHomeBinding
 import com.saqs.app.ui.home.model.HomeViewEvent
+import com.saqs.app.ui.home.model.HomeViewEventType.NavigateHello
 import com.saqs.app.ui.home.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-    @Inject lateinit var viewModel: HomeViewModel
+    private val viewModel: HomeViewModel by viewModels()
     private lateinit var viewEvent: HomeViewEvent
 
     private var _binding: FragmentHomeBinding? = null
@@ -37,15 +42,35 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        viewModel.attachEvents(this)
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvHelloWorld.text = "Hello, world! (with ViewBinding!)"
+        initViewEffects()
+        initViewStates()
+
+        binding.btnHello.setOnClickListener {
+            viewEvent.navigateHello(NavigateHello)
+        }
     }
 
-    fun attachEvents(viewEvent: HomeViewEvent) {
+    fun attachViewEvents(viewEvent: HomeViewEvent) {
+        this.viewEvent = viewEvent
+    }
+
+    private fun initViewEffects() {
+        viewModel.effect.showSnackBar.onEach { effect ->
+            showToastMessage()
+        }.launchIn(lifecycleScope)
+    }
+
+    private fun initViewStates() {
+    }
+
+    private fun showToastMessage() {
+        Toast.makeText(requireContext(), "Hello SharedFlow", Toast.LENGTH_SHORT).show()
     }
 }
