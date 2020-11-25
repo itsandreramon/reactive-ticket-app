@@ -13,14 +13,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saqs.app.ui.home.HomeFragment
-import com.saqs.app.ui.home.model.HomeViewEffect
+import com.saqs.app.ui.home.model.*
 import com.saqs.app.ui.home.model.HomeViewEffectType.ShowSnackBarEffect
-import com.saqs.app.ui.home.model.HomeViewEvent
+import com.saqs.app.ui.home.model.HomeViewEventType.NavigateEventItem
 import com.saqs.app.ui.home.model.HomeViewEventType.NavigateHello
-import com.saqs.app.ui.home.model.HomeViewState
-import com.saqs.app.ui.home.model._HomeViewEffect
-import com.saqs.app.ui.home.model._HomeViewState
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class HomeViewModel @ViewModelInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle
@@ -40,6 +38,12 @@ class HomeViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             _effect._showSnackBar.emit(ShowSnackBarEffect)
             _state._counter.emit(state.counter.value + 1)
+        }
+    }
+
+    override fun navigateEventItem(event: NavigateEventItem) {
+        viewModelScope.launch {
+            Timber.e("Navigate to event!")
         }
     }
 }
