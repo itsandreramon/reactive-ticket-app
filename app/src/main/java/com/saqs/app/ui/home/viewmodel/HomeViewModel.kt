@@ -26,8 +26,6 @@ class HomeViewModel @ViewModelInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel(), HomeViewEvent {
 
-    private val COUNTER_KEY = "counter"
-
     private val _state = _HomeViewState()
     val state = HomeViewState(_state)
 
