@@ -63,7 +63,8 @@ class EventItemAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        val availabilityInPercent = getItem(position).availableTicketsInPercent
+        // val availabilityInPercent = getItem(position).availableTicketsInPercent
+        val availabilityInPercent = 0.5F
 
         if (availabilityInPercent in 0.5F..1.0F) {
             return TYPE_GREEN

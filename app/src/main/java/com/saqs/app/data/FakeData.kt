@@ -12,12 +12,7 @@ class FakeData(
     val eventGenerator: Flow<Event> = flow {
         while (true) {
             delay(1000)
-            emit(
-                Event(
-                    name = UUID.randomUUID().toString(),
-                    availableTicketsInPercent = Random.nextDouble(0.0, 1.0).toFloat()
-                )
-            )
+            // TODO
         }
     }
 )

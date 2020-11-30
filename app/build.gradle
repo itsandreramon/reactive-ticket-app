@@ -47,6 +47,12 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
@@ -72,6 +78,10 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version"
 
     implementation "com.jakewharton.timber:timber:$timber_version"
+
+    testImplementation "io.mockk:mockk:$mockk_version"
+    testImplementation "io.kotest:kotest-runner-junit5:$kotest_version"
+    testImplementation "io.kotest:kotest-assertions-core:$kotest_version"
 
     testImplementation "junit:junit:4.13.1"
     androidTestImplementation "androidx.test.ext:junit:1.1.2"
