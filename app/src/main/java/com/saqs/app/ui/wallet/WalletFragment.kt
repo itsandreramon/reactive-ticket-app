@@ -16,7 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.saqs.app.databinding.FragmentHomeBinding
+import com.saqs.app.databinding.FragmentWalletBinding
 import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.wallet.adapter.TicketItemAdapter
 import com.saqs.app.ui.wallet.model.WalletViewEvent
@@ -34,7 +34,7 @@ class WalletFragment : Fragment(), TicketItemAdapter.TicketItemClickListener {
     private val viewModel by viewModels<WalletViewModel>()
     private lateinit var viewEvent: WalletViewEvent
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentWalletBinding? = null
     private val binding get() = _binding!!
 
     override fun onDestroyView() {
@@ -48,7 +48,7 @@ class WalletFragment : Fragment(), TicketItemAdapter.TicketItemClickListener {
         savedInstanceState: Bundle?
     ): View {
         viewModel.attachEvents(this)
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentWalletBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -81,7 +81,7 @@ class WalletFragment : Fragment(), TicketItemAdapter.TicketItemClickListener {
         viewManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         viewAdapter = TicketItemAdapter(this, requireContext())
 
-        binding.recyclerViewEventItems.apply {
+        binding.recyclerViewTicketItems.apply {
             layoutManager = viewManager
             adapter = viewAdapter
         }
