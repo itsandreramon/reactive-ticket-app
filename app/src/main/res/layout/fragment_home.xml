@@ -25,6 +25,6 @@
         android:id="@+id/recycler_view_event_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/view_holder_event_item" />
+        tools:listitem="@layout/view_holder_event_item_green" />
 
 </LinearLayout>

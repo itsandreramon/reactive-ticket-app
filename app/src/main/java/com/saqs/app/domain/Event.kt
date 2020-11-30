@@ -2,6 +2,7 @@ package com.saqs.app.domain
 
 import android.os.Parcelable
 import androidx.recyclerview.widget.DiffUtil
+import com.saqs.app.util.round
 import kotlinx.parcelize.Parcelize
 import java.time.ZonedDateTime
 import kotlin.math.round
@@ -20,11 +21,9 @@ class Event(
 ) : Parcelable {
 
     val availableTicketsPercentage: Double
-    get() = round(
-        availableTickets.toDouble()
-            .div(availableTicketsOverall.toDouble().times(100))
-    )
-
+        get() = availableTickets.toDouble()
+            .div(availableTicketsOverall.toDouble())
+            .round(2)
 }
 
 class EventDiffCallback : DiffUtil.ItemCallback<Event>() {

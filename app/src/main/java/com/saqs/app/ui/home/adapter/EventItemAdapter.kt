@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.saqs.app.databinding.ViewHolderEventItemBinding
+import com.saqs.app.databinding.ViewHolderEventItemGreenBinding
+import com.saqs.app.databinding.ViewHolderEventItemRedBinding
+import com.saqs.app.databinding.ViewHolderEventItemYellowBinding
 import com.saqs.app.domain.Event
 import com.saqs.app.domain.EventDiffCallback
 
@@ -19,22 +21,22 @@ class EventItemAdapter(
 
         return when (viewType) {
             TYPE_GREEN -> {
-                val binding = ViewHolderEventItemBinding.inflate(layoutInflater, parent, false)
-                EventItemViewHolder(
+                val binding = ViewHolderEventItemGreenBinding.inflate(layoutInflater, parent, false)
+                EventItemViewHolderGreen(
                     parent.context,
                     binding
                 )
             }
             TYPE_YELLOW -> {
-                val binding = ViewHolderEventItemBinding.inflate(layoutInflater, parent, false)
-                EventItemViewHolder(
+                val binding = ViewHolderEventItemYellowBinding.inflate(layoutInflater, parent, false)
+                EventItemViewHolderYellow(
                     parent.context,
                     binding
                 )
             }
             TYPE_RED -> {
-                val binding = ViewHolderEventItemBinding.inflate(layoutInflater, parent, false)
-                EventItemViewHolder(
+                val binding = ViewHolderEventItemRedBinding.inflate(layoutInflater, parent, false)
+                EventItemViewHolderRed(
                     parent.context,
                     binding
                 )
@@ -48,13 +50,13 @@ class EventItemAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
             TYPE_GREEN -> {
-                (holder as EventItemViewHolder).bind(getItem(position), TYPE_GREEN, listener)
+                (holder as EventItemViewHolderGreen).bind(getItem(position), listener)
             }
             TYPE_YELLOW -> {
-                (holder as EventItemViewHolder).bind(getItem(position), TYPE_YELLOW, listener)
+                (holder as EventItemViewHolderYellow).bind(getItem(position), listener)
             }
             TYPE_RED -> {
-                (holder as EventItemViewHolder).bind(getItem(position), TYPE_RED, listener)
+                (holder as EventItemViewHolderRed).bind(getItem(position), listener)
             }
             else -> {
                 throw IllegalStateException("Invalid view type: ${getItemViewType(position)}")
@@ -63,8 +65,7 @@ class EventItemAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        // val availabilityInPercent = getItem(position).availableTicketsInPercent
-        val availabilityInPercent = 0.5F
+        val availabilityInPercent = getItem(position).availableTicketsPercentage
 
         if (availabilityInPercent in 0.5F..1.0F) {
             return TYPE_GREEN
