@@ -29,5 +29,8 @@
         <item name="emphasisMediumAlpha">0.40</item>
         <item name="emphasisLowAlpha">0.15</item>
         <item name="emphasisDisabledAlpha">0.30</item>
+
+        <item name="android:statusBarColor">?android:colorBackground</item>
+        <item name="android:windowLightStatusBar">@bool/isLightMode</item>
     </style>
 </resources>
