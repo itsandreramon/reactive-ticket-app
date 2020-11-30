@@ -59,12 +59,9 @@ class HomeFragment : Fragment(), EventItemAdapter.EventItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupEventItemAdapter()
         initViewEffects()
         initViewStates()
-
-        setupEventItemAdapter()
-
-        viewAdapter.submitList(FakeData().events)
     }
 
     fun attachViewEvents(viewEvent: HomeViewEvent) {
@@ -76,6 +73,9 @@ class HomeFragment : Fragment(), EventItemAdapter.EventItemClickListener {
     }
 
     private fun initViewStates() {
+        viewModel.state.events.onEach { state ->
+            viewAdapter.submitList(state)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun onEventItemClicked(eventItem: Event) {

@@ -7,13 +7,14 @@
 
 package com.saqs.app.ui.home.model
 
+import com.saqs.app.domain.Event
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 data class _HomeViewState(
-    val _counter: MutableStateFlow<Int> = MutableStateFlow(0)
+    val _events: MutableStateFlow<List<Event>> = MutableStateFlow(listOf())
 )
 
 data class HomeViewState(private val _state: _HomeViewState) {
-    val counter: StateFlow<Int> = _state._counter
+    val events: StateFlow<List<Event>> = _state._events
 }
