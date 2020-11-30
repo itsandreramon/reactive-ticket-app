@@ -6,8 +6,13 @@
     app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/exploreFragment"
         android:name="com.saqs.app.ui.explore.ExploreFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_explore" />
+    <fragment
+        android:id="@+id/walletFragment"
+        android:name="com.saqs.app.ui.wallet.WalletFragment"
+        android:label="WalletFragment"
+        tools:layout="@layout/fragment_wallet" />
 </navigation>

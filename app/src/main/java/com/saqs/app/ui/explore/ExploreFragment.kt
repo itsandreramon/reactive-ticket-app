@@ -17,7 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.saqs.app.databinding.FragmentHomeBinding
+import com.saqs.app.databinding.FragmentExploreBinding
 import com.saqs.app.domain.Event
 import com.saqs.app.ui.explore.adapter.EventItemAdapter
 import com.saqs.app.ui.explore.model.ExploreViewEvent
@@ -36,7 +36,7 @@ class ExploreFragment : Fragment(), EventItemAdapter.EventItemClickListener {
     private val viewModel by viewModels<ExploreViewModel>()
     private lateinit var viewEvent: ExploreViewEvent
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentExploreBinding? = null
     private val binding get() = _binding!!
 
     override fun onDestroyView() {
@@ -50,7 +50,7 @@ class ExploreFragment : Fragment(), EventItemAdapter.EventItemClickListener {
         savedInstanceState: Bundle?
     ): View {
         viewModel.attachEvents(this)
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentExploreBinding.inflate(inflater, container, false)
         return binding.root
     }
 
