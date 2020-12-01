@@ -13,7 +13,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class FakeData(
+object FakeData {
     val eventGenerator: Flow<Event> = flow {
         (0..10).forEach { _ ->
             delay(2000)
@@ -25,4 +25,4 @@ class FakeData(
             )
         }
     }
-)
+}

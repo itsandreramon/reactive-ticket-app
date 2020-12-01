@@ -9,11 +9,23 @@
         android:id="@+id/exploreFragment"
         android:name="com.saqs.app.ui.explore.ExploreFragment"
         android:label="ExploreFragment"
-        tools:layout="@layout/fragment_explore" />
-
+        tools:layout="@layout/fragment_explore" >
+        <action
+            android:id="@+id/action_exploreFragment_to_purchaseTicketActivity"
+            app:destination="@id/purchaseTicketActivity" />
+    </fragment>
     <fragment
         android:id="@+id/walletFragment"
         android:name="com.saqs.app.ui.wallet.WalletFragment"
         android:label="WalletFragment"
         tools:layout="@layout/fragment_wallet" />
+    <activity
+        android:id="@+id/purchaseTicketActivity"
+        android:name="com.saqs.app.ui.purchase.PurchaseTicketActivity"
+        android:label="activity_purchase_ticket"
+        tools:layout="@layout/activity_purchase_ticket" >
+        <argument
+            android:name="eventId"
+            app:argType="integer" />
+    </activity>
 </navigation>

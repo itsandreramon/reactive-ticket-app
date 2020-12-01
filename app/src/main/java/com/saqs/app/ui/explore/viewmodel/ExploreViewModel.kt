@@ -15,6 +15,7 @@ import androidx.lifecycle.viewModelScope
 import com.saqs.app.data.FakeData
 import com.saqs.app.ui.explore.ExploreFragment
 import com.saqs.app.ui.explore.model.ExploreViewEffect
+import com.saqs.app.ui.explore.model.ExploreViewEffectType.PurchaseTicketEffect
 import com.saqs.app.ui.explore.model.ExploreViewEvent
 import com.saqs.app.ui.explore.model.ExploreViewState
 import com.saqs.app.ui.explore.model.HomeViewEventType.NavigateEventItem
@@ -23,7 +24,6 @@ import com.saqs.app.ui.explore.model._ExploreViewState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class ExploreViewModel @ViewModelInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle
@@ -36,7 +36,7 @@ class ExploreViewModel @ViewModelInject constructor(
     val effect = ExploreViewEffect(_effect)
 
     init {
-        FakeData().eventGenerator.onEach { event ->
+        FakeData.eventGenerator.onEach { event ->
             _state._events.value = buildList {
                 addAll(_state._events.value)
                 add(event)
@@ -50,7 +50,7 @@ class ExploreViewModel @ViewModelInject constructor(
 
     override fun navigateEventItem(event: NavigateEventItem) {
         viewModelScope.launch {
-            Timber.e("Navigate to event!")
+            _effect._purchaseTicket.emit(PurchaseTicketEffect(event.eventItem.id))
         }
     }
 }

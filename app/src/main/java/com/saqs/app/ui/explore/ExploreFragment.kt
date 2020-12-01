@@ -11,14 +11,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.saqs.app.databinding.FragmentExploreBinding
 import com.saqs.app.domain.Event
+import com.saqs.app.ui.explore.ExploreFragmentDirections.actionExploreFragmentToPurchaseTicketActivity
 import com.saqs.app.ui.explore.adapter.EventItemAdapter
 import com.saqs.app.ui.explore.model.ExploreViewEvent
 import com.saqs.app.ui.explore.model.HomeViewEventType.NavigateEventItem
@@ -66,6 +67,11 @@ class ExploreFragment : Fragment(), EventItemAdapter.EventItemClickListener {
     }
 
     private fun initViewEffects() {
+        viewModel.effect.purchaseTicket.onEach { effect ->
+            actionExploreFragmentToPurchaseTicketActivity(
+                effect.eventId
+            ).also { findNavController().navigate(it) }
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun initViewStates() {
@@ -76,10 +82,6 @@ class ExploreFragment : Fragment(), EventItemAdapter.EventItemClickListener {
 
     override fun onEventItemClicked(eventItem: Event) {
         viewEvent.navigateEventItem(NavigateEventItem(eventItem))
-    }
-
-    private fun showToastMessage() {
-        Toast.makeText(requireContext(), "Hello SharedFlow", Toast.LENGTH_SHORT).show()
     }
 
     private fun setupEventItemAdapter() {
