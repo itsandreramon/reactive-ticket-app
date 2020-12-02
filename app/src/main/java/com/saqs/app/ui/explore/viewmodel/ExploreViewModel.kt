@@ -24,6 +24,7 @@ import com.saqs.app.ui.explore.model._ExploreViewState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class ExploreViewModel @ViewModelInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle
@@ -36,6 +37,8 @@ class ExploreViewModel @ViewModelInject constructor(
     val effect = ExploreViewEffect(_effect)
 
     init {
+        Timber.e("ViewModel: $this")
+
         FakeData.eventGenerator.onEach { event ->
             _state._events.value = buildList {
                 addAll(_state._events.value)
