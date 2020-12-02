@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.saqs.app.databinding.ViewHolderEventItemBinding
 import com.saqs.app.domain.Event
 import com.saqs.app.extensions.loadImageElsePlaceholder
+import com.saqs.app.util.DateUtils
 
 class EventItemViewHolder(
     private val context: Context,
@@ -24,6 +25,9 @@ class EventItemViewHolder(
         }
 
         binding.ivImage.loadImageElsePlaceholder()
+
+        binding.tvTitle.text = eventItem.id.toString()
+        binding.tvLocation.text = DateUtils.toLocalString(eventItem.date)
 
         val availabilityInPercent = eventItem.availableTicketsPercentage
     }
