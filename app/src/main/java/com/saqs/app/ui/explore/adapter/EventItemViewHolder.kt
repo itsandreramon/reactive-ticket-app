@@ -25,7 +25,6 @@ class EventItemViewHolder(
         }
 
         binding.ivImage.loadImageElsePlaceholder()
-
         binding.tvTitle.text = eventItem.id.toString()
         binding.tvLocation.text = DateUtils.toLocalString(eventItem.date)
 
