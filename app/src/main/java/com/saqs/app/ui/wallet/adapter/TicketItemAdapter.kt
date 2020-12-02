@@ -12,7 +12,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.saqs.app.databinding.ViewHolderEventItemGreenBinding
+import com.saqs.app.databinding.ViewHolderTicketItemBinding
 import com.saqs.app.domain.Ticket
 import com.saqs.app.domain.TicketDiffCallback
 
@@ -23,7 +23,7 @@ class TicketItemAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ViewHolderEventItemGreenBinding.inflate(layoutInflater, parent, false)
+        val binding = ViewHolderTicketItemBinding.inflate(layoutInflater, parent, false)
 
         return TicketItemViewHolder(
             parent.context,

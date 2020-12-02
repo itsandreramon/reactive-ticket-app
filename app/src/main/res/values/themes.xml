@@ -11,6 +11,10 @@
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
 
+        <!-- Custom styles -->
+        <item name="toolbarStyle">@style/Widget.App.Toolbar</item>
+        <item name="materialButtonStyle">@style/Widget.App.Button</item>
+
         <!--Typography-->
         <item name="textAppearanceHeadline2">@style/TextAppearance.App.Headline2</item>
         <item name="textAppearanceHeadline3">@style/TextAppearance.App.Headline3</item>

@@ -9,17 +9,22 @@ package com.saqs.app.ui.explore.adapter
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import com.saqs.app.databinding.ViewHolderEventItemYellowBinding
+import com.saqs.app.databinding.ViewHolderEventItemBinding
 import com.saqs.app.domain.Event
+import com.saqs.app.extensions.loadImageElsePlaceholder
 
-class EventItemViewHolderYellow(
+class EventItemViewHolder(
     private val context: Context,
-    private val binding: ViewHolderEventItemYellowBinding
+    private val binding: ViewHolderEventItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(eventItem: Event, listener: EventItemAdapter.EventItemClickListener) {
-        binding.root.setOnClickListener {
+        binding.btnBuy.setOnClickListener {
             listener.onEventItemClicked(eventItem)
         }
+
+        binding.ivImage.loadImageElsePlaceholder()
+
+        val availabilityInPercent = eventItem.availableTicketsPercentage
     }
 }
