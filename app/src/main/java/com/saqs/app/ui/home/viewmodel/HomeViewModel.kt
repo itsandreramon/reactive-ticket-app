@@ -16,6 +16,7 @@ import com.saqs.app.data.FakeData
 import com.saqs.app.domain.Event
 import com.saqs.app.ui.home.HomeFragment
 import com.saqs.app.ui.home.model.*
+//import com.saqs.app.ui.home.model.*
 import com.saqs.app.ui.home.model.HomeViewEffectType.ShowSnackBarEffect
 import com.saqs.app.ui.home.model.HomeViewEventType.NavigateEventItem
 import com.saqs.app.ui.home.model.HomeViewEventType.NavigateHello
