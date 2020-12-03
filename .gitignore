@@ -17,6 +17,3 @@ captures/
 
 # Local configuration file (sdk path, etc)
 local.properties
-
-# API keys
-google-services.json
