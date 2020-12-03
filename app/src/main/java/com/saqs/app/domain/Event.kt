@@ -2,10 +2,10 @@ package com.saqs.app.domain
 
 import android.os.Parcelable
 import androidx.recyclerview.widget.DiffUtil
+import com.google.firebase.firestore.FirebaseFirestore
 import com.saqs.app.util.round
 import kotlinx.parcelize.Parcelize
 import java.time.ZonedDateTime
-import kotlin.math.round
 
 @Parcelize
 class Event(
@@ -24,6 +24,10 @@ class Event(
         get() = availableTickets.toDouble()
             .div(availableTicketsOverall.toDouble())
             .round(2)
+
+    fun updateSelf(){
+        val db = FirebaseFirestore.getInstance()
+    }
 }
 
 class EventDiffCallback : DiffUtil.ItemCallback<Event>() {

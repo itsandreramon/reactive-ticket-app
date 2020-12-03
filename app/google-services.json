@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:999919913863:android:a8bf2af8505b2010b2a122",
         "android_client_info": {
-          "package_name": "com.saqs.app"
+          "package_name": "com.saqs.app.debug"
         }
       },
       "oauth_client": [
