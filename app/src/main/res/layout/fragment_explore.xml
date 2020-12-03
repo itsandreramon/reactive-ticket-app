@@ -15,8 +15,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="More Fonts..."
-            android:text="Events"
+            android:text="@string/title_fragment_explore"
             android:textAppearance="?textAppearanceHeadline4" />
 
     </RelativeLayout>
@@ -25,6 +24,6 @@
         android:id="@+id/recycler_view_event_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/view_holder_event_item_green" />
+        tools:listitem="@layout/view_holder_event_item" />
 
 </LinearLayout>

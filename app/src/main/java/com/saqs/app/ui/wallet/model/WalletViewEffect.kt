@@ -5,20 +5,20 @@
  * University of Applied Sciences Brandenburg
  */
 
-package com.saqs.app.ui.home.model
+package com.saqs.app.ui.wallet.model
 
-import com.saqs.app.ui.home.model.HomeViewEffectType.ShowSnackBarEffect
+import com.saqs.app.ui.wallet.model.WalletViewEffectType.ShowSnackBarEffect
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 
-class _HomeViewEffect(
+class _WalletViewEffect(
     val _showSnackBar: MutableSharedFlow<ShowSnackBarEffect> = MutableSharedFlow()
 )
 
-class HomeViewEffect(_effect: _HomeViewEffect) {
+class WalletViewEffect(_effect: _WalletViewEffect) {
     val showSnackBar: SharedFlow<ShowSnackBarEffect> = _effect._showSnackBar
 }
 
-sealed class HomeViewEffectType {
-    object ShowSnackBarEffect : HomeViewEffectType()
+sealed class WalletViewEffectType {
+    object ShowSnackBarEffect : WalletViewEffectType()
 }

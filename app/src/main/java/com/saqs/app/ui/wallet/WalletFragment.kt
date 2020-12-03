@@ -5,41 +5,36 @@
  * University of Applied Sciences Brandenburg
  */
 
-package com.saqs.app.ui.home
+package com.saqs.app.ui.wallet
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.saqs.app.data.FakeData
-import com.saqs.app.databinding.FragmentHomeBinding
-import com.saqs.app.domain.Event
-import com.saqs.app.ui.home.adapter.EventItemAdapter
-import com.saqs.app.ui.home.model.HomeViewEvent
-import com.saqs.app.ui.home.model.HomeViewEventType
-import com.saqs.app.ui.home.model.HomeViewEventType.NavigateEventItem
-import com.saqs.app.ui.home.model.HomeViewEventType.NavigateHello
-import com.saqs.app.ui.home.viewmodel.HomeViewModel
+import com.saqs.app.databinding.FragmentWalletBinding
+import com.saqs.app.domain.Ticket
+import com.saqs.app.ui.wallet.adapter.TicketItemAdapter
+import com.saqs.app.ui.wallet.model.WalletViewEvent
+import com.saqs.app.ui.wallet.viewmodel.WalletViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), EventItemAdapter.EventItemClickListener {
+class WalletFragment : Fragment(), TicketItemAdapter.TicketItemClickListener {
 
-    private lateinit var viewAdapter: EventItemAdapter
+    private lateinit var viewAdapter: TicketItemAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    private val viewModel by viewModels<HomeViewModel>()
-    private lateinit var viewEvent: HomeViewEvent
+    private val viewModel by viewModels<WalletViewModel>()
+    private lateinit var viewEvent: WalletViewEvent
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentWalletBinding? = null
     private val binding get() = _binding!!
 
     override fun onDestroyView() {
@@ -53,7 +48,7 @@ class HomeFragment : Fragment(), EventItemAdapter.EventItemClickListener {
         savedInstanceState: Bundle?
     ): View {
         viewModel.attachEvents(this)
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentWalletBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -64,33 +59,29 @@ class HomeFragment : Fragment(), EventItemAdapter.EventItemClickListener {
         initViewStates()
     }
 
-    fun attachViewEvents(viewEvent: HomeViewEvent) {
+    fun attachViewEvents(viewEvent: WalletViewEvent) {
         this.viewEvent = viewEvent
     }
 
     private fun initViewEffects() {
-
     }
 
     private fun initViewStates() {
-        viewModel.state.events.onEach { state ->
+        viewModel.state.tickets.onEach { state ->
+            // TODO
             viewAdapter.submitList(state)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
-    override fun onEventItemClicked(eventItem: Event) {
-        viewEvent.navigateEventItem(NavigateEventItem(eventItem))
-    }
-
-    private fun showToastMessage() {
-        Toast.makeText(requireContext(), "Hello SharedFlow", Toast.LENGTH_SHORT).show()
+    override fun onTicketItemClicked(ticketItem: Ticket) {
+        // TODO
     }
 
     private fun setupEventItemAdapter() {
         viewManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        viewAdapter = EventItemAdapter(this, requireContext())
+        viewAdapter = TicketItemAdapter(this, requireContext())
 
-        binding.recyclerViewEventItems.apply {
+        binding.recyclerViewTicketItems.apply {
             layoutManager = viewManager
             adapter = viewAdapter
         }
