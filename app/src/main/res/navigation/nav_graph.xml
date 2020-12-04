@@ -26,6 +26,6 @@
         tools:layout="@layout/activity_purchase_ticket" >
         <argument
             android:name="eventId"
-            app:argType="integer" />
+            app:argType="string" />
     </activity>
 </navigation>

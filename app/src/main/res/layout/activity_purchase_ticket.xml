@@ -11,7 +11,7 @@
         android:id="@+id/appbar"
         android:backgroundTint="?colorSurface"
         android:layout_width="match_parent"
-        android:layout_height="128dp">
+        android:layout_height="196dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
@@ -21,7 +21,7 @@
             app:expandedTitleMarginStart="16dp"
             app:expandedTitleTextAppearance="?textAppearanceHeadline4"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:title="@string/title_activity_purchase">
+            app:title="GamesCom">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -39,16 +39,72 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-
-        <TextView
-            android:id="@+id/tv_test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:padding="@dimen/margin_medium"
-            android:textAppearance="?textAppearanceBody1"
-            tools:text="2" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_title_event_location"
+                android:textAppearance="?textAppearanceHeadline6"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Mercedes-Benz Arena"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tv_event_address"
+                android:textAppearance="?textAppearanceBody2"
+                android:text="Mercedes-Benz Platz 1, 10243 Berlin"
+                app:layout_constraintTop_toBottomOf="@id/tv_title_event_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:textColor="@color/color_on_surface_emphasis_high"
+                android:layout_marginTop="@dimen/margin_large"
+                android:textAppearance="?textAppearanceHeadline6"
+                android:text="Available"
+                android:id="@+id/tv_title_amount_available"
+                app:layout_constraintTop_toBottomOf="@id/tv_event_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tv_amount_available"
+                android:text="10 of 1000"
+                app:layout_constraintTop_toBottomOf="@id/tv_title_amount_available"
+                android:textAppearance="?textAppearanceBody2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:text="Amount"
+                android:textAppearance="?textAppearanceHeadline6"
+                android:layout_marginTop="@dimen/margin_large"
+                app:layout_constraintTop_toBottomOf="@id/tv_amount_available"
+                android:id="@+id/tv_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <NumberPicker
+                android:id="@+id/number_picker_amount"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 
+    <com.google.android.material.button.MaterialButton
+        android:padding="@dimen/margin_medium"
+        android:text="Buy"
+        android:layout_margin="@dimen/margin_medium"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

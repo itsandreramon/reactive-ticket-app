@@ -32,6 +32,9 @@ class PurchaseTicketActivity : AppCompatActivity() {
             setDisplayShowTitleEnabled(false)
         }
 
-        binding.tvTest.text = args.eventId.toString()
+        binding.numberPickerAmount.apply {
+            maxValue = 10
+            minValue = 1
+        }
     }
 }

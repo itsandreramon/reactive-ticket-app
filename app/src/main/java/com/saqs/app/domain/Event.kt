@@ -15,7 +15,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class Event(
-    val id: Int = 0,
+    val id: String = "-1",
 
     val name: String = "",
 

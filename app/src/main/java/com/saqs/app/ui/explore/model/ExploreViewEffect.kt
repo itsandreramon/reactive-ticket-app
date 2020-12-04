@@ -20,5 +20,5 @@ class ExploreViewEffect(_effect: _ExploreViewEffect) {
 }
 
 sealed class ExploreViewEffectType {
-    data class PurchaseTicketEffect(val eventId: Int) : ExploreViewEffectType()
+    data class PurchaseTicketEffect(val eventId: String) : ExploreViewEffectType()
 }

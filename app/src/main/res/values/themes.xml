@@ -34,6 +34,10 @@
         <item name="emphasisLowAlpha">0.15</item>
         <item name="emphasisDisabledAlpha">0.30</item>
 
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.App.LargeComponent</item>
+
         <item name="android:statusBarColor">?android:colorBackground</item>
         <item name="android:windowLightStatusBar">@bool/isLightMode</item>
     </style>
