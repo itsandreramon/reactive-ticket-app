@@ -9,10 +9,6 @@ package com.saqs.app.ui.wallet.model
 
 import com.saqs.app.util.ViewEvent
 
-interface WalletViewEvent : ViewEvent {
+interface WalletViewEvent : ViewEvent
 
-}
-
-sealed class WalletViewEventType {
-
-}
+sealed class WalletViewEventType
