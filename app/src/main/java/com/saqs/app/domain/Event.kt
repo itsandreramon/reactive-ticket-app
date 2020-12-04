@@ -16,15 +16,10 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 class Event(
     var id: String = "-1",
-
     val name: String = "",
-
     val date: Timestamp = Timestamp.now(),
-
     val available: Int = 0,
-
     val amount: Int = 0,
-
     val image: String? = null
 ) : Parcelable {
 

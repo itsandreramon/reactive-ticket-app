@@ -42,5 +42,6 @@ class MainModule {
     fun providePurchaseTicketViewModel(
         factory: PurchaseTicketViewModelFactory,
         activity: FragmentActivity
-    ): PurchaseTicketViewModel = ViewModelProvider(activity, factory).get(PurchaseTicketViewModel::class.java)
+    ): PurchaseTicketViewModel =
+        ViewModelProvider(activity, factory).get(PurchaseTicketViewModel::class.java)
 }
