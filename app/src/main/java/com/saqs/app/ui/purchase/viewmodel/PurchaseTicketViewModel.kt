@@ -1,3 +1,10 @@
+/*
+ * Copyright 2020 - André Thiele
+ *
+ * Department of Computer Science and Media
+ * University of Applied Sciences Brandenburg
+ */
+
 package com.saqs.app.ui.purchase.viewmodel
 
 import androidx.lifecycle.ViewModel
@@ -25,6 +32,5 @@ class PurchaseTicketViewModel(
     }
 
     override fun buyTicket(event: HomeViewEventType.NavigateEventItem) {
-
     }
 }
