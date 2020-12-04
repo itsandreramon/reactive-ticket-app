@@ -11,9 +11,11 @@ import com.saqs.app.ui.explore.model.HomeViewEventType.NavigateEventItem
 import com.saqs.app.util.ViewEvent
 
 interface PurchaseTicketViewEvent : ViewEvent {
+    fun initState(event: PurchaseTicketViewEventType.InitState)
     fun buyTicket(event: NavigateEventItem)
 }
 
 sealed class PurchaseTicketViewEventType {
+    data class InitState(val eventId: String) : PurchaseTicketViewEventType()
     data class BuyTicket(val eventId: String, val amount: Int) : PurchaseTicketViewEventType()
 }

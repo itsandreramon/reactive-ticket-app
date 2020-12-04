@@ -37,10 +37,14 @@ class ExploreViewModel @ViewModelInject constructor(
 
     init {
         eventRepository.observeEvents().onEach {
-            _state._events.value = buildList {
+            eventRepository.inMemoryDatabase.value = buildList {
                 addAll(state.events.value)
                 add(it)
             }
+        }.launchIn(viewModelScope)
+
+        eventRepository.inMemoryDatabase.onEach {
+            _state._events.value = it
         }.launchIn(viewModelScope)
     }
 

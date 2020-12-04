@@ -40,7 +40,7 @@ class EventDiffCallback : DiffUtil.ItemCallback<Event>() {
     }
 
     override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean {
-        // TODO
-        return false
+        return (oldItem.name == newItem.name) &&
+                (oldItem.date == newItem.date)
     }
 }

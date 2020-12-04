@@ -9,11 +9,16 @@ package com.saqs.app.ui.purchase
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navArgs
 import com.saqs.app.databinding.ActivityPurchaseTicketBinding
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEvent
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.InitState
 import com.saqs.app.ui.purchase.viewmodel.PurchaseTicketViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,9 +36,14 @@ class PurchaseTicketActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.attachEvents(this)
+
         binding = ActivityPurchaseTicketBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        viewEvent.initState(InitState(args.eventId))
+        initViewStates()
 
         // prepare toolbar
         setSupportActionBar(binding.toolbar)
@@ -42,11 +52,15 @@ class PurchaseTicketActivity : AppCompatActivity() {
             setDisplayShowHomeEnabled(true)
             setDisplayShowTitleEnabled(false)
         }
+    }
 
-        // setup number picker
-        binding.numberPickerAmount.apply {
-            maxValue = 10
-            minValue = 1
-        }
+    private fun initViewStates() {
+        viewModel.state.selectedEvent.filterNotNull().onEach { state ->
+            binding.tvAmountAvailable.text = "${state.available} of ${state.amount}"
+            binding.numberPickerAmount.apply {
+                maxValue = state.available
+                minValue = 1
+            }
+        }.launchIn(lifecycleScope)
     }
 }

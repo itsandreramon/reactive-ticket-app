@@ -14,13 +14,14 @@ import com.saqs.app.data.EventRepository
 import javax.inject.Inject
 
 class PurchaseTicketViewModelFactory @Inject constructor(
-    private val repository: EventRepository,
+    private val eventRepository: EventRepository,
     private val dispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return PurchaseTicketViewModel(
+            eventRepository,
             dispatcherProvider
         ) as T
     }
