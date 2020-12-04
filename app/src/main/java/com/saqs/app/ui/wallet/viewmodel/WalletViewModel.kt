@@ -17,6 +17,7 @@ import com.saqs.app.ui.wallet.WalletFragment
 import com.saqs.app.ui.wallet.model.WalletViewEvent
 import com.saqs.app.ui.wallet.model.WalletViewState
 import com.saqs.app.ui.wallet.model._WalletViewState
+import com.saqs.app.util.Lce
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -30,26 +31,57 @@ class WalletViewModel @ViewModelInject constructor(
     val state = WalletViewState(_state)
 
     init {
-        ticketRepository.getAll().onEach {
-            _state._tickets.value = it
-        }.launchIn(viewModelScope)
-
-        eventRepository.getAll().onEach {
-            _state._events.value = it
-        }.launchIn(viewModelScope)
-
-        ticketRepository.getAll().combine(state.events) { tickets, events ->
-            val ticketsWithEvents = tickets
-                .distinctBy { it.eventId }
-                .map { ticket -> events
-                    .first { it.id == ticket.eventId }
-                    .let { event ->
-                        val amount = tickets.count { it.eventId == event.id }
-                        TicketWithEvent(ticket, event, amount)
-                    }
+        ticketRepository.getAll().onEach { lce ->
+            when (lce) {
+                is Lce.Loading -> {
+                    // TODO
+                }
+                is Lce.Error -> {
+                    // TODO
+                }
+                is Lce.Content -> {
+                    _state._tickets.value = lce.packet
+                }
             }
+        }.launchIn(viewModelScope)
 
-            _state._ticketsWithEvents.value = ticketsWithEvents
+        eventRepository.getAll().onEach { lce ->
+            when (lce) {
+                is Lce.Loading -> {
+                    // TODO
+                }
+                is Lce.Error -> {
+                    // TODO
+                }
+                is Lce.Content -> {
+                    _state._events.value = lce.packet
+                }
+            }
+        }.launchIn(viewModelScope)
+
+        ticketRepository.getAll().combine(state.events) { ticketsLce, events ->
+            when (ticketsLce) {
+                is Lce.Loading -> {
+                    // TODO
+                }
+                is Lce.Error -> {
+                    // TODO
+                }
+                is Lce.Content -> {
+                    val tickets = ticketsLce.packet
+                    val ticketsWithEvents = tickets
+                        .distinctBy { it.eventId }
+                        .map { ticket -> events
+                            .first { it.id == ticket.eventId }
+                            .let { event ->
+                                val amount = tickets.count { it.eventId == event.id }
+                                TicketWithEvent(ticket, event, amount)
+                            }
+                        }
+
+                    _state._ticketsWithEvents.value = ticketsWithEvents
+                }
+            }
         }.launchIn(viewModelScope)
     }
 

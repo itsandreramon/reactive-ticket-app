@@ -8,9 +8,13 @@
 package com.saqs.app.data
 
 import com.saqs.app.domain.Ticket
+import com.saqs.app.util.Lce
 import kotlinx.coroutines.flow.Flow
 
 interface TicketRepository {
-    fun addTicket(ticket: Ticket)
-    fun getAll(): Flow<List<Ticket>>
+    val dataSource: DataSource
+
+    suspend fun addTicket(ticket: Ticket)
+
+    fun getAll(): Flow<Lce<List<Ticket>>>
 }

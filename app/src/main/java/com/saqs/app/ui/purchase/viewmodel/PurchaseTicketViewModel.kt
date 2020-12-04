@@ -21,6 +21,7 @@ import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.InitState
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewState
 import com.saqs.app.ui.purchase.model._PurchaseTicketViewEffect
 import com.saqs.app.ui.purchase.model._PurchaseTicketViewState
+import com.saqs.app.util.Lce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -41,8 +42,19 @@ class PurchaseTicketViewModel(
     }
 
     override fun initState(event: InitState) {
-        eventRepository.getAll().onEach { eventList ->
-            _state._selectedEvent.value = eventList.firstOrNull { it.id == event.eventId }
+        eventRepository.getAll().onEach { eventsLce ->
+            when (eventsLce) {
+                is Lce.Loading -> {
+                    // TODO
+                }
+                is Lce.Error -> {
+                    // TODO
+                }
+                is Lce.Content -> {
+                    val events = eventsLce.packet
+                    _state._selectedEvent.value = events.firstOrNull { it.id == event.eventId }
+                }
+            }
         }.launchIn(viewModelScope)
     }
 

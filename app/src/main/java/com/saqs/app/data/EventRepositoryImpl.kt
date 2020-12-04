@@ -8,32 +8,48 @@
 package com.saqs.app.data
 
 import com.saqs.app.domain.Event
+import com.saqs.app.util.Lce
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withContext
 
 class EventRepositoryImpl private constructor(
     private val dispatcherProvider: CoroutinesDispatcherProvider,
     private val firebaseSource: FirebaseSource
 ) : EventRepository {
 
-    override fun addEvent(event: Event) {
-        InMemoryDatabase.events.value = buildList {
-            addAll(InMemoryDatabase.events.value)
-            add(event)
-        }
-    }
+    override val dataSource: DataSource
+        get() = InMemoryDatabase
 
-    override fun getAll(): Flow<List<Event>> {
-        return InMemoryDatabase.events
-    }
+    override fun getAll() = channelFlow<Lce<List<Event>>> {
+        dataSource.events
+            .onStart { send(Lce.Loading()) }
+            .catch { send(Lce.Error(it)) }
+            .collect { send(Lce.Content(it)) }
+    }.flowOn(dispatcherProvider.db)
 
     override fun getAllRemote(): Flow<Event> {
         return firebaseSource.observeEvents()
             .flowOn(dispatcherProvider.io)
     }
 
-    override fun getById(id: String): Event {
-        return InMemoryDatabase.events.value.first { it.id == id }
+    override suspend fun addEvent(event: Event) {
+        withContext(dispatcherProvider.db) {
+            dataSource.events.value = buildList {
+                addAll(dataSource.events.value)
+                add(event)
+            }
+        }
+    }
+
+    override suspend fun getById(id: String): Event? {
+        return withContext(dispatcherProvider.db) {
+            dataSource.events.value.firstOrNull { it.id == id }
+        }
     }
 
     companion object {
