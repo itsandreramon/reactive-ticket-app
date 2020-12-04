@@ -12,6 +12,5 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class Ticket(
-    val eventId: String = "-1",
-    val amount: Int = 1
+    val eventId: String = "-1"
 ) : Parcelable

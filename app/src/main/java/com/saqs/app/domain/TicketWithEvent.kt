@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.DiffUtil
 
 data class TicketWithEvent(
     val ticket: Ticket,
-    val event: Event
+    val event: Event,
+    val amount: Int
 )
 
 class TicketWithEventDiffCallback : DiffUtil.ItemCallback<TicketWithEvent>() {

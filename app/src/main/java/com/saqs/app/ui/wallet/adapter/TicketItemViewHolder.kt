@@ -24,7 +24,7 @@ class TicketItemViewHolder(
             // TODO
         }
 
-        binding.tvTitle.text = ticketWithEvent.event.name
+        binding.tvTitle.text = "${ticketWithEvent.event.name} (${ticketWithEvent.amount}x)"
         binding.tvDate.text = DateUtils.toLocalFormattedDate(DateUtils.fromTimestamp(ticketWithEvent.event.date))
         binding.ivImage.loadImageElsePlaceholder(ticketWithEvent.event.image)
     }

@@ -39,10 +39,14 @@ class WalletViewModel @ViewModelInject constructor(
         }.launchIn(viewModelScope)
 
         ticketRepository.getAll().combine(state.events) { tickets, events ->
-            val ticketsWithEvents = tickets.map { ticket ->
-                events
+            val ticketsWithEvents = tickets
+                .distinctBy { it.eventId }
+                .map { ticket -> events
                     .first { it.id == ticket.eventId }
-                    .let { event -> TicketWithEvent(ticket, event) }
+                    .let { event ->
+                        val amount = tickets.count { it.eventId == event.id }
+                        TicketWithEvent(ticket, event, amount)
+                    }
             }
 
             _state._ticketsWithEvents.value = ticketsWithEvents
