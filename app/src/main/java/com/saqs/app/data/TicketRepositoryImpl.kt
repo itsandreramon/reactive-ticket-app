@@ -8,22 +8,36 @@
 package com.saqs.app.data
 
 import com.saqs.app.domain.Ticket
-import kotlinx.coroutines.flow.Flow
+import com.saqs.app.util.Lce
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withContext
 
 class TicketRepositoryImpl(
     private val dispatcherProvider: CoroutinesDispatcherProvider
 ) : TicketRepository {
 
-    override fun addTicket(ticket: Ticket) {
-        InMemoryDatabase.tickets.value = buildList {
-            addAll(InMemoryDatabase.tickets.value)
-            add(ticket)
+    override val dataSource: DataSource
+        get() = InMemoryDatabase
+
+    override suspend fun addTicket(ticket: Ticket) {
+        withContext(dispatcherProvider.db) {
+            dataSource.tickets.value = buildList {
+                addAll(dataSource.tickets.value)
+                add(ticket)
+            }
         }
     }
 
-    override fun getAll(): Flow<List<Ticket>> {
-        return InMemoryDatabase.tickets
-    }
+    override fun getAll() = channelFlow<Lce<List<Ticket>>> {
+        dataSource.tickets
+            .onStart { send(Lce.Loading()) }
+            .catch { send(Lce.Error(it)) }
+            .collect { send(Lce.Content(it)) }
+    }.flowOn(dispatcherProvider.db)
 
     companion object {
 

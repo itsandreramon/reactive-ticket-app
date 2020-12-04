@@ -8,11 +8,17 @@
 package com.saqs.app.data
 
 import com.saqs.app.domain.Event
+import com.saqs.app.util.Lce
 import kotlinx.coroutines.flow.Flow
 
 interface EventRepository {
-    fun addEvent(event: Event)
-    fun getById(id: String): Event
-    fun getAll(): Flow<List<Event>>
+    val dataSource: DataSource
+
+    suspend fun addEvent(event: Event)
+
+    suspend fun getById(id: String): Event?
+
+    fun getAll(): Flow<Lce<List<Event>>>
+
     fun getAllRemote(): Flow<Event>
 }
