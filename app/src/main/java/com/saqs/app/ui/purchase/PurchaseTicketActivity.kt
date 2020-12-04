@@ -13,13 +13,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navArgs
 import com.saqs.app.databinding.ActivityPurchaseTicketBinding
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEvent
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.InitState
 import com.saqs.app.ui.purchase.viewmodel.PurchaseTicketViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PurchaseTicketActivity : AppCompatActivity() {
@@ -44,6 +45,7 @@ class PurchaseTicketActivity : AppCompatActivity() {
 
         viewEvent.initState(InitState(args.eventId))
         initViewStates()
+        initViewEffects()
 
         // prepare toolbar
         setSupportActionBar(binding.toolbar)
@@ -52,6 +54,16 @@ class PurchaseTicketActivity : AppCompatActivity() {
             setDisplayShowHomeEnabled(true)
             setDisplayShowTitleEnabled(false)
         }
+
+        binding.btnPurchase.setOnClickListener {
+            viewEvent.buyTicket(BuyTicket(binding.numberPickerAmount.value))
+        }
+    }
+
+    private fun initViewEffects() {
+        viewModel.effect.navigateExplore.onEach { effect ->
+            onBackPressed()
+        }.launchIn(lifecycleScope)
     }
 
     private fun initViewStates() {

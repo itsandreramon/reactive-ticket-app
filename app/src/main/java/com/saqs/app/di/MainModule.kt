@@ -13,10 +13,14 @@ import com.saqs.app.data.CoroutinesDispatcherProvider
 import com.saqs.app.data.EventRepository
 import com.saqs.app.data.EventRepositoryImpl
 import com.saqs.app.data.FirebaseSource
+import com.saqs.app.data.TicketRepository
+import com.saqs.app.data.TicketRepositoryImpl
 import com.saqs.app.ui.explore.viewmodel.ExploreViewModel
 import com.saqs.app.ui.explore.viewmodel.ExploreViewModelFactory
 import com.saqs.app.ui.purchase.viewmodel.PurchaseTicketViewModel
 import com.saqs.app.ui.purchase.viewmodel.PurchaseTicketViewModelFactory
+import com.saqs.app.ui.wallet.viewmodel.WalletViewModel
+import com.saqs.app.ui.wallet.viewmodel.WalletViewModelFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,10 +37,21 @@ class MainModule {
     ): EventRepository = EventRepositoryImpl.getInstance(dispatcherProvider, firebaseSource)
 
     @Provides
+    fun provideTicketRepository(
+        dispatcherProvider: CoroutinesDispatcherProvider
+    ): TicketRepository = TicketRepositoryImpl.getInstance(dispatcherProvider)
+
+    @Provides
     fun provideExploreViewModel(
         factory: ExploreViewModelFactory,
         activity: FragmentActivity
     ): ExploreViewModel = ViewModelProvider(activity, factory).get(ExploreViewModel::class.java)
+
+    @Provides
+    fun provideWalletViewModel(
+        factory: WalletViewModelFactory,
+        activity: FragmentActivity
+    ): WalletViewModel = ViewModelProvider(activity, factory).get(WalletViewModel::class.java)
 
     @Provides
     fun providePurchaseTicketViewModel(

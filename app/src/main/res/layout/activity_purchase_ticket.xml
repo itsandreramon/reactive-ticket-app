@@ -42,7 +42,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_medium">
+            android:paddingHorizontal="@dimen/margin_medium">
 
             <TextView
                 android:id="@+id/tv_title_amount_available"
@@ -88,8 +88,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:id="@+id/btn_purchase"
         android:layout_margin="@dimen/margin_medium"
         android:padding="@dimen/margin_medium"
-        android:text="Buy" />
+        android:text="Purchase" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

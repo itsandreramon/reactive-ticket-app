@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:foreground="?selectableItemBackground"
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,7 +27,6 @@
             android:layout_marginHorizontal="@dimen/margin_medium"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="@+id/iv_image"
-            app:layout_constraintEnd_toStartOf="@+id/btn_buy"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/iv_image"
             app:layout_constraintTop_toTopOf="@+id/iv_image">
@@ -52,15 +52,6 @@
                 tools:text="Mercedes-Benz Arena" />
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_buy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Buy"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

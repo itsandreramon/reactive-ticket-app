@@ -9,13 +9,14 @@ package com.saqs.app.ui.purchase.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saqs.app.data.CoroutinesDispatcherProvider
 import com.saqs.app.data.EventRepository
-import com.saqs.app.ui.explore.model.HomeViewEventType.NavigateEventItem
+import com.saqs.app.data.TicketRepository
+import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.purchase.PurchaseTicketActivity
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.NavigateExploreEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEvent
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.InitState
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewState
 import com.saqs.app.ui.purchase.model._PurchaseTicketViewEffect
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
 
 class PurchaseTicketViewModel(
     private val eventRepository: EventRepository,
-    private val dispatcherProvider: CoroutinesDispatcherProvider
+    private val ticketRepository: TicketRepository
 ) : ViewModel(), PurchaseTicketViewEvent {
 
     private val _state = _PurchaseTicketViewState()
@@ -40,13 +41,18 @@ class PurchaseTicketViewModel(
     }
 
     override fun initState(event: InitState) {
-        eventRepository.inMemoryDatabase.onEach { eventList ->
+        eventRepository.getAll().onEach { eventList ->
             _state._selectedEvent.value = eventList.firstOrNull { it.id == event.eventId }
         }.launchIn(viewModelScope)
     }
 
-    override fun buyTicket(event: NavigateEventItem) {
+    override fun buyTicket(event: BuyTicket) {
         viewModelScope.launch {
+            repeat(event.amount) {
+                state.selectedEvent.value?.let {
+                    ticketRepository.addTicket(Ticket(it.id))
+                }
+            }
             _effect._navigateExplore.emit(NavigateExploreEffect)
         }
     }

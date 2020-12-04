@@ -13,18 +13,15 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class Ticket(
-    val id: Int = 0,
-    val owner: String,
-    val eventId: Int
+    val eventId: String = "-1"
 ) : Parcelable
 
 class TicketDiffCallback : DiffUtil.ItemCallback<Ticket>() {
     override fun areItemsTheSame(oldItem: Ticket, newItem: Ticket): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem == newItem
     }
 
     override fun areContentsTheSame(oldItem: Ticket, newItem: Ticket): Boolean {
-        // TODO
         return false
     }
 }

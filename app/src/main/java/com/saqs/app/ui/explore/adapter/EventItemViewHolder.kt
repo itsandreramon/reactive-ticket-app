@@ -20,7 +20,7 @@ class EventItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(eventItem: Event, listener: EventItemAdapter.EventItemClickListener) {
-        binding.btnBuy.setOnClickListener {
+        binding.root.setOnClickListener {
             listener.onEventItemClicked(eventItem)
         }
 

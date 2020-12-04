@@ -7,11 +7,10 @@
 
 package com.saqs.app.data
 
-import com.saqs.app.domain.Event
+import com.saqs.app.domain.Ticket
 import kotlinx.coroutines.flow.Flow
 
-interface EventRepository {
-    fun addEvent(event: Event)
-    fun getAll(): Flow<List<Event>>
-    fun getAllRemote(): Flow<Event>
+interface TicketRepository {
+    fun addTicket(ticket: Ticket)
+    fun getAll(): Flow<List<Ticket>>
 }

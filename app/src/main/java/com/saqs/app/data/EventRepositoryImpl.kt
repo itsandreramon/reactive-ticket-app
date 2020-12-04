@@ -9,7 +9,6 @@ package com.saqs.app.data
 
 import com.saqs.app.domain.Event
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn
 
 class EventRepositoryImpl private constructor(
@@ -17,10 +16,18 @@ class EventRepositoryImpl private constructor(
     private val firebaseSource: FirebaseSource
 ) : EventRepository {
 
-    override val inMemoryDatabase: MutableStateFlow<List<Event>>
-        get() = InMemoryDatabase.events
+    override fun addEvent(event: Event) {
+        InMemoryDatabase.events.value = buildList {
+            addAll(InMemoryDatabase.events.value)
+            add(event)
+        }
+    }
 
-    override fun observeEvents(): Flow<Event> {
+    override fun getAll(): Flow<List<Event>> {
+        return InMemoryDatabase.events
+    }
+
+    override fun getAllRemote(): Flow<Event> {
         return firebaseSource.observeEvents()
             .flowOn(dispatcherProvider.io)
     }
