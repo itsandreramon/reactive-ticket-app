@@ -1,17 +1,42 @@
+/*
+ * Copyright 2020 - André Thiele
+ *
+ * Department of Computer Science and Media
+ * University of Applied Sciences Brandenburg
+ */
+
 package com.saqs.app
 
-import org.junit.Test
+import com.saqs.app.util.round
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
 
-import org.junit.Assert.*
+class ExampleUnitTest : FunSpec({
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
-    @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    test("round") {
+        val given = 3.14159265359
+        val expected = 3.14
+
+        val actual = given.round(2)
+
+        actual shouldBe expected
     }
-}
+
+    test("roundFraction") {
+        val given = 0.711245
+        val expected = 0.71
+
+        val actual = given.round(2)
+
+        actual shouldBe expected
+    }
+
+    test("roundNegative") {
+        val given = -3.14159265359
+        val expected = -3.14
+
+        val actual = given.round(2)
+
+        actual shouldBe expected
+    }
+})
