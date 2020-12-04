@@ -20,6 +20,10 @@ class TicketItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(ticketWithEvent: TicketWithEvent, listener: TicketItemAdapter.TicketItemClickListener) {
+        binding.root.setOnClickListener {
+            // TODO
+        }
+
         binding.tvTitle.text = ticketWithEvent.event.name
         binding.tvDate.text = DateUtils.toLocalFormattedDate(DateUtils.fromTimestamp(ticketWithEvent.event.date))
         binding.ivImage.loadImageElsePlaceholder(ticketWithEvent.event.image)
