@@ -14,5 +14,5 @@ import kotlinx.coroutines.flow.Flow
 interface FirebaseSource {
     val firebaseStorage: FirebaseFirestore
 
-    fun observeEvents() : Flow<Event>
+    fun observeEvents(): Flow<Event>
 }
