@@ -15,20 +15,22 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class Event(
-    val id: String = "-1",
+    var id: String = "-1",
 
     val name: String = "",
 
     val date: Timestamp = Timestamp.now(),
 
-    val availableTickets: Int = 0,
+    val available: Int = 0,
 
-    val availableTicketsOverall: Int = 0
+    val amount: Int = 0,
+
+    val image: String? = null
 ) : Parcelable {
 
     val availableTicketsPercentage: Double
-        get() = availableTickets.toDouble()
-            .div(availableTicketsOverall.toDouble())
+        get() = available.toDouble()
+            .div(amount.toDouble())
             .round(2)
 }
 

@@ -30,3 +30,21 @@ fun ImageView.loadImageElsePlaceholder(
         }
     }
 }
+
+fun ImageView.loadImageElsePlaceholder(
+    imageRes: String? = null,
+    @DrawableRes placeholderRes: Int = R.drawable.ic_no_photography
+) {
+    if (imageRes != null) {
+        // try loading image resource
+        load(imageRes) {
+            placeholder(placeholderRes)
+            transformations(listOf(CircleCropTransformation()))
+        }
+    } else {
+        // default to placeholder
+        load(placeholderRes) {
+            transformations(listOf(CircleCropTransformation()))
+        }
+    }
+}

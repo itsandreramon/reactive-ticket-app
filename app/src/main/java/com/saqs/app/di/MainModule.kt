@@ -15,6 +15,8 @@ import com.saqs.app.data.EventRepositoryImpl
 import com.saqs.app.data.FirebaseSource
 import com.saqs.app.ui.explore.viewmodel.ExploreViewModel
 import com.saqs.app.ui.explore.viewmodel.ExploreViewModelFactory
+import com.saqs.app.ui.purchase.viewmodel.PurchaseTicketViewModel
+import com.saqs.app.ui.purchase.viewmodel.PurchaseTicketViewModelFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,4 +37,10 @@ class MainModule {
         factory: ExploreViewModelFactory,
         activity: FragmentActivity
     ): ExploreViewModel = ViewModelProvider(activity, factory).get(ExploreViewModel::class.java)
+
+    @Provides
+    fun providePurchaseTicketViewModel(
+        factory: PurchaseTicketViewModelFactory,
+        activity: FragmentActivity
+    ): PurchaseTicketViewModel = ViewModelProvider(activity, factory).get(PurchaseTicketViewModel::class.java)
 }

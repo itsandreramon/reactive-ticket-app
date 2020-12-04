@@ -27,7 +27,9 @@ class FirebaseSourceImpl : FirebaseSource {
 
                 for (doc in value!!) {
                     try {
-                        val event = doc.toObject(Event::class.java)
+                        val event = doc.toObject(Event::class.java).apply {
+                            id = doc.id
+                        }
                         offer(event)
                     } catch (e: Exception) {
                         Timber.e(e)
