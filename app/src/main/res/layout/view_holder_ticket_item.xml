@@ -1,16 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     android:foreground="?selectableItemBackground"
-    android:padding="@dimen/margin_medium">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/text_view_title"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?textAppearanceBody1"
-        android:text="Ticket" />
+        android:padding="@dimen/margin_medium">
+
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_image"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/iv_image"
+            app:layout_constraintTop_toTopOf="@+id/iv_image">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="?textAppearanceHeadline6"
+                android:textColor="@color/color_on_surface_emphasis_high"
+                android:textStyle="bold"
+                tools:text="GamesCom (3x)" />
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="?textAppearanceBody2"
+                tools:text="Tue, 16 Feb 2021 - 14:00" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

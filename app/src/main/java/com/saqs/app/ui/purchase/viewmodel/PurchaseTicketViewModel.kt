@@ -48,10 +48,13 @@ class PurchaseTicketViewModel(
 
     override fun buyTicket(event: BuyTicket) {
         viewModelScope.launch {
-            repeat(event.amount) {
-                state.selectedEvent.value?.let {
-                    ticketRepository.addTicket(Ticket(it.id))
-                }
+            state.selectedEvent.value?.let {
+                ticketRepository.addTicket(
+                    Ticket(
+                        eventId = it.id,
+                        amount = event.amount
+                    )
+                )
             }
             _effect._navigateExplore.emit(NavigateExploreEffect)
         }

@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface EventRepository {
     fun addEvent(event: Event)
+    fun getById(id: String): Event
     fun getAll(): Flow<List<Event>>
     fun getAllRemote(): Flow<Event>
 }

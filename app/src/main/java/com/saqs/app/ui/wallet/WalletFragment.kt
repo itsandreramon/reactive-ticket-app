@@ -67,8 +67,7 @@ class WalletFragment : Fragment(), TicketItemAdapter.TicketItemClickListener {
     }
 
     private fun initViewStates() {
-        viewModel.state.tickets.onEach { state ->
-            // TODO
+        viewModel.state.ticketsWithEvents.onEach { state ->
             viewAdapter.submitList(state)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
     }

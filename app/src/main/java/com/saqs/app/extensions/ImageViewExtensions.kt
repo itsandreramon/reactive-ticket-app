@@ -32,12 +32,12 @@ fun ImageView.loadImageElsePlaceholder(
 }
 
 fun ImageView.loadImageElsePlaceholder(
-    imageRes: String? = null,
+    imageUrl: String? = null,
     @DrawableRes placeholderRes: Int = R.drawable.ic_no_photography
 ) {
-    if (imageRes != null) {
+    if (imageUrl != null) {
         // try loading image resource
-        load(imageRes) {
+        load(imageUrl) {
             placeholder(placeholderRes)
             transformations(listOf(CircleCropTransformation()))
         }

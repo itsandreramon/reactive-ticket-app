@@ -14,12 +14,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.saqs.app.databinding.ViewHolderTicketItemBinding
 import com.saqs.app.domain.Ticket
-import com.saqs.app.domain.TicketDiffCallback
+import com.saqs.app.domain.TicketWithEvent
+import com.saqs.app.domain.TicketWithEventDiffCallback
 
 class TicketItemAdapter(
     private val listener: TicketItemClickListener,
     private val context: Context
-) : ListAdapter<Ticket, RecyclerView.ViewHolder>(TicketDiffCallback()) {
+) : ListAdapter<TicketWithEvent, RecyclerView.ViewHolder>(TicketWithEventDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)

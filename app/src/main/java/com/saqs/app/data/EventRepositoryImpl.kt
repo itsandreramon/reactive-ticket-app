@@ -32,6 +32,10 @@ class EventRepositoryImpl private constructor(
             .flowOn(dispatcherProvider.io)
     }
 
+    override fun getById(id: String): Event {
+        return InMemoryDatabase.events.value.first { it.id == id }
+    }
+
     companion object {
 
         @Volatile private var instance: EventRepositoryImpl? = null
