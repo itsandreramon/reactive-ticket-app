@@ -5,16 +5,14 @@
  * University of Applied Sciences Brandenburg
  */
 
-package com.saqs.app.data.database
+package com.saqs.app.data
 
-import androidx.room.Dao
-import androidx.room.Query
+import com.google.firebase.firestore.FirebaseFirestore
 import com.saqs.app.domain.Event
 import kotlinx.coroutines.flow.Flow
 
-@Dao
-interface EventRoomDao {
+interface FirebaseSource {
+    val firebaseStorage: FirebaseFirestore
 
-    @Query("SELECT * FROM events")
-    fun getAll(): Flow<List<Event>>
+    fun observeEvents(): Flow<Event>
 }

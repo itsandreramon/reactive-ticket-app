@@ -9,27 +9,17 @@ package com.saqs.app.domain
 
 import android.os.Parcelable
 import androidx.recyclerview.widget.DiffUtil
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import com.saqs.app.data.database.Converters
+import com.google.firebase.Timestamp
 import com.saqs.app.util.round
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import kotlin.math.round
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-@TypeConverters(Converters::class)
-@Entity(tableName = "events")
 class Event(
-
-    @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
 
     val name: String = "",
 
-    val date: ZonedDateTime = ZonedDateTime.now(ZoneId.of("UTC")),
+    val date: Timestamp = Timestamp.now(),
 
     val availableTickets: Int = 0,
 

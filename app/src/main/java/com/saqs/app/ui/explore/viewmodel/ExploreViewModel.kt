@@ -7,12 +7,11 @@
 
 package com.saqs.app.ui.explore.viewmodel
 
-import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saqs.app.data.FakeData
+import com.saqs.app.data.CoroutinesDispatcherProvider
+import com.saqs.app.data.EventRepository
 import com.saqs.app.ui.explore.ExploreFragment
 import com.saqs.app.ui.explore.model.ExploreViewEffect
 import com.saqs.app.ui.explore.model.ExploreViewEffectType.PurchaseTicketEffect
@@ -24,10 +23,10 @@ import com.saqs.app.ui.explore.model._ExploreViewState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class ExploreViewModel @ViewModelInject constructor(
-    @Assisted private val savedStateHandle: SavedStateHandle
+    private val eventRepository: EventRepository,
+    private val dispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel(), ExploreViewEvent {
 
     private val _state = _ExploreViewState()
@@ -37,12 +36,10 @@ class ExploreViewModel @ViewModelInject constructor(
     val effect = ExploreViewEffect(_effect)
 
     init {
-        Timber.e("ViewModel: $this")
-
-        FakeData.eventGenerator.onEach { event ->
+        eventRepository.observeEvents().onEach {
             _state._events.value = buildList {
-                addAll(_state._events.value)
-                add(event)
+                addAll(state.events.value)
+                add(it)
             }
         }.launchIn(viewModelScope)
     }

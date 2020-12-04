@@ -26,7 +26,7 @@ class EventItemViewHolder(
 
         binding.ivImage.loadImageElsePlaceholder()
         binding.tvTitle.text = eventItem.id.toString()
-        binding.tvLocation.text = DateUtils.toLocalString(eventItem.date)
+        binding.tvLocation.text = DateUtils.fromTimestamp(eventItem.date)
 
         val availabilityInPercent = eventItem.availableTicketsPercentage
     }
