@@ -7,4 +7,9 @@
 
 package com.saqs.app.data
 
-interface EventRepository
+import com.saqs.app.domain.Event
+import kotlinx.coroutines.flow.Flow
+
+interface EventRepository {
+    fun observeEvents(): Flow<Event>
+}

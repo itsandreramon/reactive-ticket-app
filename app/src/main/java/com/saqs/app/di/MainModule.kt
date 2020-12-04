@@ -9,6 +9,7 @@ package com.saqs.app.di
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import com.saqs.app.data.CoroutinesDispatcherProvider
 import com.saqs.app.data.EventRepository
 import com.saqs.app.data.EventRepositoryImpl
 import com.saqs.app.data.FirebaseSource
@@ -25,8 +26,9 @@ class MainModule {
 
     @Provides
     fun provideEventRepository(
+        dispatcherProvider: CoroutinesDispatcherProvider,
         firebaseSource: FirebaseSource
-    ): EventRepository = EventRepositoryImpl.getInstance(firebaseSource)
+    ): EventRepository = EventRepositoryImpl.getInstance(dispatcherProvider, firebaseSource)
 
     @Provides
     fun provideExploreViewModel(

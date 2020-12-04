@@ -20,8 +20,9 @@ import com.saqs.app.ui.explore.model.ExploreViewState
 import com.saqs.app.ui.explore.model.HomeViewEventType.NavigateEventItem
 import com.saqs.app.ui.explore.model._ExploreViewEffect
 import com.saqs.app.ui.explore.model._ExploreViewState
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class ExploreViewModel @ViewModelInject constructor(
     private val eventRepository: EventRepository,
@@ -35,7 +36,12 @@ class ExploreViewModel @ViewModelInject constructor(
     val effect = ExploreViewEffect(_effect)
 
     init {
-        Timber.e("ViewModel: $this")
+        eventRepository.observeEvents().onEach {
+            _state._events.value = buildList {
+                addAll(state.events.value)
+                add(it)
+            }
+        }.launchIn(viewModelScope)
     }
 
     fun attachEvents(fragment: ExploreFragment) {

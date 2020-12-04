@@ -7,6 +7,7 @@
 
 package com.saqs.app.util
 
+import com.google.firebase.Timestamp
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -39,5 +40,12 @@ object DateUtils {
         utc: ZonedDateTime
     ): String {
         return utc.toLocalDateTime().toString()
+    }
+
+    @Throws(DateTimeParseException::class)
+    fun fromTimestamp(timestampUtc: Timestamp): String {
+        val instant = timestampUtc.toDate().toInstant()
+        val utc = ZonedDateTime.ofInstant(instant, ZoneId.of("UTC"))
+        return toUtcString(utc)
     }
 }
