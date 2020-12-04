@@ -11,6 +11,7 @@ import com.google.firebase.Timestamp
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
 object DateUtils {
@@ -19,15 +20,6 @@ object DateUtils {
         return ZonedDateTime
             .ofInstant(Instant.now(), ZoneId.of("UTC"))
             .toString()
-    }
-
-    @Throws(DateTimeParseException::class)
-    fun fromUtcString(
-        utc: String
-    ): ZonedDateTime {
-        val instantUtc = Instant.parse(utc)
-        return ZonedDateTime
-            .ofInstant(instantUtc, ZoneId.of("UTC"))
     }
 
     fun toUtcString(
@@ -42,10 +34,26 @@ object DateUtils {
         return utc.toLocalDateTime().toString()
     }
 
+    fun toLocalFormattedDate(
+        date: ZonedDateTime
+    ): String {
+        return date.format(DateTimeFormatter.ofPattern("EEE, d MMM yyyy - HH:mm"))
+    }
+
     @Throws(DateTimeParseException::class)
-    fun fromTimestamp(timestampUtc: Timestamp): String {
+    fun fromUtcString(
+        utc: String
+    ): ZonedDateTime {
+        val instantUtc = Instant.parse(utc)
+        return ZonedDateTime
+            .ofInstant(instantUtc, ZoneId.of("UTC"))
+    }
+
+    @Throws(DateTimeParseException::class)
+    fun fromTimestamp(
+        timestampUtc: Timestamp
+    ): ZonedDateTime {
         val instant = timestampUtc.toDate().toInstant()
-        val utc = ZonedDateTime.ofInstant(instant, ZoneId.of("UTC"))
-        return toUtcString(utc)
+        return ZonedDateTime.ofInstant(instant, ZoneId.of("UTC"))
     }
 }

@@ -21,6 +21,7 @@ import com.saqs.app.ui.explore.model._ExploreViewEffect
 import com.saqs.app.ui.explore.model._ExploreViewState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 class ExploreViewModel @ViewModelInject constructor(
@@ -38,7 +39,7 @@ class ExploreViewModel @ViewModelInject constructor(
             eventRepository.addEvent(it)
         }.launchIn(viewModelScope)
 
-        eventRepository.getAll().onEach {
+        eventRepository.getAll().take(32).onEach {
             _state._events.value = it
         }.launchIn(viewModelScope)
     }
