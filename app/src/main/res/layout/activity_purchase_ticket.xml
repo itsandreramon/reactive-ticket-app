@@ -9,6 +9,7 @@
     <!-- Collapsing Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
+        android:backgroundTint="?colorSurface"
         android:layout_width="match_parent"
         android:layout_height="128dp">
 
