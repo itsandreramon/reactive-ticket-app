@@ -7,11 +7,11 @@
 
 package com.saqs.app.data
 
+import java.util.concurrent.Executors
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
-import java.util.concurrent.Executors
-import javax.inject.Inject
 
 data class CoroutinesDispatcherProvider(
     val main: CoroutineDispatcher,
