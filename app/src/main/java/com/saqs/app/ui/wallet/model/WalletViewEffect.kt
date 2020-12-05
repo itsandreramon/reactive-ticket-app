@@ -7,12 +7,8 @@
 
 package com.saqs.app.ui.wallet.model
 
-class _WalletViewEffect(
-)
+class _WalletViewEffect()
 
-class WalletViewEffect(_effect: _WalletViewEffect) {
-}
+class WalletViewEffect(_effect: _WalletViewEffect)
 
-sealed class WalletViewEffectType {
-
-}
+sealed class WalletViewEffectType
