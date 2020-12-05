@@ -42,7 +42,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/margin_medium">
+            android:padding="@dimen/margin_medium">
 
             <TextView
                 android:id="@+id/tv_title_amount_available"

@@ -84,11 +84,12 @@ dependencies {
     implementation "com.google.android.material:material:$material_version"
 
     implementation platform("com.google.firebase:firebase-bom:$firebase_version")
-    implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutines_version"
 
     implementation "com.jakewharton.timber:timber:$timber_version"
 

@@ -9,6 +9,7 @@ package com.saqs.app.data
 
 import com.saqs.app.domain.Event
 import com.saqs.app.util.Lce
+import com.saqs.app.util.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
@@ -32,9 +33,15 @@ class EventRepositoryImpl private constructor(
             .collect { send(Lce.Content(it)) }
     }.flowOn(dispatcherProvider.db)
 
-    override fun getAllRemote(): Flow<Event> {
+    override fun observeEventsRemote(): Flow<Event> {
         return firebaseSource.observeEvents()
             .flowOn(dispatcherProvider.io)
+    }
+
+    override suspend fun updateEventRemote(event: Event): Result<Void> {
+        return withContext(dispatcherProvider.io) {
+            firebaseSource.updateEvent(event)
+        }
     }
 
     override suspend fun addEvent(event: Event) {
