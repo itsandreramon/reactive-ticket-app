@@ -22,9 +22,9 @@ import com.saqs.app.ui.wallet.model.WalletViewEvent
 import com.saqs.app.ui.wallet.viewmodel.WalletViewModel
 import com.saqs.app.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class WalletFragment : Fragment(), TicketItemAdapter.TicketItemClickListener {
