@@ -24,7 +24,10 @@ import com.saqs.app.ui.purchase.model.PurchaseTicketViewState
 import com.saqs.app.ui.purchase.model._PurchaseTicketViewEffect
 import com.saqs.app.ui.purchase.model._PurchaseTicketViewState
 import com.saqs.app.util.Lce
+<<<<<<< HEAD
+=======
 import com.saqs.app.util.Result
+>>>>>>> 42c26509c8c8f19124152731e691a3eb9d3f28fe
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
