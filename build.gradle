@@ -6,7 +6,7 @@ buildscript {
     ]
 
     ext {
-        android_plugin_version = "4.1.1"
+        android_plugin_version = '4.2.0-beta01'
         kotlin_version = "1.4.20"
         desugar_version = "1.0.9"
         spotless_version = "5.8.2"
