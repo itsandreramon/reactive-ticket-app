@@ -83,10 +83,6 @@ class WalletViewModel @ViewModelInject constructor(
                 }
             }
         }.launchIn(viewModelScope)
-
-        ticketRepository.observeTicketsRemote().onEach {
-            ticketRepository.addTicket(it)
-        }.launchIn(viewModelScope)
     }
 
     fun attachEvents(fragment: WalletFragment) {

@@ -7,10 +7,8 @@
 
 package com.saqs.app.data
 
-import com.google.firebase.firestore.DocumentReference
 import com.saqs.app.domain.Ticket
 import com.saqs.app.util.Lce
-import com.saqs.app.util.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
@@ -24,16 +22,16 @@ class TicketRepositoryImpl(
     private val firebaseSource: FirebaseSource
 ) : TicketRepository {
 
-    override val dataSource: DataSource
+    private val dataSource: DataSource
         get() = InMemoryDatabase
 
     override suspend fun addTicket(ticket: Ticket) {
-        /*withContext(dispatcherProvider.db) {
+        withContext(dispatcherProvider.db) {
             dataSource.tickets.value = buildList {
                 addAll(dataSource.tickets.value)
                 add(ticket)
             }
-        }*/
+        }
     }
 
     override fun getAll() = channelFlow<Lce<List<Ticket>>> {
@@ -42,17 +40,6 @@ class TicketRepositoryImpl(
             .catch { send(Lce.Error(it)) }
             .collect { send(Lce.Content(it)) }
     }.flowOn(dispatcherProvider.db)
-
-    override fun observeTicketsRemote(): Flow<Ticket> {
-        return firebaseSource.observeTickets()
-            .flowOn(dispatcherProvider.io)
-    }
-
-    override suspend fun addTicketRemote(ticket: Ticket): Result<DocumentReference> {
-        return withContext(dispatcherProvider.io) {
-            firebaseSource.addTicket(ticket)
-        }
-    }
 
     companion object {
 

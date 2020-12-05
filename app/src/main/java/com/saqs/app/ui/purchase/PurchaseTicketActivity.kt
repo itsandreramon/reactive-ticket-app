@@ -62,6 +62,10 @@ class PurchaseTicketActivity : AppCompatActivity() {
     }
 
     private fun initViewEffects() {
+        viewModel.effect.setPurchaseButtonState.onEach { effect ->
+            binding.btnPurchase.isEnabled = effect.enabled
+        }.launchIn(lifecycleScope)
+
         viewModel.effect.navigateExplore.onEach { effect ->
             onBackPressed()
         }.launchIn(lifecycleScope)

@@ -23,7 +23,6 @@ import com.saqs.app.ui.explore.adapter.EventItemAdapter
 import com.saqs.app.ui.explore.model.ExploreViewEvent
 import com.saqs.app.ui.explore.model.ExploreViewEventType.NavigateEventItem
 import com.saqs.app.ui.explore.viewmodel.ExploreViewModel
-import com.saqs.app.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -77,7 +76,7 @@ class ExploreFragment : Fragment(), EventItemAdapter.EventItemClickListener {
 
     private fun initViewStates() {
         viewModel.state.events.onEach { state ->
-            viewAdapter.submitList(state.sortedBy { DateUtils.fromTimestamp(it.date) })
+            viewAdapter.submitList(state)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 

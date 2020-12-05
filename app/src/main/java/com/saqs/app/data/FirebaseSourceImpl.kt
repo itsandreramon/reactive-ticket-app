@@ -13,9 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.saqs.app.domain.Event
-import com.saqs.app.domain.Ticket
 import com.saqs.app.util.FIRESTORE_COLLECTION_EVENTS
-import com.saqs.app.util.FIRESTORE_COLLECTION_TICKETS
 import com.saqs.app.util.Result
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -49,35 +47,15 @@ class FirebaseSourceImpl : FirebaseSource {
         awaitClose()
     }
 
-    override fun observeTickets(): Flow<Ticket> = callbackFlow {
-        firestore.collection(FIRESTORE_COLLECTION_TICKETS)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    return@addSnapshotListener
-                }
-
-                for (doc in value!!) {
-                    try {
-                        val ticket = doc
-                            .toObject(Ticket::class.java)
-                            .apply { id = doc.id }
-
-                        offer(ticket)
-                    } catch (e: Exception) {
-                        Timber.e(e)
-                    }
-                }
-            }
-
-        awaitClose()
-    }
-
-    override suspend fun bookEvent(event: Event): Result<Task<Double>> {
+    override suspend fun bookEvent(event: Event, amount: Int): Result<Task<Double>> {
         return try {
+            require(amount > 0)
+
+            // Firestore Transaction
             val sfDocRef = firestore.collection(FIRESTORE_COLLECTION_EVENTS).document(event.id)
             val result = firestore.runTransaction { transaction ->
                 val snapshot = transaction.get(sfDocRef)
-                val newAvailableTickets = snapshot.getDouble("available")!! - 1
+                val newAvailableTickets = snapshot.getDouble("available")!! - amount
 
                 if (newAvailableTickets >= 0) {
                     transaction.update(sfDocRef, "available", newAvailableTickets)
