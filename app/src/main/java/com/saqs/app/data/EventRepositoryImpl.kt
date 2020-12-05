@@ -7,6 +7,7 @@
 
 package com.saqs.app.data
 
+import com.google.android.gms.tasks.Task
 import com.saqs.app.domain.Event
 import com.saqs.app.util.Lce
 import com.saqs.app.util.Result
@@ -38,9 +39,9 @@ class EventRepositoryImpl private constructor(
             .flowOn(dispatcherProvider.io)
     }
 
-    override suspend fun updateEventRemote(event: Event): Result<Void> {
+    override suspend fun bookEventRemote(event: Event): Result<Task<Double>> {
         return withContext(dispatcherProvider.io) {
-            firebaseSource.updateEvent(event)
+            firebaseSource.bookEvent(event)
         }
     }
 

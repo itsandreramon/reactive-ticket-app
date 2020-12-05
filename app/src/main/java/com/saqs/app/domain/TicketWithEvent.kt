@@ -17,7 +17,7 @@ data class TicketWithEvent(
 
 class TicketWithEventDiffCallback : DiffUtil.ItemCallback<TicketWithEvent>() {
     override fun areItemsTheSame(oldItem: TicketWithEvent, newItem: TicketWithEvent): Boolean {
-        return oldItem == newItem
+        return false
     }
 
     override fun areContentsTheSame(oldItem: TicketWithEvent, newItem: TicketWithEvent): Boolean {
