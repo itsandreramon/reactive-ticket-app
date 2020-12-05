@@ -19,10 +19,7 @@ import com.saqs.app.ui.explore.model.ExploreViewEventType.NavigateEventItem
 import com.saqs.app.ui.explore.model.ExploreViewState
 import com.saqs.app.ui.explore.model._ExploreViewEffect
 import com.saqs.app.ui.explore.model._ExploreViewState
-<<<<<<< HEAD
-=======
 import com.saqs.app.util.DateUtils
->>>>>>> 42c26509c8c8f19124152731e691a3eb9d3f28fe
 import com.saqs.app.util.Lce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -43,11 +40,7 @@ class ExploreViewModel @ViewModelInject constructor(
             eventRepository.addEvent(it)
         }.launchIn(viewModelScope)
 
-<<<<<<< HEAD
-        eventRepository.getAll().take(32).onEach { lce ->
-=======
         eventRepository.getAll().onEach { lce ->
->>>>>>> 42c26509c8c8f19124152731e691a3eb9d3f28fe
             when (lce) {
                 is Lce.Loading -> {
                     // TODO
@@ -57,11 +50,8 @@ class ExploreViewModel @ViewModelInject constructor(
                 }
                 is Lce.Content -> {
                     _state._events.value = lce.packet
-<<<<<<< HEAD
-=======
                         .take(32)
                         .sortedBy { DateUtils.fromTimestamp(it.date) }
->>>>>>> 42c26509c8c8f19124152731e691a3eb9d3f28fe
                 }
             }
         }.launchIn(viewModelScope)

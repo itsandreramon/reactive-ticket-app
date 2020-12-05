@@ -10,10 +10,7 @@ package com.saqs.app.data
 import com.google.android.gms.tasks.Task
 import com.saqs.app.domain.Event
 import com.saqs.app.util.Lce
-<<<<<<< HEAD
-=======
 import com.saqs.app.util.Result
->>>>>>> 42c26509c8c8f19124152731e691a3eb9d3f28fe
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
@@ -27,11 +24,7 @@ class EventRepositoryImpl private constructor(
     private val firebaseSource: FirebaseSource
 ) : EventRepository {
 
-<<<<<<< HEAD
-    override val dataSource: DataSource
-=======
     private val dataSource: DataSource
->>>>>>> 42c26509c8c8f19124152731e691a3eb9d3f28fe
         get() = InMemoryDatabase
 
     override fun getAll() = channelFlow<Lce<List<Event>>> {
@@ -46,8 +39,6 @@ class EventRepositoryImpl private constructor(
             .flowOn(dispatcherProvider.io)
     }
 
-<<<<<<< HEAD
-=======
     override suspend fun bookEventRemote(
         event: Event,
         amount: Int
@@ -57,7 +48,6 @@ class EventRepositoryImpl private constructor(
         }
     }
 
->>>>>>> 42c26509c8c8f19124152731e691a3eb9d3f28fe
     override suspend fun addEvent(event: Event) {
         withContext(dispatcherProvider.db) {
             dataSource.events.value = buildList {
