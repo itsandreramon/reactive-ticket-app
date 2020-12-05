@@ -67,7 +67,7 @@ class PurchaseTicketViewModel(
                     when (ticketRepository.addTicketRemote(Ticket(eventId = eventItem.id))) {
                         is Result.Success -> {
                             val updatedEvent = eventItem.copy(amount = eventItem.amount - 1)
-                            eventRepository.updateEventRemote(updatedEvent)
+                            eventRepository.bookEventRemote(updatedEvent)
                         }
                         is Result.Error -> {
                             _effect._showErrorDialog.emit(ShowErrorDialogEffect)

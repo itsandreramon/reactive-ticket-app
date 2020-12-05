@@ -28,12 +28,12 @@ class TicketRepositoryImpl(
         get() = InMemoryDatabase
 
     override suspend fun addTicket(ticket: Ticket) {
-        withContext(dispatcherProvider.db) {
+        /*withContext(dispatcherProvider.db) {
             dataSource.tickets.value = buildList {
                 addAll(dataSource.tickets.value)
                 add(ticket)
             }
-        }
+        }*/
     }
 
     override fun getAll() = channelFlow<Lce<List<Ticket>>> {

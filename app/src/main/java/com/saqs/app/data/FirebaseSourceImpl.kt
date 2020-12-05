@@ -7,7 +7,7 @@
 
 package com.saqs.app.data
 
-import com.google.firebase.firestore.DocumentReference
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ktx.firestore
@@ -20,7 +20,6 @@ import com.saqs.app.util.Result
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
 class FirebaseSourceImpl : FirebaseSource {
@@ -73,26 +72,25 @@ class FirebaseSourceImpl : FirebaseSource {
         awaitClose()
     }
 
-    override suspend fun updateEvent(event: Event): Result<Void> {
+    override suspend fun bookEvent(event: Event): Result<Task<Double>> {
         return try {
-            val res = firestore.collection(FIRESTORE_COLLECTION_EVENTS)
-                .document(event.id)
-                .set(event)
-                .await()
+            val sfDocRef = firestore.collection(FIRESTORE_COLLECTION_EVENTS).document(event.id)
+            val result = firestore.runTransaction { transaction ->
+                val snapshot = transaction.get(sfDocRef)
+                val newAvailableTickets = snapshot.getDouble("available")!! - 1
 
-            Result.Success(res)
-        } catch (e: FirebaseFirestoreException) {
-            Result.Error(e)
-        }
-    }
+                if (newAvailableTickets >= 0) {
+                    transaction.update(sfDocRef, "available", newAvailableTickets)
+                    newAvailableTickets
+                } else {
+                    throw FirebaseFirestoreException(
+                        "Available tickets cannot be less than 0",
+                        FirebaseFirestoreException.Code.ABORTED
+                    )
+                }
+            }
 
-    override suspend fun addTicket(ticket: Ticket): Result<DocumentReference> {
-        return try {
-            val res = firestore.collection(FIRESTORE_COLLECTION_TICKETS)
-                .add(ticket)
-                .await()
-
-            Result.Success(res)
+            Result.Success(result)
         } catch (e: FirebaseFirestoreException) {
             Result.Error(e)
         }

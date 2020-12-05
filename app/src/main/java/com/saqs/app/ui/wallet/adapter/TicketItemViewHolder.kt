@@ -21,11 +21,11 @@ class TicketItemViewHolder(
 
     fun bind(ticketWithEvent: TicketWithEvent, listener: TicketItemAdapter.TicketItemClickListener) {
         binding.root.setOnClickListener {
-            // TODO
+            listener.onTicketItemClicked(ticketWithEvent.ticket)
         }
 
-        binding.tvTitle.text = "${ticketWithEvent.event.name} (${ticketWithEvent.amount}x)"
-        binding.tvDate.text = DateUtils.toLocalFormattedDate(DateUtils.fromTimestamp(ticketWithEvent.event.date))
+        binding.tvTitle.text = "${ticketWithEvent.event.name}"
+        binding.tvDate.text = "${ticketWithEvent.amount} Tickets (${DateUtils.toLocalFormattedDate(DateUtils.fromTimestamp(ticketWithEvent.event.date))})"
         binding.ivImage.loadImageElsePlaceholder(ticketWithEvent.event.image)
     }
 }

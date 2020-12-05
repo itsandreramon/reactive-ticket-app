@@ -37,7 +37,7 @@ object DateUtils {
     fun toLocalFormattedDate(
         date: ZonedDateTime
     ): String {
-        return date.format(DateTimeFormatter.ofPattern("EEE, d MMM yyyy - HH:mm"))
+        return date.format(DateTimeFormatter.ofPattern("EEE, d MMM yyyy"))
     }
 
     @Throws(DateTimeParseException::class)
