@@ -17,6 +17,6 @@ interface EventRepository {
     suspend fun getById(id: String): Event?
     fun getAll(): Flow<Lce<List<Event>>>
     suspend fun addEvent(event: Event)
-    suspend fun bookEventRemote(event: Event, amount: Int) : Result<Task<Double>>
+    suspend fun bookEventRemote(event: Event, amount: Int): Result<Task<Double>>
     fun observeEventsRemote(): Flow<Event>
 }
