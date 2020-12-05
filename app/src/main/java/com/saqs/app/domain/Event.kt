@@ -14,7 +14,7 @@ import com.saqs.app.util.round
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-class Event(
+data class Event(
     var id: String = "-1",
     val name: String = "",
     val date: Timestamp = Timestamp.now(),

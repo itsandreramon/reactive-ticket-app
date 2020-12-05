@@ -35,7 +35,7 @@ object DateUtils {
     }
 
     fun toLocalFormattedDate(
-        date: ZonedDateTime
+            date: String
     ): String {
         return date.format(DateTimeFormatter.ofPattern("EEE, d MMM yyyy - HH:mm"))
     }

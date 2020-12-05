@@ -36,7 +36,7 @@ class ExploreViewModel @ViewModelInject constructor(
     val effect = ExploreViewEffect(_effect)
 
     init {
-        eventRepository.getAllRemote().onEach {
+        eventRepository.observeEventsRemote().onEach {
             eventRepository.addEvent(it)
         }.launchIn(viewModelScope)
 

@@ -38,8 +38,9 @@ class MainModule {
 
     @Provides
     fun provideTicketRepository(
-        dispatcherProvider: CoroutinesDispatcherProvider
-    ): TicketRepository = TicketRepositoryImpl.getInstance(dispatcherProvider)
+        dispatcherProvider: CoroutinesDispatcherProvider,
+        firebaseSource: FirebaseSource
+    ): TicketRepository = TicketRepositoryImpl.getInstance(dispatcherProvider, firebaseSource)
 
     @Provides
     fun provideExploreViewModel(
