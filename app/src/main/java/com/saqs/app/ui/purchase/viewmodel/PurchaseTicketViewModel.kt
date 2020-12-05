@@ -14,6 +14,7 @@ import com.saqs.app.data.TicketRepository
 import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.purchase.PurchaseTicketActivity
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffect
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.NavigateExploreEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.ShowErrorDialogEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEvent
@@ -62,21 +63,28 @@ class PurchaseTicketViewModel(
 
     override fun buyTicket(event: BuyTicket) {
         viewModelScope.launch {
-            repeat(event.amount) {
-                state.selectedEvent.value?.let { eventItem ->
-                    when (ticketRepository.addTicketRemote(Ticket(eventId = eventItem.id))) {
-                        is Result.Success -> {
-                            val updatedEvent = eventItem.copy(amount = eventItem.amount - 1)
-                            eventRepository.bookEventRemote(updatedEvent)
+            _effect._setPurchaseButtonState.emit(
+                PurchaseTicketViewEffectType.SetPurchaseButtonState(
+                    false
+                )
+            )
+        }
+
+        viewModelScope.launch {
+            state.selectedEvent.value?.let { eventItem ->
+                when (eventRepository.bookEventRemote(eventItem, event.amount)) {
+                    is Result.Success -> {
+                        _effect._navigateExplore.emit(NavigateExploreEffect)
+
+                        repeat(event.amount) {
+                            ticketRepository.addTicket(Ticket(eventId = eventItem.id))
                         }
-                        is Result.Error -> {
-                            _effect._showErrorDialog.emit(ShowErrorDialogEffect)
-                        }
+                    }
+                    is Result.Error -> {
+                        _effect._showErrorDialog.emit(ShowErrorDialogEffect)
                     }
                 }
             }
-
-            _effect._navigateExplore.emit(NavigateExploreEffect)
         }
     }
 }

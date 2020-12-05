@@ -24,7 +24,7 @@ class EventRepositoryImpl private constructor(
     private val firebaseSource: FirebaseSource
 ) : EventRepository {
 
-    override val dataSource: DataSource
+    private val dataSource: DataSource
         get() = InMemoryDatabase
 
     override fun getAll() = channelFlow<Lce<List<Event>>> {
@@ -39,9 +39,12 @@ class EventRepositoryImpl private constructor(
             .flowOn(dispatcherProvider.io)
     }
 
-    override suspend fun bookEventRemote(event: Event): Result<Task<Double>> {
+    override suspend fun bookEventRemote(
+        event: Event,
+        amount: Int
+    ): Result<Task<Double>> {
         return withContext(dispatcherProvider.io) {
-            firebaseSource.bookEvent(event)
+            firebaseSource.bookEvent(event, amount)
         }
     }
 
