@@ -14,7 +14,9 @@ import com.saqs.app.data.TicketRepository
 import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.purchase.PurchaseTicketActivity
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffect
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.NavigateExploreEffect
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.ShowErrorDialogEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEvent
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.InitState
@@ -22,6 +24,10 @@ import com.saqs.app.ui.purchase.model.PurchaseTicketViewState
 import com.saqs.app.ui.purchase.model._PurchaseTicketViewEffect
 import com.saqs.app.ui.purchase.model._PurchaseTicketViewState
 import com.saqs.app.util.Lce
+<<<<<<< HEAD
+=======
+import com.saqs.app.util.Result
+>>>>>>> 42c26509c8c8f19124152731e691a3eb9d3f28fe
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -60,15 +66,28 @@ class PurchaseTicketViewModel(
 
     override fun buyTicket(event: BuyTicket) {
         viewModelScope.launch {
-            repeat(event.amount) {
-                state.selectedEvent.value?.let {
-                    ticketRepository.addTicket(
-                        Ticket(eventId = it.id)
-                    )
+            _effect._setPurchaseButtonState.emit(
+                PurchaseTicketViewEffectType.SetPurchaseButtonState(
+                    false
+                )
+            )
+        }
+
+        viewModelScope.launch {
+            state.selectedEvent.value?.let { eventItem ->
+                when (eventRepository.bookEventRemote(eventItem, event.amount)) {
+                    is Result.Success -> {
+                        _effect._navigateExplore.emit(NavigateExploreEffect)
+
+                        repeat(event.amount) {
+                            ticketRepository.addTicket(Ticket(eventId = eventItem.id))
+                        }
+                    }
+                    is Result.Error -> {
+                        _effect._showErrorDialog.emit(ShowErrorDialogEffect)
+                    }
                 }
             }
-
-            _effect._navigateExplore.emit(NavigateExploreEffect)
         }
     }
 }

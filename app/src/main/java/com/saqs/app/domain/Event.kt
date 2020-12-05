@@ -31,11 +31,12 @@ data class Event(
 
 class EventDiffCallback : DiffUtil.ItemCallback<Event>() {
     override fun areItemsTheSame(oldItem: Event, newItem: Event): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem == newItem
     }
 
     override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean {
-        return (oldItem.name == newItem.name) &&
+        return (oldItem.image == newItem.image) &&
+                (oldItem.name == newItem.image) &&
                 (oldItem.date == newItem.date)
     }
 }
