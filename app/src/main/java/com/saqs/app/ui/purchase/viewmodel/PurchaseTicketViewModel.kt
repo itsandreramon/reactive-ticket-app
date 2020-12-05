@@ -56,10 +56,8 @@ class PurchaseTicketViewModel(
         eventRepository.getAll().onEach { lce ->
             when (lce) {
                 is Lce.Loading -> {
-
                 }
                 is Lce.Error -> {
-
                 }
                 is Lce.Content -> {
                     val events = lce.packet
