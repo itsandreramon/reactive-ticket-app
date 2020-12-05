@@ -7,6 +7,7 @@
 
 package com.saqs.app.ui.explore.viewmodel
 
+import android.view.View
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,7 @@ import com.saqs.app.data.EventRepository
 import com.saqs.app.ui.explore.ExploreFragment
 import com.saqs.app.ui.explore.model.ExploreViewEffect
 import com.saqs.app.ui.explore.model.ExploreViewEffectType.PurchaseTicketEffect
+import com.saqs.app.ui.explore.model.ExploreViewEffectType.SetProgressBarState
 import com.saqs.app.ui.explore.model.ExploreViewEvent
 import com.saqs.app.ui.explore.model.ExploreViewEventType.NavigateEventItem
 import com.saqs.app.ui.explore.model.ExploreViewState
@@ -24,6 +26,7 @@ import com.saqs.app.util.Lce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class ExploreViewModel @ViewModelInject constructor(
     private val eventRepository: EventRepository
@@ -36,19 +39,25 @@ class ExploreViewModel @ViewModelInject constructor(
     val effect = ExploreViewEffect(_effect)
 
     init {
-        eventRepository.observeEventsRemote().onEach {
-            eventRepository.addEvent(it)
-        }.launchIn(viewModelScope)
+        viewModelScope.launch {
+            _effect._setProgressBarState.emit(SetProgressBarState(View.VISIBLE))
+        }
+
+        viewModelScope.launch {
+            // initiate remote fetch
+            eventRepository.observeEventsRemote()
+        }
 
         eventRepository.getAll().onEach { lce ->
             when (lce) {
                 is Lce.Loading -> {
-                    // TODO
+                    _effect._setProgressBarState.emit(SetProgressBarState(View.VISIBLE))
                 }
                 is Lce.Error -> {
-                    // TODO
+                    Timber.e(lce.error)
                 }
                 is Lce.Content -> {
+                    _effect._setProgressBarState.emit(SetProgressBarState(View.INVISIBLE))
                     _state._events.value = lce.packet
                         .take(32)
                         .sortedBy { DateUtils.fromTimestamp(it.date) }

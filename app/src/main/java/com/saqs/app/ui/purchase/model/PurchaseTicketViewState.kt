@@ -12,9 +12,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 data class _PurchaseTicketViewState(
+    val _selectedEventId: MutableStateFlow<String?> = MutableStateFlow(null),
     val _selectedEvent: MutableStateFlow<Event?> = MutableStateFlow(null)
 )
 
 data class PurchaseTicketViewState(private val _state: _PurchaseTicketViewState) {
+    val selectedEventId: StateFlow<String?> = _state._selectedEventId
     val selectedEvent: StateFlow<Event?> = _state._selectedEvent
 }

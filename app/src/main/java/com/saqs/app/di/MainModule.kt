@@ -15,6 +15,7 @@ import com.saqs.app.data.EventRepositoryImpl
 import com.saqs.app.data.FirebaseSource
 import com.saqs.app.data.TicketRepository
 import com.saqs.app.data.TicketRepositoryImpl
+import com.saqs.app.db.AppDatabase
 import com.saqs.app.ui.explore.viewmodel.ExploreViewModel
 import com.saqs.app.ui.explore.viewmodel.ExploreViewModelFactory
 import com.saqs.app.ui.purchase.viewmodel.PurchaseTicketViewModel
@@ -33,8 +34,9 @@ class MainModule {
     @Provides
     fun provideEventRepository(
         dispatcherProvider: CoroutinesDispatcherProvider,
+        appDatabase: AppDatabase,
         firebaseSource: FirebaseSource
-    ): EventRepository = EventRepositoryImpl.getInstance(dispatcherProvider, firebaseSource)
+    ): EventRepository = EventRepositoryImpl.getInstance(dispatcherProvider, appDatabase.eventDao(), firebaseSource)
 
     @Provides
     fun provideTicketRepository(

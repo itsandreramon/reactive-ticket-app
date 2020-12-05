@@ -12,6 +12,7 @@ import com.saqs.app.util.Lce
 import kotlinx.coroutines.flow.Flow
 
 interface TicketRepository {
-    suspend fun addTicket(ticket: Ticket)
     fun getAll(): Flow<Lce<List<Ticket>>>
+
+    suspend fun addTicket(ticket: Ticket)
 }
