@@ -7,4 +7,5 @@
 
 package com.saqs.app.util
 
-const val LOCAL_DATABASE_NAME = "db"
+const val FIRESTORE_COLLECTION_EVENTS = "events"
+const val FIRESTORE_COLLECTION_TICKETS = "tickets"

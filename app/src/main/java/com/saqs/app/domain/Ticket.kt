@@ -11,6 +11,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-class Ticket(
+data class Ticket(
+    var id: String = "-1",
     val eventId: String = "-1"
 ) : Parcelable

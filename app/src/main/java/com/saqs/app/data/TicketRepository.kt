@@ -7,8 +7,10 @@
 
 package com.saqs.app.data
 
+import com.google.firebase.firestore.DocumentReference
 import com.saqs.app.domain.Ticket
 import com.saqs.app.util.Lce
+import com.saqs.app.util.Result
 import kotlinx.coroutines.flow.Flow
 
 interface TicketRepository {
@@ -16,5 +18,9 @@ interface TicketRepository {
 
     suspend fun addTicket(ticket: Ticket)
 
+    suspend fun addTicketRemote(ticket: Ticket) : Result<DocumentReference>
+
     fun getAll(): Flow<Lce<List<Ticket>>>
+
+    fun observeTicketsRemote(): Flow<Ticket>
 }

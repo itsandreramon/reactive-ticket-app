@@ -15,6 +15,7 @@ import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.purchase.PurchaseTicketActivity
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.NavigateExploreEffect
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.ShowErrorDialogEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEvent
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.InitState
@@ -22,6 +23,7 @@ import com.saqs.app.ui.purchase.model.PurchaseTicketViewState
 import com.saqs.app.ui.purchase.model._PurchaseTicketViewEffect
 import com.saqs.app.ui.purchase.model._PurchaseTicketViewState
 import com.saqs.app.util.Lce
+import com.saqs.app.util.Result
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -61,10 +63,16 @@ class PurchaseTicketViewModel(
     override fun buyTicket(event: BuyTicket) {
         viewModelScope.launch {
             repeat(event.amount) {
-                state.selectedEvent.value?.let {
-                    ticketRepository.addTicket(
-                        Ticket(eventId = it.id)
-                    )
+                state.selectedEvent.value?.let { eventItem ->
+                    when (ticketRepository.addTicketRemote(Ticket(eventId = eventItem.id))) {
+                        is Result.Success -> {
+                            val updatedEvent = eventItem.copy(amount = eventItem.amount - 1)
+                            eventRepository.updateEventRemote(updatedEvent)
+                        }
+                        is Result.Error -> {
+                            _effect._showErrorDialog.emit(ShowErrorDialogEffect)
+                        }
+                    }
                 }
             }
 
