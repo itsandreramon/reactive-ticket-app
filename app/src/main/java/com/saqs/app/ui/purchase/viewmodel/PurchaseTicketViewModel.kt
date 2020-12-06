@@ -24,7 +24,6 @@ import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.InitState
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewState
 import com.saqs.app.ui.purchase.model._PurchaseTicketViewEffect
 import com.saqs.app.ui.purchase.model._PurchaseTicketViewState
-import com.saqs.app.util.Lce
 import com.saqs.app.util.Result
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
@@ -54,20 +53,8 @@ class PurchaseTicketViewModel @ViewModelInject constructor(
     }
 
     override fun initState(event: InitState) {
-        eventRepository.getAll().onEach { lce ->
-            when (lce) {
-                is Lce.Loading -> {
-                }
-                is Lce.Error -> {
-                }
-                is Lce.Content -> {
-                    val events = lce.packet
-                    val selectedEvent = events.firstOrNull { it.id == event.eventId }
-                    _state._selectedEvent.value = selectedEvent
-
-                    Timber.e("hello Updating selected: $selectedEvent")
-                }
-            }
+        eventRepository.getById(event.eventId).onEach {
+            _state._selectedEvent.value = it
         }.launchIn(viewModelScope)
     }
 
