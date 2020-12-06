@@ -7,7 +7,6 @@
 
 package com.saqs.app.data
 
-import com.google.android.gms.tasks.Task
 import com.saqs.app.domain.Event
 import com.saqs.app.util.Lce
 import com.saqs.app.util.Result
@@ -18,9 +17,9 @@ interface EventRepository {
 
     fun getAll(): Flow<Lce<List<Event>>>
 
-    fun getAllRemote(): Flow<List<Event>>
+    fun getAllRemote(): Flow<Lce<List<Event>>>
 
     suspend fun insert(event: Event)
 
-    suspend fun bookEventRemote(event: Event, amount: Int): Result<Task<Double>>
+    suspend fun bookEventRemote(event: Event, amount: Int): Result<Double>
 }

@@ -7,6 +7,7 @@
 
 package com.saqs.app.ui.purchase.viewmodel
 
+import android.view.View
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +16,7 @@ import com.saqs.app.data.TicketRepository
 import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.purchase.PurchaseTicketActivity
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffect
-import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.SetPurchaseButtonState
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.NavigateExploreEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.ShowErrorDialogEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEvent
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
@@ -46,7 +47,11 @@ class PurchaseTicketViewModel @ViewModelInject constructor(
 
     init {
         state.selectedEvent.filterNotNull().onEach {
-            // TODO
+            _state._layoutAmountVisible.value = if (it.available > 0) {
+                View.VISIBLE
+            } else {
+                View.INVISIBLE
+            }
         }.launchIn(viewModelScope)
     }
 
@@ -58,7 +63,8 @@ class PurchaseTicketViewModel @ViewModelInject constructor(
 
     override fun buyTicket(event: BuyTicket) {
         viewModelScope.launch {
-            _effect._setPurchaseButtonState.emit(SetPurchaseButtonState(false))
+            _state._dialogLoadingVisible.value = true
+            _state._buttonPurchaseEnabled.value = false
         }
 
         viewModelScope.launch {
@@ -68,12 +74,14 @@ class PurchaseTicketViewModel @ViewModelInject constructor(
                         repeat(event.amount) {
                             ticketRepository.addTicket(Ticket(eventId = eventItem.id))
                         }
-
-                        _effect._setPurchaseButtonState.emit(SetPurchaseButtonState(true))
+                        _state._dialogLoadingVisible.value = false
+                        _state._buttonPurchaseEnabled.value = true
+                        _effect._navigateExplore.emit(NavigateExploreEffect)
                     }
                     is Result.Error -> {
+                        _state._dialogLoadingVisible.value = false
+                        _state._buttonPurchaseEnabled.value = true
                         _effect._showErrorDialog.emit(ShowErrorDialogEffect)
-                        _effect._setPurchaseButtonState.emit(SetPurchaseButtonState(true))
                     }
                 }
             }

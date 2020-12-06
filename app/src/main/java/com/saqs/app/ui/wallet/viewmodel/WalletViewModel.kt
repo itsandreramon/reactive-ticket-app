@@ -30,6 +30,10 @@ class WalletViewModel @ViewModelInject constructor(
     private val _state = _WalletViewState()
     val state = WalletViewState(_state)
 
+    fun attachEvents(fragment: WalletFragment) {
+        fragment.attachViewEvents(this)
+    }
+
     init {
         ticketRepository.getAll().onEach { lce ->
             when (lce) {
@@ -69,23 +73,20 @@ class WalletViewModel @ViewModelInject constructor(
                 }
                 is Lce.Content -> {
                     val tickets = ticketsLce.packet
-                    val ticketsWithEvents = tickets
+                    val ticketsWithEvents = ticketsLce.packet
                         .distinctBy { it.eventId }
-                        .map { ticket -> events
-                            .first { it.id == ticket.eventId }
-                            .let { event ->
-                                val amount = tickets.count { it.eventId == event.id }
-                                TicketWithEvent(ticket, event, amount)
-                            }
+                        .mapNotNull { ticket ->
+                            events.firstOrNull { event -> ticket.eventId == event.id }
+                                ?.let { event ->
+                                    val amountTicketsForEvent =
+                                        tickets.count { it.eventId == event.id }
+                                    TicketWithEvent(ticket, event, amountTicketsForEvent)
+                                }
                         }
 
                     _state._ticketsWithEvents.value = ticketsWithEvents
                 }
             }
         }.launchIn(viewModelScope)
-    }
-
-    fun attachEvents(fragment: WalletFragment) {
-        fragment.attachViewEvents(this)
     }
 }

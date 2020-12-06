@@ -21,7 +21,6 @@ import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.wallet.adapter.TicketItemAdapter
 import com.saqs.app.ui.wallet.model.WalletViewEvent
 import com.saqs.app.ui.wallet.viewmodel.WalletViewModel
-import com.saqs.app.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -69,7 +68,7 @@ class WalletFragment : Fragment(), TicketItemAdapter.TicketItemClickListener {
 
     private fun initViewStates() {
         viewModel.state.ticketsWithEvents.onEach { state ->
-            viewAdapter.submitList(state.sortedBy { DateUtils.fromTimestamp(it.event.date) })
+            viewAdapter.submitList(state)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 

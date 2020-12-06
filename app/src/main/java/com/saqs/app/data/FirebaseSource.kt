@@ -7,7 +7,6 @@
 
 package com.saqs.app.data
 
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.saqs.app.domain.Event
 import com.saqs.app.util.Result
@@ -18,5 +17,5 @@ interface FirebaseSource {
 
     fun observeEvents(): Flow<List<Event>>
 
-    suspend fun bookEvent(event: Event, amount: Int): Result<Task<Double>>
+    suspend fun bookEvent(event: Event, amount: Int): Result<Double>
 }
