@@ -28,6 +28,7 @@ class FirebaseSourceImpl : FirebaseSource {
         firestore.collection(FIRESTORE_COLLECTION_EVENTS)
             .addSnapshotListener { value, e ->
                 if (e != null) {
+                    Timber.e(e)
                     return@addSnapshotListener
                 }
 

@@ -67,7 +67,7 @@ class PurchaseTicketActivity : AppCompatActivity() {
 
     private fun initViewEffects() {
         viewModel.effect.navigateExplore.onEach { effect ->
-            onBackPressed()
+            // onBackPressed()
         }.launchIn(lifecycleScope)
 
         viewModel.effect.showErrorDialog.onEach { effect ->

@@ -7,6 +7,7 @@
 
 package com.saqs.app.data
 
+import com.saqs.app.db.TicketRoomDao
 import com.saqs.app.domain.Ticket
 import com.saqs.app.util.Lce
 import kotlinx.coroutines.flow.catch
@@ -18,39 +19,19 @@ import kotlinx.coroutines.withContext
 
 class TicketRepositoryImpl(
     private val dispatcherProvider: CoroutinesDispatcherProvider,
-    private val firebaseSource: FirebaseSource
+    private val ticketRoomDao: TicketRoomDao
 ) : TicketRepository {
-
-    private val dataSource: DataSource
-        get() = InMemoryDatabase
 
     override suspend fun addTicket(ticket: Ticket) {
         withContext(dispatcherProvider.db) {
-            dataSource.tickets.value = buildList {
-                addAll(dataSource.tickets.value)
-                add(ticket)
-            }
+            ticketRoomDao.add(ticket)
         }
     }
 
     override fun getAll() = channelFlow<Lce<List<Ticket>>> {
-        dataSource.tickets
+        ticketRoomDao.getAll()
             .onStart { send(Lce.Loading()) }
             .catch { send(Lce.Error(it)) }
             .collect { send(Lce.Content(it)) }
     }.flowOn(dispatcherProvider.db)
-
-    companion object {
-
-        @Volatile private var instance: TicketRepositoryImpl? = null
-
-        fun getInstance(
-            dispatcherProvider: CoroutinesDispatcherProvider,
-            firebaseSource: FirebaseSource
-        ) = instance
-            ?: TicketRepositoryImpl(
-                dispatcherProvider,
-                firebaseSource
-            ).also { instance = it }
-    }
 }

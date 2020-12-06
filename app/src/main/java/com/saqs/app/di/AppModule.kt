@@ -47,8 +47,8 @@ object AppModule {
     @Provides
     fun provideTicketRepository(
         dispatcherProvider: CoroutinesDispatcherProvider,
-        firebaseSource: FirebaseSource
-    ): TicketRepository = TicketRepositoryImpl.getInstance(dispatcherProvider, firebaseSource)
+        appDatabase: AppDatabase
+    ): TicketRepository = TicketRepositoryImpl(dispatcherProvider, appDatabase.ticketDao())
 
     @Singleton
     @Provides
