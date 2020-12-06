@@ -40,7 +40,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideFirebaseFirestore() : FirebaseFirestore {
+    fun provideFirebaseFirestore(): FirebaseFirestore {
         return Firebase.firestore
     }
 
