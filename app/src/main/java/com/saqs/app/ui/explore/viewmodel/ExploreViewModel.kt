@@ -23,6 +23,7 @@ import com.saqs.app.ui.explore.model._ExploreViewEffect
 import com.saqs.app.ui.explore.model._ExploreViewState
 import com.saqs.app.util.DateUtils
 import com.saqs.app.util.Lce
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -40,12 +41,8 @@ class ExploreViewModel @ViewModelInject constructor(
 
     init {
         viewModelScope.launch {
-            _effect._setProgressBarState.emit(SetProgressBarState(View.VISIBLE))
-        }
-
-        viewModelScope.launch {
             // initiate remote fetch
-            eventRepository.observeEventsRemote()
+            eventRepository.observeEventsRemote().collect()
         }
 
         eventRepository.getAll().onEach { lce ->
@@ -57,6 +54,7 @@ class ExploreViewModel @ViewModelInject constructor(
                     Timber.e(lce.error)
                 }
                 is Lce.Content -> {
+                    Timber.e("Local db changed..")
                     _effect._setProgressBarState.emit(SetProgressBarState(View.INVISIBLE))
                     _state._events.value = lce.packet
                         .take(32)

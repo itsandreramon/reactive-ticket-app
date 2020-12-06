@@ -18,7 +18,7 @@ interface EventRepository {
 
     fun getAll(): Flow<Lce<List<Event>>>
 
-    fun observeEventsRemote(): Flow<Event>
+    fun observeEventsRemote(): Flow<List<Event>>
 
     suspend fun addEvent(event: Event)
 

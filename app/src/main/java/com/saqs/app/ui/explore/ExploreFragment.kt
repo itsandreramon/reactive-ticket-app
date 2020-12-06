@@ -24,9 +24,10 @@ import com.saqs.app.ui.explore.model.ExploreViewEvent
 import com.saqs.app.ui.explore.model.ExploreViewEventType.NavigateEventItem
 import com.saqs.app.ui.explore.viewmodel.ExploreViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ExploreFragment : Fragment(), EventItemAdapter.EventItemClickListener {
@@ -68,6 +69,7 @@ class ExploreFragment : Fragment(), EventItemAdapter.EventItemClickListener {
 
     private fun initViewEffects() {
         viewModel.effect.setProgressBarState.onEach { effect ->
+            Timber.e("Setting progressbar visibility to: ${effect.visibility}")
             binding.progressBar.visibility = effect.visibility
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 

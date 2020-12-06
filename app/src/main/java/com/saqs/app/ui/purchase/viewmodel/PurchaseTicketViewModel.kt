@@ -48,7 +48,7 @@ class PurchaseTicketViewModel(
 
     init {
         state.selectedEvent.filterNotNull().onEach {
-            Timber.e("Selected: $it")
+            Timber.e("hello current selected: $it")
         }.launchIn(viewModelScope)
     }
 
@@ -63,6 +63,8 @@ class PurchaseTicketViewModel(
                     val events = lce.packet
                     val selectedEvent = events.firstOrNull { it.id == event.eventId }
                     _state._selectedEvent.value = selectedEvent
+
+                    Timber.e("hello Updating selected: $selectedEvent")
                 }
             }
         }.launchIn(viewModelScope)

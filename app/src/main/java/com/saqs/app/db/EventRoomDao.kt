@@ -20,6 +20,9 @@ interface EventRoomDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(event: Event)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addAll(events: List<Event>)
+
     @Query("SELECT * FROM events")
     fun getAll(): Flow<List<Event>>
 

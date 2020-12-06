@@ -25,11 +25,11 @@ class Converters {
 
     @TypeConverter
     fun dateFromTimestamp(timestamp: Timestamp): String {
-        return DateUtils.fromTimestamp(timestamp).toString()
+        return DateUtils.toUtcString(DateUtils.fromTimestamp(timestamp))
     }
 
     @TypeConverter
     fun dateToTimestamp(date: String): Timestamp {
-        return Timestamp(Date.from(DateUtils.fromUtcString(date).toInstant()))
+        return Timestamp(Date.from(DateUtils.fromUtcString(date)))
     }
 }

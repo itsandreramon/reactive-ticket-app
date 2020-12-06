@@ -43,6 +43,7 @@
 
     <ProgressBar
         tools:visibility="visible"
+        android:visibility="invisible"
         android:id="@+id/progress_bar"
         android:layout_gravity="center"
         android:layout_width="wrap_content"

@@ -15,6 +15,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface FirebaseSource {
     val firestore: FirebaseFirestore
-    fun observeEvents(): Flow<Event>
+    fun observeEvents(): Flow<List<Event>>
     suspend fun bookEvent(event: Event, amount: Int): Result<Task<Double>>
 }

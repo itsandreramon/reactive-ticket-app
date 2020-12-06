@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class EventRepositoryImpl private constructor(
     private val dispatcherProvider: CoroutinesDispatcherProvider,
@@ -35,15 +34,9 @@ class EventRepositoryImpl private constructor(
             .collect { send(Lce.Content(it)) }
     }.flowOn(dispatcherProvider.io)
 
-    /**
-     * caches events locally
-     */
-    override fun observeEventsRemote(): Flow<Event> {
+    override fun observeEventsRemote(): Flow<List<Event>> {
         return firebaseSource.observeEvents()
-            .onEach {
-                Timber.e("Adding event $it")
-                addEvent(it)
-            }
+            .onEach { eventRoomDao.addAll(it) }
             .flowOn(dispatcherProvider.io)
     }
 
