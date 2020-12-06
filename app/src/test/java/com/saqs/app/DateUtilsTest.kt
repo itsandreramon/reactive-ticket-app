@@ -20,12 +20,15 @@ class DateUtilsTest : FunSpec({
     }
 
     test("toUtcStringTest") {
+        val zoneId = ZoneId.of("Europe/Berlin")
+        val date = ZonedDateTime.of(2020,12,6,13,0,0,0,zoneId)
+
         val expected = DateTimeFormatter
                 .ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
                 .withZone(ZoneOffset.UTC)
-                .format(Instant.now())
+                .format(date)
 
-        val actual = toUtcString(Instant.now())
+        val actual = toUtcString(date.toInstant())
         actual shouldBe expected
     }
 
