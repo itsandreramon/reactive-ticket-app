@@ -28,6 +28,7 @@ buildscript {
         kotest_version = "4.3.1"
         mockk_version = "1.10.2"
         google_play_version = "4.3.4"
+        turbine_version = "0.3.0"
     }
 
     repositories {
