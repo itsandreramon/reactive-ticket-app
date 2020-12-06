@@ -17,6 +17,7 @@ import com.saqs.app.ui.wallet.WalletFragment
 import com.saqs.app.ui.wallet.model.WalletViewEvent
 import com.saqs.app.ui.wallet.model.WalletViewState
 import com.saqs.app.ui.wallet.model._WalletViewState
+import com.saqs.app.util.DateUtils
 import com.saqs.app.util.Lce
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -84,6 +85,7 @@ class WalletViewModel @ViewModelInject constructor(
                         }
 
                     _state._ticketsWithEvents.value = ticketsWithEvents
+                        .sortedBy { DateUtils.fromTimestamp(it.event.date) }
                 }
             }
         }.launchIn(viewModelScope)
