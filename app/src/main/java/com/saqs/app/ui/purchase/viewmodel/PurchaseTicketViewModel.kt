@@ -15,7 +15,6 @@ import com.saqs.app.data.TicketRepository
 import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.purchase.PurchaseTicketActivity
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffect
-import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.NavigateExploreEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.SetPurchaseButtonState
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.ShowErrorDialogEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEvent
@@ -29,7 +28,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class PurchaseTicketViewModel @ViewModelInject constructor(
     private val eventRepository: EventRepository,
@@ -48,7 +46,7 @@ class PurchaseTicketViewModel @ViewModelInject constructor(
 
     init {
         state.selectedEvent.filterNotNull().onEach {
-            Timber.e("hello current selected: $it")
+            // TODO
         }.launchIn(viewModelScope)
     }
 
@@ -67,14 +65,15 @@ class PurchaseTicketViewModel @ViewModelInject constructor(
             state.selectedEvent.value?.let { eventItem ->
                 when (eventRepository.bookEventRemote(eventItem, event.amount)) {
                     is Result.Success -> {
-                        _effect._navigateExplore.emit(NavigateExploreEffect)
-
                         repeat(event.amount) {
                             ticketRepository.addTicket(Ticket(eventId = eventItem.id))
                         }
+
+                        _effect._setPurchaseButtonState.emit(SetPurchaseButtonState(true))
                     }
                     is Result.Error -> {
                         _effect._showErrorDialog.emit(ShowErrorDialogEffect)
+                        _effect._setPurchaseButtonState.emit(SetPurchaseButtonState(true))
                     }
                 }
             }

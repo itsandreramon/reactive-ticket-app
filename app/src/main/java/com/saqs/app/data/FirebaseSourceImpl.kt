@@ -27,8 +27,6 @@ class FirebaseSourceImpl : FirebaseSource {
     override fun observeEvents(): Flow<List<Event>> = callbackFlow {
         firestore.collection(FIRESTORE_COLLECTION_EVENTS)
             .addSnapshotListener { value, e ->
-                Timber.e("hello firebase changed")
-
                 if (e != null) {
                     return@addSnapshotListener
                 }
@@ -40,7 +38,6 @@ class FirebaseSourceImpl : FirebaseSource {
                             .toObject(Event::class.java)
                             .apply { id = doc.id }
 
-                        Timber.e("hello receiving new event: $event")
                         buffer.add(event)
                     } catch (e: Exception) {
                         Timber.e(e)
@@ -66,7 +63,6 @@ class FirebaseSourceImpl : FirebaseSource {
 
                 if (newAvailableTickets >= 0) {
                     transaction.update(sfDocRef, "available", newAvailableTickets)
-                    Timber.e("hello updating document to $newAvailableTickets")
                     newAvailableTickets
                 } else {
                     throw FirebaseFirestoreException(
@@ -77,7 +73,7 @@ class FirebaseSourceImpl : FirebaseSource {
             }
 
             Result.Success(result)
-        } catch (e: FirebaseFirestoreException) {
+        } catch (e: Exception) {
             Result.Error(e)
         }
     }

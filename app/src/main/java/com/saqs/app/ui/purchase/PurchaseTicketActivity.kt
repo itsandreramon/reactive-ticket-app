@@ -48,7 +48,6 @@ class PurchaseTicketActivity : AppCompatActivity() {
         initViewStates()
         initViewEffects()
 
-        // prepare toolbar
         setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
@@ -67,7 +66,7 @@ class PurchaseTicketActivity : AppCompatActivity() {
         }.launchIn(lifecycleScope)
 
         viewModel.effect.navigateExplore.onEach { effect ->
-            // onBackPressed()
+            onBackPressed()
         }.launchIn(lifecycleScope)
 
         viewModel.effect.showErrorDialog.onEach { effect ->
