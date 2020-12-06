@@ -10,7 +10,6 @@ buildscript {
         desugar_version = "1.0.9"
         spotless_version = "5.8.2"
         coroutines_version = "1.4.1"
-        datastore_version = "1.0.0-alpha04"
         room_version = "2.2.5"
         serialization_version = "1.0.1"
         material_version = "1.2.1"
