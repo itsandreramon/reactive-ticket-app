@@ -63,32 +63,38 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_title_amount_available"
                 tools:text="10 of 1000" />
 
-            <TextView
-                android:id="@+id/tv_amount"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/layout_amount"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
-                android:text="Amount"
-                android:textAppearance="?textAppearanceHeadline6"
+                android:orientation="vertical"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_amount_available" />
+                app:layout_constraintTop_toBottomOf="@id/tv_amount_available">
 
-            <NumberPicker
-                android:id="@+id/number_picker_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_amount" />
+                <TextView
+                    android:id="@+id/tv_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Amount"
+                    android:textAppearance="?textAppearanceHeadline6" />
+
+                <NumberPicker
+                    android:id="@+id/number_picker_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_purchase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:id="@+id/btn_purchase"
         android:layout_margin="@dimen/margin_medium"
         android:padding="@dimen/margin_medium"
         android:text="Purchase" />

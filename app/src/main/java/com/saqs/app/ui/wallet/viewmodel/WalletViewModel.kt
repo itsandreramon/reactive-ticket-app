@@ -30,6 +30,10 @@ class WalletViewModel @ViewModelInject constructor(
     private val _state = _WalletViewState()
     val state = WalletViewState(_state)
 
+    fun attachEvents(fragment: WalletFragment) {
+        fragment.attachViewEvents(this)
+    }
+
     init {
         ticketRepository.getAll().onEach { lce ->
             when (lce) {
@@ -83,9 +87,5 @@ class WalletViewModel @ViewModelInject constructor(
                 }
             }
         }.launchIn(viewModelScope)
-    }
-
-    fun attachEvents(fragment: WalletFragment) {
-        fragment.attachViewEvents(this)
     }
 }
