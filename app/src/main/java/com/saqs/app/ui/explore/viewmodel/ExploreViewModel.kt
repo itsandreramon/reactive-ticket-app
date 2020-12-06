@@ -41,8 +41,7 @@ class ExploreViewModel @ViewModelInject constructor(
 
     init {
         viewModelScope.launch {
-            // initiate remote fetch
-            eventRepository.observeEventsRemote().collect()
+            eventRepository.getAllRemote().collect()
         }
 
         eventRepository.getAll().onEach { lce ->
@@ -54,7 +53,6 @@ class ExploreViewModel @ViewModelInject constructor(
                     Timber.e(lce.error)
                 }
                 is Lce.Content -> {
-                    Timber.e("Local db changed..")
                     _effect._setProgressBarState.emit(SetProgressBarState(View.INVISIBLE))
                     _state._events.value = lce.packet
                         .take(32)

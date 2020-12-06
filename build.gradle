@@ -6,7 +6,6 @@ buildscript {
     ]
 
     ext {
-        android_plugin_version = "4.1.1"
         kotlin_version = "1.4.20"
         desugar_version = "1.0.9"
         spotless_version = "5.8.2"
@@ -15,10 +14,10 @@ buildscript {
         room_version = "2.2.5"
         serialization_version = "1.0.1"
         material_version = "1.2.1"
-        dagger_hilt_version = "2.28-alpha"
+        hilt_version = "2.28-alpha"
+        hilt_androidX_version = "1.0.0-alpha02"
         fragment_version = "1.2.5"
         lifecycle_version = "2.2.0"
-        lifecycle_hilt_version = "1.0.0-alpha02"
         nav_version = "2.3.1"
         firebase_version = "26.1.0"
         constraint_layout_version = "2.0.4"
@@ -37,16 +36,17 @@ buildscript {
     }
 
     dependencies {
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
-        classpath "com.android.tools.build:gradle:$android_plugin_version"
-        classpath "com.google.dagger:hilt-android-gradle-plugin:$dagger_hilt_version"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.android.tools.build:gradle:4.1.1"
         classpath "com.google.gms:google-services:$google_play_version"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 plugins {
     id "com.diffplug.spotless" version "$spotless_version"
+    id "com.github.plnice.canidropjetifier" version "0.5"
 }
 
 if (hasProperty('buildScan')) {

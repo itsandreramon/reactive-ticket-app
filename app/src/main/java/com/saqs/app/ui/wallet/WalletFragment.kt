@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +23,6 @@ import com.saqs.app.ui.wallet.model.WalletViewEvent
 import com.saqs.app.ui.wallet.viewmodel.WalletViewModel
 import com.saqs.app.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -32,7 +32,7 @@ class WalletFragment : Fragment(), TicketItemAdapter.TicketItemClickListener {
     private lateinit var viewAdapter: TicketItemAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    @Inject lateinit var viewModel: WalletViewModel
+    private val viewModel by viewModels<WalletViewModel>()
     private lateinit var viewEvent: WalletViewEvent
 
     private var _binding: FragmentWalletBinding? = null

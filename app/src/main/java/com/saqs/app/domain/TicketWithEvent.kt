@@ -17,10 +17,11 @@ data class TicketWithEvent(
 
 class TicketWithEventDiffCallback : DiffUtil.ItemCallback<TicketWithEvent>() {
     override fun areItemsTheSame(oldItem: TicketWithEvent, newItem: TicketWithEvent): Boolean {
-        return false
+        return oldItem == newItem
     }
 
     override fun areContentsTheSame(oldItem: TicketWithEvent, newItem: TicketWithEvent): Boolean {
+        // TODO
         return false
     }
 }

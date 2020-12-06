@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,10 +25,8 @@ import com.saqs.app.ui.explore.model.ExploreViewEvent
 import com.saqs.app.ui.explore.model.ExploreViewEventType.NavigateEventItem
 import com.saqs.app.ui.explore.viewmodel.ExploreViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ExploreFragment : Fragment(), EventItemAdapter.EventItemClickListener {
@@ -35,7 +34,7 @@ class ExploreFragment : Fragment(), EventItemAdapter.EventItemClickListener {
     private lateinit var viewAdapter: EventItemAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    @Inject lateinit var viewModel: ExploreViewModel
+    private val viewModel by viewModels<ExploreViewModel>()
     private lateinit var viewEvent: ExploreViewEvent
 
     private var _binding: FragmentExploreBinding? = null
@@ -69,7 +68,6 @@ class ExploreFragment : Fragment(), EventItemAdapter.EventItemClickListener {
 
     private fun initViewEffects() {
         viewModel.effect.setProgressBarState.onEach { effect ->
-            Timber.e("Setting progressbar visibility to: ${effect.visibility}")
             binding.progressBar.visibility = effect.visibility
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
