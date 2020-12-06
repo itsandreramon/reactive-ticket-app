@@ -10,6 +10,7 @@ package com.saqs.app.util
 import com.google.firebase.Timestamp
 import java.time.Instant
 import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -22,6 +23,10 @@ object DateUtils {
     fun toUtcString(
         utc: Instant
     ): String {
+        val utc = DateTimeFormatter
+                .ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+                .withZone(ZoneOffset.UTC)
+                .format(utc)
         return utc.toString()
     }
 
