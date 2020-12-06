@@ -24,24 +24,31 @@ class FirebaseSourceImpl : FirebaseSource {
 
     override val firestore: FirebaseFirestore by lazy { Firebase.firestore }
 
-    override fun observeEvents(): Flow<Event> = callbackFlow {
+    override fun observeEvents(): Flow<List<Event>> = callbackFlow {
         firestore.collection(FIRESTORE_COLLECTION_EVENTS)
             .addSnapshotListener { value, e ->
+                Timber.e("hello firebase changed")
+
                 if (e != null) {
                     return@addSnapshotListener
                 }
 
+                val buffer = mutableListOf<Event>()
                 for (doc in value!!) {
                     try {
                         val event = doc
                             .toObject(Event::class.java)
                             .apply { id = doc.id }
 
-                        offer(event)
+                        Timber.e("hello receiving new event: $event")
+                        buffer.add(event)
                     } catch (e: Exception) {
                         Timber.e(e)
                     }
                 }
+
+                // only emit once the whole data is fetched
+                offer(buffer)
             }
 
         awaitClose()
@@ -59,6 +66,7 @@ class FirebaseSourceImpl : FirebaseSource {
 
                 if (newAvailableTickets >= 0) {
                     transaction.update(sfDocRef, "available", newAvailableTickets)
+                    Timber.e("hello updating document to $newAvailableTickets")
                     newAvailableTickets
                 } else {
                     throw FirebaseFirestoreException(

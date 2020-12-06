@@ -14,8 +14,8 @@ import com.saqs.app.data.TicketRepository
 import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.purchase.PurchaseTicketActivity
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffect
-import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.NavigateExploreEffect
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.SetPurchaseButtonState
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.ShowErrorDialogEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEvent
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
@@ -25,9 +25,11 @@ import com.saqs.app.ui.purchase.model._PurchaseTicketViewEffect
 import com.saqs.app.ui.purchase.model._PurchaseTicketViewState
 import com.saqs.app.util.Lce
 import com.saqs.app.util.Result
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class PurchaseTicketViewModel(
     private val eventRepository: EventRepository,
@@ -44,18 +46,25 @@ class PurchaseTicketViewModel(
         fragment.attachViewEvents(this)
     }
 
+    init {
+        state.selectedEvent.filterNotNull().onEach {
+            Timber.e("hello current selected: $it")
+        }.launchIn(viewModelScope)
+    }
+
     override fun initState(event: InitState) {
-        eventRepository.getAll().onEach { eventsLce ->
-            when (eventsLce) {
+        eventRepository.getAll().onEach { lce ->
+            when (lce) {
                 is Lce.Loading -> {
-                    // TODO
                 }
                 is Lce.Error -> {
-                    // TODO
                 }
                 is Lce.Content -> {
-                    val events = eventsLce.packet
-                    _state._selectedEvent.value = events.firstOrNull { it.id == event.eventId }
+                    val events = lce.packet
+                    val selectedEvent = events.firstOrNull { it.id == event.eventId }
+                    _state._selectedEvent.value = selectedEvent
+
+                    Timber.e("hello Updating selected: $selectedEvent")
                 }
             }
         }.launchIn(viewModelScope)
@@ -63,11 +72,7 @@ class PurchaseTicketViewModel(
 
     override fun buyTicket(event: BuyTicket) {
         viewModelScope.launch {
-            _effect._setPurchaseButtonState.emit(
-                PurchaseTicketViewEffectType.SetPurchaseButtonState(
-                    false
-                )
-            )
+            _effect._setPurchaseButtonState.emit(SetPurchaseButtonState(false))
         }
 
         viewModelScope.launch {

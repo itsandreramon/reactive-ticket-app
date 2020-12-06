@@ -12,48 +12,35 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
 
 object DateUtils {
 
     fun nowUtc(): String {
-        return ZonedDateTime
-            .ofInstant(Instant.now(), ZoneId.of("UTC"))
-            .toString()
+        return Instant.now().toString()
     }
 
     fun toUtcString(
-        utc: ZonedDateTime
+        utc: Instant
     ): String {
         return utc.toString()
     }
 
-    fun toLocalString(
-        utc: ZonedDateTime
-    ): String {
-        return utc.toLocalDateTime().toString()
-    }
-
     fun toLocalFormattedDate(
-        date: ZonedDateTime
+        utc: Instant
     ): String {
-        return date.format(DateTimeFormatter.ofPattern("EEE, d MMM yyyy"))
+        val zonedDateTime = ZonedDateTime.ofInstant(utc, ZoneId.systemDefault())
+        return zonedDateTime.format(DateTimeFormatter.ofPattern("EEE, d MMM yyyy"))
     }
 
-    @Throws(DateTimeParseException::class)
     fun fromUtcString(
         utc: String
-    ): ZonedDateTime {
-        val instantUtc = Instant.parse(utc)
-        return ZonedDateTime
-            .ofInstant(instantUtc, ZoneId.of("UTC"))
+    ): Instant {
+        return Instant.parse(utc)
     }
 
-    @Throws(DateTimeParseException::class)
     fun fromTimestamp(
         timestampUtc: Timestamp
-    ): ZonedDateTime {
-        val instant = timestampUtc.toDate().toInstant()
-        return ZonedDateTime.ofInstant(instant, ZoneId.of("UTC"))
+    ): Instant {
+        return timestampUtc.toDate().toInstant()
     }
 }

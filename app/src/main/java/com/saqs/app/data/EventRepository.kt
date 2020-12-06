@@ -14,9 +14,13 @@ import com.saqs.app.util.Result
 import kotlinx.coroutines.flow.Flow
 
 interface EventRepository {
-    suspend fun getById(id: String): Event?
+    fun getById(id: String): Flow<Event>
+
     fun getAll(): Flow<Lce<List<Event>>>
+
+    fun observeEventsRemote(): Flow<List<Event>>
+
     suspend fun addEvent(event: Event)
+
     suspend fun bookEventRemote(event: Event, amount: Int): Result<Task<Double>>
-    fun observeEventsRemote(): Flow<Event>
 }
