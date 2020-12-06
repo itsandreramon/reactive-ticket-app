@@ -21,6 +21,7 @@ import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.InitState
 import com.saqs.app.ui.purchase.viewmodel.PurchaseTicketViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -83,8 +84,12 @@ class PurchaseTicketActivity : AppCompatActivity() {
             binding.layoutAmount.visibility = state
         }.launchIn(lifecycleScope)
 
-        viewModel.state.buttonPurchaseEnabled.onEach { state ->
-            binding.btnPurchase.isEnabled = state
+        viewModel.state.buttonPurchaseEnabled.combine(
+            viewModel.state.selectedEvent
+        ) { stateEnabled, stateEvent ->
+            if (stateEvent != null) {
+                binding.btnPurchase.isEnabled = stateEnabled && (stateEvent.available > 0)
+            }
         }.launchIn(lifecycleScope)
 
         viewModel.state.dialogLoadingVisible.onEach { state ->
