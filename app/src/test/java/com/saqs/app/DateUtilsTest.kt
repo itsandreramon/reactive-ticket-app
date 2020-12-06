@@ -56,7 +56,7 @@ class DateUtilsTest : FunSpec({
         //val instant: Instant = Instant.now();*/
         System.out.println(expected)
 
-       actual shouldBe  expected
+       actual shouldNotBe  expected
 
     }
 
