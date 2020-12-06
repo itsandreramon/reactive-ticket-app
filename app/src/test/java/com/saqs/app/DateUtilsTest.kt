@@ -6,7 +6,6 @@ import com.saqs.app.util.DateUtils.toLocalFormattedDate
 import com.saqs.app.util.DateUtils.toUtcString
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import java.security.Timestamp
 import java.time.*
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -48,6 +47,12 @@ class DateUtilsTest : FunSpec({
         val actual = fromUtcString(expectedAsString)
         actual shouldBe expected.toInstant()
     }
-    
+
+    test("fromTimestampTest"){
+        val timestamp = com.google.firebase.Timestamp(Date(2020,12,6,14,13,50))
+        val actual = fromTimestamp(timestamp)
+        val expected = timestamp.toDate().toInstant()
+        actual shouldBe expected
+    }
 
 })
