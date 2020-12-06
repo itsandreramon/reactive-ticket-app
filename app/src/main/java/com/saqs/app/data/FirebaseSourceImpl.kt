@@ -49,7 +49,11 @@ class FirebaseSourceImpl : FirebaseSource {
                 offer(buffer)
             }
 
-        awaitClose()
+        try {
+            awaitClose()
+        } catch (t: Throwable) {
+            Timber.e(t) // called with JobCancellationException
+        }
     }
 
     override suspend fun bookEvent(event: Event, amount: Int): Result<Double> {
