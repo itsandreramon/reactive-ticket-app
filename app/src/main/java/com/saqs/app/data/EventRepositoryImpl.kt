@@ -21,11 +21,16 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
-class EventRepositoryImpl private constructor(
+class EventRepositoryImpl(
     private val dispatcherProvider: CoroutinesDispatcherProvider,
     private val eventRoomDao: EventRoomDao,
     private val firebaseSource: FirebaseSource
 ) : EventRepository {
+
+    override fun getById(id: String): Flow<Event> {
+        return eventRoomDao.getById(id)
+            .flowOn(dispatcherProvider.db)
+    }
 
     override fun getAll() = channelFlow<Lce<List<Event>>> {
         eventRoomDao.getAll()
@@ -34,45 +39,21 @@ class EventRepositoryImpl private constructor(
             .collect { send(Lce.Content(it)) }
     }.flowOn(dispatcherProvider.io)
 
-    override fun observeEventsRemote(): Flow<List<Event>> {
-        return firebaseSource.observeEvents()
-            .onEach { eventRoomDao.addAll(it) }
-            .flowOn(dispatcherProvider.io)
-    }
-
-    override suspend fun bookEventRemote(
-        event: Event,
-        amount: Int
-    ): Result<Task<Double>> {
-        return withContext(dispatcherProvider.io) {
-            firebaseSource.bookEvent(event, amount)
-        }
-    }
-
-    override suspend fun addEvent(event: Event) {
+    override suspend fun insert(event: Event) {
         withContext(dispatcherProvider.db) {
             eventRoomDao.add(event)
         }
     }
 
-    override fun getById(id: String): Flow<Event> {
-        return eventRoomDao.getById(id)
-            .flowOn(dispatcherProvider.db)
+    override fun getAllRemote(): Flow<List<Event>> {
+        return firebaseSource.observeEvents()
+            .onEach { eventRoomDao.addAll(it) }
+            .flowOn(dispatcherProvider.io)
     }
 
-    companion object {
-
-        @Volatile private var instance: EventRepositoryImpl? = null
-
-        fun getInstance(
-            dispatcherProvider: CoroutinesDispatcherProvider,
-            eventRoomDao: EventRoomDao,
-            firebaseSource: FirebaseSource
-        ) = instance
-            ?: EventRepositoryImpl(
-                dispatcherProvider,
-                eventRoomDao,
-                firebaseSource
-            ).also { instance = it }
+    override suspend fun bookEventRemote(event: Event, amount: Int): Result<Task<Double>> {
+        return withContext(dispatcherProvider.io) {
+            firebaseSource.bookEvent(event, amount)
+        }
     }
 }

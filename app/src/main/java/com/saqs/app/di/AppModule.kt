@@ -9,6 +9,13 @@ package com.saqs.app.di
 
 import android.content.Context
 import androidx.room.Room
+import com.saqs.app.data.CoroutinesDispatcherProvider
+import com.saqs.app.data.EventRepository
+import com.saqs.app.data.EventRepositoryImpl
+import com.saqs.app.data.FirebaseSource
+import com.saqs.app.data.FirebaseSourceImpl
+import com.saqs.app.data.TicketRepository
+import com.saqs.app.data.TicketRepositoryImpl
 import com.saqs.app.db.AppDatabase
 import com.saqs.app.util.LOCAL_DATABASE_NAME
 import dagger.Module
@@ -20,7 +27,28 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
-class AppModule {
+object AppModule {
+
+    @Singleton
+    @Provides
+    fun provideFirebaseSource(): FirebaseSource {
+        return FirebaseSourceImpl()
+    }
+
+    @Singleton
+    @Provides
+    fun provideEventRepository(
+        dispatcherProvider: CoroutinesDispatcherProvider,
+        appDatabase: AppDatabase,
+        firebaseSource: FirebaseSource
+    ): EventRepository = EventRepositoryImpl(dispatcherProvider, appDatabase.eventDao(), firebaseSource)
+
+    @Singleton
+    @Provides
+    fun provideTicketRepository(
+        dispatcherProvider: CoroutinesDispatcherProvider,
+        firebaseSource: FirebaseSource
+    ): TicketRepository = TicketRepositoryImpl.getInstance(dispatcherProvider, firebaseSource)
 
     @Singleton
     @Provides

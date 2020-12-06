@@ -41,8 +41,7 @@ class ExploreViewModel @ViewModelInject constructor(
 
     init {
         viewModelScope.launch {
-            // initiate remote fetch
-            eventRepository.observeEventsRemote().collect()
+            eventRepository.getAllRemote().collect()
         }
 
         eventRepository.getAll().onEach { lce ->

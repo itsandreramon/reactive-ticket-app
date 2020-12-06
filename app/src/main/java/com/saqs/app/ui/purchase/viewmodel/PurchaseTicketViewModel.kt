@@ -7,6 +7,7 @@
 
 package com.saqs.app.ui.purchase.viewmodel
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saqs.app.data.EventRepository
@@ -31,7 +32,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class PurchaseTicketViewModel(
+class PurchaseTicketViewModel @ViewModelInject constructor(
     private val eventRepository: EventRepository,
     private val ticketRepository: TicketRepository
 ) : ViewModel(), PurchaseTicketViewEvent {

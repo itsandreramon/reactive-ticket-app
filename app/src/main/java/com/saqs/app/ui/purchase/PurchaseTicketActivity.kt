@@ -8,6 +8,7 @@
 package com.saqs.app.ui.purchase
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navArgs
@@ -18,7 +19,6 @@ import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.InitState
 import com.saqs.app.ui.purchase.viewmodel.PurchaseTicketViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -26,10 +26,10 @@ import kotlinx.coroutines.flow.onEach
 @AndroidEntryPoint
 class PurchaseTicketActivity : AppCompatActivity() {
 
-    @Inject lateinit var viewModel: PurchaseTicketViewModel
+    private val viewModel by viewModels<PurchaseTicketViewModel>()
     private lateinit var viewEvent: PurchaseTicketViewEvent
 
-    val args: PurchaseTicketActivityArgs by navArgs()
+    private val args: PurchaseTicketActivityArgs by navArgs()
     private lateinit var binding: ActivityPurchaseTicketBinding
 
     fun attachViewEvents(viewEvent: PurchaseTicketViewEvent) {
