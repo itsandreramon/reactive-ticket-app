@@ -17,6 +17,7 @@ import com.saqs.app.util.Result
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
@@ -45,15 +46,12 @@ class FirebaseSourceImpl : FirebaseSource {
                     }
                 }
 
-                // only emit once the whole data is fetched
-                offer(buffer)
+                if (isActive) {
+                    offer(buffer)
+                }
             }
 
-        try {
-            awaitClose()
-        } catch (t: Throwable) {
-            Timber.e(t) // called with JobCancellationException
-        }
+        awaitClose()
     }
 
     override suspend fun bookEvent(event: Event, amount: Int): Result<Double> {
