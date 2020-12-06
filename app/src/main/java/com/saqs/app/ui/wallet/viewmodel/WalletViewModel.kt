@@ -10,8 +10,8 @@ package com.saqs.app.ui.wallet.viewmodel
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saqs.app.data.EventRepository
-import com.saqs.app.data.TicketRepository
+import com.saqs.app.data.events.EventsRepository
+import com.saqs.app.data.tickets.TicketsRepository
 import com.saqs.app.domain.TicketWithEvent
 import com.saqs.app.ui.wallet.WalletFragment
 import com.saqs.app.ui.wallet.model.WalletViewEvent
@@ -23,8 +23,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class WalletViewModel @ViewModelInject constructor(
-    private val eventRepository: EventRepository,
-    private val ticketRepository: TicketRepository
+    private val eventsRepository: EventsRepository,
+    private val ticketsRepository: TicketsRepository
 ) : ViewModel(), WalletViewEvent {
 
     private val _state = _WalletViewState()
@@ -35,7 +35,7 @@ class WalletViewModel @ViewModelInject constructor(
     }
 
     init {
-        ticketRepository.getAll().onEach { lce ->
+        ticketsRepository.observeAll().onEach { lce ->
             when (lce) {
                 is Lce.Loading -> {
                     // TODO
@@ -49,7 +49,7 @@ class WalletViewModel @ViewModelInject constructor(
             }
         }.launchIn(viewModelScope)
 
-        eventRepository.getAll().onEach { lce ->
+        eventsRepository.getAll().onEach { lce ->
             when (lce) {
                 is Lce.Loading -> {
                     // TODO
@@ -63,7 +63,7 @@ class WalletViewModel @ViewModelInject constructor(
             }
         }.launchIn(viewModelScope)
 
-        ticketRepository.getAll().combine(state.events) { ticketsLce, events ->
+        ticketsRepository.observeAll().combine(state.events) { ticketsLce, events ->
             when (ticketsLce) {
                 is Lce.Loading -> {
                     // TODO

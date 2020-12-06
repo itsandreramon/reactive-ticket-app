@@ -5,9 +5,10 @@
  * University of Applied Sciences Brandenburg
  */
 
-package com.saqs.app.data
+package com.saqs.app.data.events
 
-import com.saqs.app.db.EventRoomDao
+import com.saqs.app.data.events.local.EventsLocalDataSource
+import com.saqs.app.data.events.remote.EventsRemoteDataSource
 import com.saqs.app.domain.Event
 import com.saqs.app.util.Lce
 import com.saqs.app.util.Result
@@ -15,47 +16,39 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.withContext
 
-class EventRepositoryImpl(
-    private val dispatcherProvider: CoroutinesDispatcherProvider,
-    private val eventRoomDao: EventRoomDao,
-    private val firebaseSource: FirebaseSource
-) : EventRepository {
+class EventsRepositoryImpl(
+    private val eventsLocalDataSource: EventsLocalDataSource,
+    private val eventsRemoteDataSource: EventsRemoteDataSource
+) : EventsRepository {
 
     override fun getById(id: String): Flow<Event> {
-        return eventRoomDao.getById(id)
-            .flowOn(dispatcherProvider.db)
+        return eventsLocalDataSource.getById(id)
     }
 
     override fun getAll() = channelFlow<Lce<List<Event>>> {
-        eventRoomDao.getAll()
+        eventsLocalDataSource.getAll()
             .onStart { send(Lce.Loading()) }
             .catch { send(Lce.Error(it)) }
             .collect { send(Lce.Content(it)) }
-    }.flowOn(dispatcherProvider.db)
-
-    override suspend fun insert(event: Event) {
-        withContext(dispatcherProvider.db) {
-            eventRoomDao.add(event)
-        }
     }
 
     override fun getAllRemote() = channelFlow<Lce<List<Event>>> {
-        firebaseSource.observeEvents()
+        eventsRemoteDataSource.getAll()
             .onStart { send(Lce.Loading()) }
             .catch { send(Lce.Error(it)) }
             .collect {
-                eventRoomDao.addAll(it) // cache locally
+                eventsLocalDataSource.insertAll(it) // cache locally
                 send(Lce.Content(it)) // emit successful content
             }
-    }.flowOn(dispatcherProvider.io)
+    }
+
+    override suspend fun insert(event: Event) {
+        eventsLocalDataSource.insert(event)
+    }
 
     override suspend fun bookEventRemote(event: Event, amount: Int): Result<Double> {
-        return withContext(dispatcherProvider.io) {
-            firebaseSource.bookEvent(event, amount)
-        }
+        return eventsRemoteDataSource.bookEvent(event, amount)
     }
 }

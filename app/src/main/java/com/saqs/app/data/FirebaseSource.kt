@@ -7,15 +7,12 @@
 
 package com.saqs.app.data
 
-import com.google.firebase.firestore.FirebaseFirestore
 import com.saqs.app.domain.Event
 import com.saqs.app.util.Result
 import kotlinx.coroutines.flow.Flow
 
 interface FirebaseSource {
-    val firestore: FirebaseFirestore
-
-    fun observeEvents(): Flow<List<Event>>
+    fun observeAllEvents(): Flow<List<Event>>
 
     suspend fun bookEvent(event: Event, amount: Int): Result<Double>
 }

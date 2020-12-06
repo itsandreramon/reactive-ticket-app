@@ -5,7 +5,7 @@
  * University of Applied Sciences Brandenburg
  */
 
-package com.saqs.app.db
+package com.saqs.app.data.tickets.local
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -15,11 +15,11 @@ import com.saqs.app.domain.Ticket
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface TicketRoomDao {
+interface TicketsRoomDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun add(event: Ticket)
+    fun insert(event: Ticket)
 
     @Query("SELECT * FROM tickets")
-    fun getAll(): Flow<List<Ticket>>
+    fun observeAll(): Flow<List<Ticket>>
 }

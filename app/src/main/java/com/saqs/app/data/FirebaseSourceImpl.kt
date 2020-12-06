@@ -9,8 +9,6 @@ package com.saqs.app.data
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.saqs.app.domain.Event
 import com.saqs.app.util.FIRESTORE_COLLECTION_EVENTS
 import com.saqs.app.util.Result
@@ -21,11 +19,11 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
-class FirebaseSourceImpl : FirebaseSource {
+class FirebaseSourceImpl(
+    private val firestore: FirebaseFirestore
+) : FirebaseSource {
 
-    override val firestore: FirebaseFirestore by lazy { Firebase.firestore }
-
-    override fun observeEvents(): Flow<List<Event>> = callbackFlow {
+    override fun observeAllEvents(): Flow<List<Event>> = callbackFlow {
         firestore.collection(FIRESTORE_COLLECTION_EVENTS)
             .addSnapshotListener { value, e ->
                 if (e != null) {
