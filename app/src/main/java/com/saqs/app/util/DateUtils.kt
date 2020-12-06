@@ -26,9 +26,10 @@ object DateUtils {
     }
 
     fun toLocalFormattedDate(
-        utc: Instant
+        utc: Instant,
+        zonedId: ZoneId = ZoneId.systemDefault()
     ): String {
-        val zonedDateTime = ZonedDateTime.ofInstant(utc, ZoneId.systemDefault())
+        val zonedDateTime = ZonedDateTime.ofInstant(utc, zonedId)
         return zonedDateTime.format(DateTimeFormatter.ofPattern("EEE, d MMM yyyy"))
     }
 
