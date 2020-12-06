@@ -18,10 +18,10 @@ import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.InitState
 import com.saqs.app.ui.purchase.viewmodel.PurchaseTicketViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class PurchaseTicketActivity : AppCompatActivity() {
