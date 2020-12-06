@@ -5,14 +5,14 @@
  * University of Applied Sciences Brandenburg
  */
 
-package com.saqs.app.data
+package com.saqs.app.data.events.remote
 
 import com.saqs.app.domain.Event
 import com.saqs.app.util.Result
 import kotlinx.coroutines.flow.Flow
 
-interface FirebaseSource {
-    fun observeAllEvents(): Flow<List<Event>>
+interface EventsRemoteDataSource {
+    fun getAll(): Flow<List<Event>>
 
     suspend fun bookEvent(event: Event, amount: Int): Result<Double>
 }

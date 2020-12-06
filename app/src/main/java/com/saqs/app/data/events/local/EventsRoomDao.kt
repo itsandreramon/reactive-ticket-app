@@ -5,7 +5,7 @@
  * University of Applied Sciences Brandenburg
  */
 
-package com.saqs.app.db
+package com.saqs.app.data.events.local
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -15,17 +15,17 @@ import com.saqs.app.domain.Event
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface EventRoomDao {
+interface EventsRoomDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun add(event: Event)
+    fun insert(event: Event)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addAll(events: List<Event>)
+    fun insertAll(events: List<Event>)
 
     @Query("SELECT * FROM events")
-    fun getAll(): Flow<List<Event>>
+    fun observeAll(): Flow<List<Event>>
 
     @Query("SELECT * FROM events WHERE id = :id LIMIT 1")
-    fun getById(id: String): Flow<Event>
+    fun observeById(id: String): Flow<Event>
 }

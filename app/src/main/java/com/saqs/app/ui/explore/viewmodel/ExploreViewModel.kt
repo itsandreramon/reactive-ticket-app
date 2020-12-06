@@ -11,7 +11,7 @@ import android.view.View
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saqs.app.data.EventRepository
+import com.saqs.app.data.events.EventsRepository
 import com.saqs.app.ui.explore.ExploreFragment
 import com.saqs.app.ui.explore.model.ExploreViewEffect
 import com.saqs.app.ui.explore.model.ExploreViewEffectType.PurchaseTicketEffect
@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ExploreViewModel @ViewModelInject constructor(
-    private val eventRepository: EventRepository
+    private val eventsRepository: EventsRepository
 ) : ViewModel(), ExploreViewEvent {
 
     private val _state = _ExploreViewState()
@@ -41,10 +41,10 @@ class ExploreViewModel @ViewModelInject constructor(
 
     init {
         viewModelScope.launch {
-            eventRepository.getAllRemote().collect()
+            eventsRepository.getAllRemote().collect()
         }
 
-        eventRepository.getAll().onEach { lce ->
+        eventsRepository.getAll().onEach { lce ->
             when (lce) {
                 is Lce.Loading -> {
                     _effect._setProgressBarState.emit(SetProgressBarState(View.VISIBLE))

@@ -11,8 +11,8 @@ import android.view.View
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saqs.app.data.EventRepository
-import com.saqs.app.data.TicketRepository
+import com.saqs.app.data.events.EventsRepository
+import com.saqs.app.data.tickets.TicketsRepository
 import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.purchase.PurchaseTicketActivity
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffect
@@ -31,8 +31,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class PurchaseTicketViewModel @ViewModelInject constructor(
-    private val eventRepository: EventRepository,
-    private val ticketRepository: TicketRepository
+    private val eventsRepository: EventsRepository,
+    private val ticketsRepository: TicketsRepository
 ) : ViewModel(), PurchaseTicketViewEvent {
 
     private val _state = _PurchaseTicketViewState()
@@ -56,7 +56,7 @@ class PurchaseTicketViewModel @ViewModelInject constructor(
     }
 
     override fun initState(event: InitState) {
-        eventRepository.getById(event.eventId).onEach {
+        eventsRepository.getById(event.eventId).onEach {
             _state._selectedEvent.value = it
         }.launchIn(viewModelScope)
     }
@@ -69,10 +69,10 @@ class PurchaseTicketViewModel @ViewModelInject constructor(
 
         viewModelScope.launch {
             state.selectedEvent.value?.let { eventItem ->
-                when (eventRepository.bookEventRemote(eventItem, event.amount)) {
+                when (eventsRepository.bookEventRemote(eventItem, event.amount)) {
                     is Result.Success -> {
                         repeat(event.amount) {
-                            ticketRepository.addTicket(Ticket(eventId = eventItem.id))
+                            ticketsRepository.insert(Ticket(eventId = eventItem.id))
                         }
                         _state._dialogLoadingVisible.value = false
                         _state._buttonPurchaseEnabled.value = true
