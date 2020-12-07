@@ -46,7 +46,7 @@ class PurchaseTicketViewModelTest {
 
     @Test
     @ExperimentalTime
-    fun viewModelCorrectlySetsSelectedItem() = coroutineRule.runBlockingTest {
+    fun selectedItemGetsSetCorrectly() = coroutineRule.runBlockingTest {
         // Given
         val event = Event(id = "2", amount = 10, available = 10)
 
@@ -65,7 +65,7 @@ class PurchaseTicketViewModelTest {
 
     @Test
     @ExperimentalTime
-    fun viewModelCorrectlyBooksAnEvent() = coroutineRule.runBlockingTest {
+    fun bookingAnEventSavesTicket() = coroutineRule.runBlockingTest {
         // Given
         val event = Event(id = "2", amount = 10, available = 10)
         val ticket = Ticket(eventId = "2")
