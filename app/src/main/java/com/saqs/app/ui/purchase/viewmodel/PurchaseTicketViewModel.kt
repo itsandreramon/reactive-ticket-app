@@ -19,7 +19,7 @@ import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEvent
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
-import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.InitState
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.Init
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewState
 import com.saqs.app.ui.purchase.model._PurchaseTicketViewEffect
 import com.saqs.app.ui.purchase.model._PurchaseTicketViewState
@@ -44,19 +44,17 @@ class PurchaseTicketViewModel @ViewModelInject constructor(
         fragment.attachViewEvents(this)
     }
 
-    init {
+    override fun init(event: Init) {
+        eventsRepository.getById(event.eventId).onEach {
+            _state._selectedEvent.value = it
+        }.launchIn(viewModelScope)
+
         state.selectedEvent.filterNotNull().onEach {
             _state._layoutAmountVisible.value = if (it.available > 0) {
                 View.VISIBLE
             } else {
                 View.INVISIBLE
             }
-        }.launchIn(viewModelScope)
-    }
-
-    override fun initState(event: InitState) {
-        eventsRepository.getById(event.eventId).onEach {
-            _state._selectedEvent.value = it
         }.launchIn(viewModelScope)
     }
 

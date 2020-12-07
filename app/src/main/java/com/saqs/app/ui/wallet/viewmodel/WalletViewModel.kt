@@ -7,6 +7,7 @@
 
 package com.saqs.app.ui.wallet.viewmodel
 
+import androidx.annotation.VisibleForTesting
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,6 +16,7 @@ import com.saqs.app.data.tickets.TicketsRepository
 import com.saqs.app.domain.TicketWithEvent
 import com.saqs.app.ui.wallet.WalletFragment
 import com.saqs.app.ui.wallet.model.WalletViewEvent
+import com.saqs.app.ui.wallet.model.WalletViewEventType.Init
 import com.saqs.app.ui.wallet.model.WalletViewState
 import com.saqs.app.ui.wallet.model._WalletViewState
 import com.saqs.app.util.Lce
@@ -34,21 +36,32 @@ class WalletViewModel @ViewModelInject constructor(
         fragment.attachViewEvents(this)
     }
 
-    init {
-        ticketsRepository.observeAll().onEach { lce ->
-            when (lce) {
-                is Lce.Loading -> {
-                    // TODO
-                }
-                is Lce.Error -> {
-                    // TODO
-                }
-                is Lce.Content -> {
-                    _state._tickets.value = lce.packet
-                }
-            }
-        }.launchIn(viewModelScope)
+    override fun init(event: Init) {
+        observeTickets()
+        observeEvents()
+        observeTicketsWithEvents()
+    }
 
+    @VisibleForTesting
+    internal fun observeTicketsWithEvents() {
+        state.tickets.combine(state.events) { tickets, events ->
+            val ticketsWithEvents = tickets
+                .distinctBy { it.eventId }
+                .mapNotNull { ticket ->
+                    events.firstOrNull { event -> ticket.eventId == event.id }
+                        ?.let { event ->
+                            val amountTicketsForEvent =
+                                tickets.count { it.eventId == event.id }
+                            TicketWithEvent(ticket, event, amountTicketsForEvent)
+                        }
+                }
+
+            _state._ticketsWithEvents.value = ticketsWithEvents
+        }.launchIn(viewModelScope)
+    }
+
+    @VisibleForTesting
+    internal fun observeEvents() {
         eventsRepository.getAll().onEach { lce ->
             when (lce) {
                 is Lce.Loading -> {
@@ -62,9 +75,12 @@ class WalletViewModel @ViewModelInject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
 
-        ticketsRepository.observeAll().combine(state.events) { ticketsLce, events ->
-            when (ticketsLce) {
+    @VisibleForTesting
+    internal fun observeTickets() {
+        ticketsRepository.getAll().onEach { lce ->
+            when (lce) {
                 is Lce.Loading -> {
                     // TODO
                 }
@@ -72,19 +88,7 @@ class WalletViewModel @ViewModelInject constructor(
                     // TODO
                 }
                 is Lce.Content -> {
-                    val tickets = ticketsLce.packet
-                    val ticketsWithEvents = ticketsLce.packet
-                        .distinctBy { it.eventId }
-                        .mapNotNull { ticket ->
-                            events.firstOrNull { event -> ticket.eventId == event.id }
-                                ?.let { event ->
-                                    val amountTicketsForEvent =
-                                        tickets.count { it.eventId == event.id }
-                                    TicketWithEvent(ticket, event, amountTicketsForEvent)
-                                }
-                        }
-
-                    _state._ticketsWithEvents.value = ticketsWithEvents
+                    _state._tickets.value = lce.packet
                 }
             }
         }.launchIn(viewModelScope)

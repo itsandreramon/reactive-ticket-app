@@ -23,7 +23,7 @@ class TicketsRepositoryImpl(
         ticketsLocalDataSource.insert(ticket)
     }
 
-    override fun observeAll() = channelFlow<Lce<List<Ticket>>> {
+    override fun getAll() = channelFlow<Lce<List<Ticket>>> {
         ticketsLocalDataSource.observeAll()
             .onStart { send(Lce.Loading()) }
             .catch { send(Lce.Error(it)) }

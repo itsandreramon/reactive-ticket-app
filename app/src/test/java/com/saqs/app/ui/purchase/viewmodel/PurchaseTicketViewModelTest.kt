@@ -14,7 +14,7 @@ import com.saqs.app.data.tickets.TicketsRepository
 import com.saqs.app.domain.Event
 import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
-import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.InitState
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.Init
 import com.saqs.app.util.Result
 import io.kotest.matchers.shouldBe
 import io.mockk.Runs
@@ -46,7 +46,7 @@ class PurchaseTicketViewModelTest {
 
     @Test
     @ExperimentalTime
-    fun selectedItemGetsSetCorrectly() = coroutineRule.runBlockingTest {
+    fun selectedItemStateIsSetCorrectly() = coroutineRule.runBlockingTest {
         // Given
         val event = Event(id = "2", amount = 10, available = 10)
 
@@ -55,11 +55,12 @@ class PurchaseTicketViewModelTest {
         } returns flowOf(event)
 
         // When
-        purchaseTicketViewModel.initState(InitState(eventId = "2"))
+        purchaseTicketViewModel.init(Init(eventId = "2"))
 
         // Then
         purchaseTicketViewModel.state.selectedEvent.test {
             expectItem() shouldBe event
+            expectComplete()
         }
     }
 
@@ -83,7 +84,7 @@ class PurchaseTicketViewModelTest {
         } just Runs
 
         // When
-        purchaseTicketViewModel.initState(InitState(eventId = "2"))
+        purchaseTicketViewModel.init(Init(eventId = "2"))
         purchaseTicketViewModel.buyTicket(BuyTicket(1))
 
         // Then
