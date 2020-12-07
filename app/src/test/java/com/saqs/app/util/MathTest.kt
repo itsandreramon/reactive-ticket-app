@@ -5,13 +5,12 @@
  * University of Applied Sciences Brandenburg
  */
 
-package com.saqs.app
+package com.saqs.app.util
 
-import com.saqs.app.util.round
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class ExampleUnitTest : FunSpec({
+class MathTest : FunSpec({
 
     test("round") {
         val given = 3.14159265359
