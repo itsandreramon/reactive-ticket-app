@@ -8,6 +8,7 @@
 package com.saqs.app.ui.purchase.viewmodel
 
 import app.cash.turbine.test
+import com.saqs.app.MainCoroutineRule
 import com.saqs.app.data.events.EventsRepository
 import com.saqs.app.data.tickets.TicketsRepository
 import com.saqs.app.domain.Event
@@ -15,7 +16,6 @@ import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.InitState
 import com.saqs.app.util.Result
-import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -23,15 +23,9 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import java.util.concurrent.Executors
 import kotlin.time.ExperimentalTime
-import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -43,7 +37,7 @@ class PurchaseTicketViewModelTest {
 
     private lateinit  var purchaseTicketViewModel: PurchaseTicketViewModel
 
-    @get:Rule val coroutineRule = MainCoroutineRule()
+    @get:Rule val mainCoroutineRule = MainCoroutineRule()
 
     @Before
     fun setupViewModel() {
@@ -52,7 +46,7 @@ class PurchaseTicketViewModelTest {
 
     @Test
     @ExperimentalTime
-    fun viewModelCorrectlySetsSelectedItem() = coroutineRule.runBlockingTest {
+    fun viewModelCorrectlySetsSelectedItem() = mainCoroutineRule.runBlockingTest {
         // Given
         val event = Event(id = "2", amount = 10, available = 10)
 
@@ -71,7 +65,7 @@ class PurchaseTicketViewModelTest {
 
     @Test
     @ExperimentalTime
-    fun viewModelCorrectlyBooksAnEvent() = coroutineRule.runBlockingTest {
+    fun viewModelCorrectlyBooksAnEvent() = mainCoroutineRule.runBlockingTest {
         // Given
         val event = Event(id = "2", amount = 10, available = 10)
         val ticket = Ticket(eventId = "2")
