@@ -60,7 +60,6 @@ class PurchaseTicketViewModelTest {
         // Then
         purchaseTicketViewModel.state.selectedEvent.test {
             expectItem() shouldBe event
-            expectComplete()
         }
     }
 
