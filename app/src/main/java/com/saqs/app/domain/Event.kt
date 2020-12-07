@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele
+ * Copyright 2020 - André Thiele, Allan Fodi, Hüseyin Celik, Bertin Junior Wagueu Nkepgang
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
@@ -7,7 +7,6 @@
 
 package com.saqs.app.domain
 
-import android.os.Parcelable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.room.Entity
 import androidx.room.Index
@@ -16,14 +15,12 @@ import androidx.room.TypeConverters
 import com.google.firebase.Timestamp
 import com.saqs.app.db.Converters
 import com.saqs.app.util.round
-import kotlinx.parcelize.Parcelize
 
 @Entity(
     tableName = "events",
     indices = [Index(value = ["id"])]
 )
 @TypeConverters(Converters::class)
-@Parcelize
 data class Event(
 
     @PrimaryKey
@@ -38,8 +35,7 @@ data class Event(
     val amount: Int = 0,
 
     val image: String? = null
-) : Parcelable {
-
+) {
     val availableTicketsPercentage: Double
         get() = available.toDouble()
             .div(amount.toDouble())
@@ -48,7 +44,7 @@ data class Event(
 
 class EventDiffCallback : DiffUtil.ItemCallback<Event>() {
     override fun areItemsTheSame(oldItem: Event, newItem: Event): Boolean {
-        return oldItem == newItem
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean {

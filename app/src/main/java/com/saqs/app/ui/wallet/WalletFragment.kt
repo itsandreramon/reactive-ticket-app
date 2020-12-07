@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele
+ * Copyright 2020 - André Thiele, Allan Fodi, Hüseyin Celik, Bertin Junior Wagueu Nkepgang
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,10 +20,9 @@ import com.saqs.app.databinding.FragmentWalletBinding
 import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.wallet.adapter.TicketItemAdapter
 import com.saqs.app.ui.wallet.model.WalletViewEvent
+import com.saqs.app.ui.wallet.model.WalletViewEventType.Init
 import com.saqs.app.ui.wallet.viewmodel.WalletViewModel
-import com.saqs.app.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -32,7 +32,7 @@ class WalletFragment : Fragment(), TicketItemAdapter.TicketItemClickListener {
     private lateinit var viewAdapter: TicketItemAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    @Inject lateinit var viewModel: WalletViewModel
+    private val viewModel by viewModels<WalletViewModel>()
     private lateinit var viewEvent: WalletViewEvent
 
     private var _binding: FragmentWalletBinding? = null
@@ -55,6 +55,8 @@ class WalletFragment : Fragment(), TicketItemAdapter.TicketItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewEvent.init(Init)
+
         setupEventItemAdapter()
         initViewEffects()
         initViewStates()
@@ -69,7 +71,7 @@ class WalletFragment : Fragment(), TicketItemAdapter.TicketItemClickListener {
 
     private fun initViewStates() {
         viewModel.state.ticketsWithEvents.onEach { state ->
-            viewAdapter.submitList(state.sortedBy { DateUtils.fromTimestamp(it.event.date) })
+            viewAdapter.submitList(state)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 

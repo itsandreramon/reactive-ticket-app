@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele
+ * Copyright 2020 - André Thiele, Allan Fodi, Hüseyin Celik, Bertin Junior Wagueu Nkepgang
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
@@ -17,10 +17,11 @@ data class TicketWithEvent(
 
 class TicketWithEventDiffCallback : DiffUtil.ItemCallback<TicketWithEvent>() {
     override fun areItemsTheSame(oldItem: TicketWithEvent, newItem: TicketWithEvent): Boolean {
-        return false
+        return oldItem == newItem
     }
 
     override fun areContentsTheSame(oldItem: TicketWithEvent, newItem: TicketWithEvent): Boolean {
+        // TODO
         return false
     }
 }

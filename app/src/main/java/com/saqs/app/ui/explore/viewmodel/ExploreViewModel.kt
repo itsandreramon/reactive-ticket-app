@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele
+ * Copyright 2020 - André Thiele, Allan Fodi, Hüseyin Celik, Bertin Junior Wagueu Nkepgang
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
@@ -11,7 +11,7 @@ import android.view.View
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saqs.app.data.EventRepository
+import com.saqs.app.data.events.EventsRepository
 import com.saqs.app.ui.explore.ExploreFragment
 import com.saqs.app.ui.explore.model.ExploreViewEffect
 import com.saqs.app.ui.explore.model.ExploreViewEffectType.PurchaseTicketEffect
@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ExploreViewModel @ViewModelInject constructor(
-    private val eventRepository: EventRepository
+    private val eventsRepository: EventsRepository
 ) : ViewModel(), ExploreViewEvent {
 
     private val _state = _ExploreViewState()
@@ -41,11 +41,10 @@ class ExploreViewModel @ViewModelInject constructor(
 
     init {
         viewModelScope.launch {
-            // initiate remote fetch
-            eventRepository.observeEventsRemote().collect()
+            eventsRepository.getAllRemote().collect()
         }
 
-        eventRepository.getAll().onEach { lce ->
+        eventsRepository.getAll().onEach { lce ->
             when (lce) {
                 is Lce.Loading -> {
                     _effect._setProgressBarState.emit(SetProgressBarState(View.VISIBLE))
@@ -54,7 +53,6 @@ class ExploreViewModel @ViewModelInject constructor(
                     Timber.e(lce.error)
                 }
                 is Lce.Content -> {
-                    Timber.e("Local db changed..")
                     _effect._setProgressBarState.emit(SetProgressBarState(View.INVISIBLE))
                     _state._events.value = lce.packet
                         .take(32)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele
+ * Copyright 2020 - André Thiele, Allan Fodi, Hüseyin Celik, Bertin Junior Wagueu Nkepgang
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
@@ -7,10 +7,14 @@
 
 package com.saqs.app.domain
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Parcelize
+@Entity(tableName = "tickets")
 data class Ticket(
+
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+
     val eventId: String = "-1"
-) : Parcelable
+)

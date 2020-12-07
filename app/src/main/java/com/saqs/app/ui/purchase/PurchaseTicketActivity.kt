@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele
+ * Copyright 2020 - André Thiele, Allan Fodi, Hüseyin Celik, Bertin Junior Wagueu Nkepgang
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
@@ -8,17 +8,20 @@
 package com.saqs.app.ui.purchase
 
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.saqs.app.R
 import com.saqs.app.databinding.ActivityPurchaseTicketBinding
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEvent
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
-import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.InitState
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.Init
 import com.saqs.app.ui.purchase.viewmodel.PurchaseTicketViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -26,11 +29,13 @@ import kotlinx.coroutines.flow.onEach
 @AndroidEntryPoint
 class PurchaseTicketActivity : AppCompatActivity() {
 
-    @Inject lateinit var viewModel: PurchaseTicketViewModel
+    private val viewModel by viewModels<PurchaseTicketViewModel>()
     private lateinit var viewEvent: PurchaseTicketViewEvent
 
-    val args: PurchaseTicketActivityArgs by navArgs()
+    private val args: PurchaseTicketActivityArgs by navArgs()
     private lateinit var binding: ActivityPurchaseTicketBinding
+
+    private var loadingDialog: AlertDialog? = null
 
     fun attachViewEvents(viewEvent: PurchaseTicketViewEvent) {
         this.viewEvent = viewEvent
@@ -44,11 +49,10 @@ class PurchaseTicketActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        viewEvent.initState(InitState(args.eventId))
+        viewEvent.init(Init(args.eventId))
         initViewStates()
         initViewEffects()
 
-        // prepare toolbar
         setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
@@ -62,10 +66,6 @@ class PurchaseTicketActivity : AppCompatActivity() {
     }
 
     private fun initViewEffects() {
-        viewModel.effect.setPurchaseButtonState.onEach { effect ->
-            binding.btnPurchase.isEnabled = effect.enabled
-        }.launchIn(lifecycleScope)
-
         viewModel.effect.navigateExplore.onEach { effect ->
             // onBackPressed()
         }.launchIn(lifecycleScope)
@@ -88,6 +88,31 @@ class PurchaseTicketActivity : AppCompatActivity() {
     }
 
     private fun initViewStates() {
+        viewModel.state.layoutAmountVisible.onEach { state ->
+            binding.layoutAmount.visibility = state
+        }.launchIn(lifecycleScope)
+
+        viewModel.state.buttonPurchaseEnabled.combine(
+            viewModel.state.selectedEvent
+        ) { stateEnabled, stateEvent ->
+            if (stateEvent != null) {
+                binding.btnPurchase.isEnabled = stateEnabled && (stateEvent.available > 0)
+            }
+        }.launchIn(lifecycleScope)
+
+        viewModel.state.dialogLoadingVisible.onEach { state ->
+            loadingDialog?.dismiss()
+            loadingDialog = MaterialAlertDialogBuilder(this)
+                .setTitle("Purchasing")
+                .setView(R.layout.dialog_loading)
+                .setCancelable(false)
+                .create()
+
+            if (state) {
+                loadingDialog?.show()
+            }
+        }.launchIn(lifecycleScope)
+
         viewModel.state.selectedEvent.filterNotNull().onEach { state ->
             binding.tvAmountAvailable.text = "${state.available} of ${state.amount}"
             binding.collapsingToolbar.title = state.name

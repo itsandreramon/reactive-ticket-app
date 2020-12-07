@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele
+ * Copyright 2020 - André Thiele, Allan Fodi, Hüseyin Celik, Bertin Junior Wagueu Nkepgang
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
@@ -31,8 +31,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigation() {
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+
         val navController = navHostFragment.navController
         findViewById<BottomNavigationView>(R.id.bottom_nav_view)
             .setupWithNavController(navController)
