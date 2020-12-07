@@ -1,19 +1,19 @@
 /*
- * Copyright 2020 - André Thiele
+ * Copyright 2020 - André Thiele, Allan Fodi, Hüseyin Celik, Bertin Junior Wagueu Nkepgang
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
  */
 
-package com.saqs.app
+package com.saqs.app.util
 
-import com.saqs.app.util.round
-import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import org.junit.Test
 
-class ExampleUnitTest : FunSpec({
+class MathTest {
 
-    test("round") {
+    @Test
+    fun round() {
         val given = 3.14159265359
         val expected = 3.14
 
@@ -22,7 +22,8 @@ class ExampleUnitTest : FunSpec({
         actual shouldBe expected
     }
 
-    test("roundFraction") {
+    @Test
+    fun roundFraction() {
         val given = 0.711245
         val expected = 0.71
 
@@ -31,7 +32,8 @@ class ExampleUnitTest : FunSpec({
         actual shouldBe expected
     }
 
-    test("roundNegative") {
+    @Test
+    fun roundNegative() {
         val given = -3.14159265359
         val expected = -3.14
 
@@ -39,4 +41,4 @@ class ExampleUnitTest : FunSpec({
 
         actual shouldBe expected
     }
-})
+}

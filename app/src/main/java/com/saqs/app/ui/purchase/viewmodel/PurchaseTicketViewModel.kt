@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele
+ * Copyright 2020 - André Thiele, Allan Fodi, Hüseyin Celik, Bertin Junior Wagueu Nkepgang
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
@@ -16,11 +16,10 @@ import com.saqs.app.data.tickets.TicketsRepository
 import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.purchase.PurchaseTicketActivity
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffect
-import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.NavigateExploreEffect
-import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.ShowErrorDialogEffect
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEvent
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
-import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.InitState
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.Init
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewState
 import com.saqs.app.ui.purchase.model._PurchaseTicketViewEffect
 import com.saqs.app.ui.purchase.model._PurchaseTicketViewState
@@ -45,19 +44,17 @@ class PurchaseTicketViewModel @ViewModelInject constructor(
         fragment.attachViewEvents(this)
     }
 
-    init {
+    override fun init(event: Init) {
+        eventsRepository.getById(event.eventId).onEach {
+            _state._selectedEvent.value = it
+        }.launchIn(viewModelScope)
+
         state.selectedEvent.filterNotNull().onEach {
             _state._layoutAmountVisible.value = if (it.available > 0) {
                 View.VISIBLE
             } else {
                 View.INVISIBLE
             }
-        }.launchIn(viewModelScope)
-    }
-
-    override fun initState(event: InitState) {
-        eventsRepository.getById(event.eventId).onEach {
-            _state._selectedEvent.value = it
         }.launchIn(viewModelScope)
     }
 
@@ -76,12 +73,12 @@ class PurchaseTicketViewModel @ViewModelInject constructor(
                         }
                         _state._dialogLoadingVisible.value = false
                         _state._buttonPurchaseEnabled.value = true
-                        _effect._navigateExplore.emit(NavigateExploreEffect)
+                        _effect._navigateExplore.emit(PurchaseTicketViewEffectType.NavigateExploreEffect)
                     }
                     is Result.Error -> {
                         _state._dialogLoadingVisible.value = false
                         _state._buttonPurchaseEnabled.value = true
-                        _effect._showErrorDialog.emit(ShowErrorDialogEffect)
+                        _effect._showErrorDialog.emit(PurchaseTicketViewEffectType.ShowErrorDialogEffect)
                     }
                 }
             }

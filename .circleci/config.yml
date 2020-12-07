@@ -15,7 +15,7 @@ download_dependencies: &download_dependencies
     name: Download dependencies
     command: |
       sudo chmod +x ./gradlew
-      ./gradlew androidDependencies
+      ./gradlew --max-workers 2 androidDependencies
 
 jobs:
   build:

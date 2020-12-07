@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele
+ * Copyright 2020 - André Thiele, Allan Fodi, Hüseyin Celik, Bertin Junior Wagueu Nkepgang
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
@@ -18,7 +18,7 @@ import com.saqs.app.R
 import com.saqs.app.databinding.ActivityPurchaseTicketBinding
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEvent
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
-import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.InitState
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.Init
 import com.saqs.app.ui.purchase.viewmodel.PurchaseTicketViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.combine
@@ -49,7 +49,7 @@ class PurchaseTicketActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        viewEvent.initState(InitState(args.eventId))
+        viewEvent.init(Init(args.eventId))
         initViewStates()
         initViewEffects()
 

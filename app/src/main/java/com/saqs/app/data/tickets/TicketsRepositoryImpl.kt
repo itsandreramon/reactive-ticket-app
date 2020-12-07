@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele
+ * Copyright 2020 - André Thiele, Allan Fodi, Hüseyin Celik, Bertin Junior Wagueu Nkepgang
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
@@ -23,7 +23,7 @@ class TicketsRepositoryImpl(
         ticketsLocalDataSource.insert(ticket)
     }
 
-    override fun observeAll() = channelFlow<Lce<List<Ticket>>> {
+    override fun getAll() = channelFlow<Lce<List<Ticket>>> {
         ticketsLocalDataSource.observeAll()
             .onStart { send(Lce.Loading()) }
             .catch { send(Lce.Error(it)) }

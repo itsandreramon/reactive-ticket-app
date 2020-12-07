@@ -10,7 +10,6 @@ buildscript {
         desugar_version = "1.0.9"
         spotless_version = "5.8.2"
         coroutines_version = "1.4.1"
-        datastore_version = "1.0.0-alpha04"
         room_version = "2.2.5"
         serialization_version = "1.0.1"
         material_version = "1.2.1"
@@ -28,6 +27,7 @@ buildscript {
         kotest_version = "4.3.1"
         mockk_version = "1.10.2"
         google_play_version = "4.3.4"
+        turbine_version = "0.3.0"
     }
 
     repositories {
@@ -69,7 +69,7 @@ subprojects {
         kotlin {
             ktlint()
             target "**/*.kt"
-            licenseHeaderFile project.rootProject.file('spotless/copyright.kt')
+            licenseHeaderFile rootProject.file('spotless/copyright.kt')
         }
     }
 
