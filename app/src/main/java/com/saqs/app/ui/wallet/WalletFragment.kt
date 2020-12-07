@@ -20,7 +20,6 @@ import com.saqs.app.databinding.FragmentWalletBinding
 import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.wallet.adapter.TicketItemAdapter
 import com.saqs.app.ui.wallet.model.WalletViewEvent
-import com.saqs.app.ui.wallet.model.WalletViewEventType
 import com.saqs.app.ui.wallet.model.WalletViewEventType.Init
 import com.saqs.app.ui.wallet.viewmodel.WalletViewModel
 import dagger.hilt.android.AndroidEntryPoint
