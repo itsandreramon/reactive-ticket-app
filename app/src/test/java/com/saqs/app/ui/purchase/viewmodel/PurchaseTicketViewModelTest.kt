@@ -23,14 +23,14 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import java.util.concurrent.Executors
+import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
-import java.util.concurrent.Executors
-import kotlin.time.ExperimentalTime
 
 class PurchaseTicketViewModelTest : AnnotationSpec() {
 
