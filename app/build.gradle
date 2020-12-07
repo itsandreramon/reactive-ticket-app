@@ -6,7 +6,6 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs'
     id 'com.google.gms.google-services'
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.20'
 }
 
 android {
@@ -32,9 +31,11 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
+            testCoverageEnabled true
         }
         release {
             minifyEnabled false
+            testCoverageEnabled true
         }
     }
 
