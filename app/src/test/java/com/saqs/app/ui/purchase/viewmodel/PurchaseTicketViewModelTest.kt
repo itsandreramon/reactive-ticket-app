@@ -23,38 +23,36 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.Executors
 import kotlin.time.ExperimentalTime
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 
-class PurchaseTicketViewModelTest : AnnotationSpec() {
+class PurchaseTicketViewModelTest {
 
     private val eventsRepository = mockk<EventsRepository>()
     private val ticketsRepository = mockk<TicketsRepository>()
 
-    private lateinit var purchaseTicketViewModel: PurchaseTicketViewModel
-    private val mainThreadSurrogate = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+    private lateinit  var purchaseTicketViewModel: PurchaseTicketViewModel
+
+    @get:Rule val coroutineRule = MainCoroutineRule()
 
     @Before
     fun setupViewModel() {
-        Dispatchers.setMain(mainThreadSurrogate)
         purchaseTicketViewModel = PurchaseTicketViewModel(eventsRepository, ticketsRepository)
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-        mainThreadSurrogate.close()
     }
 
     @Test
     @ExperimentalTime
-    fun viewModelCorrectlySetsSelectedItem() = runBlockingTest {
+    fun viewModelCorrectlySetsSelectedItem() = coroutineRule.runBlockingTest {
         // Given
         val event = Event(id = "2", amount = 10, available = 10)
 
@@ -67,13 +65,13 @@ class PurchaseTicketViewModelTest : AnnotationSpec() {
 
         // Then
         purchaseTicketViewModel.state.selectedEvent.test {
-            event shouldBe expectItem()
+            expectItem() shouldBe event
         }
     }
 
     @Test
     @ExperimentalTime
-    fun viewModelCorrectlyBooksAnEvent() = runBlockingTest {
+    fun viewModelCorrectlyBooksAnEvent() = coroutineRule.runBlockingTest {
         // Given
         val event = Event(id = "2", amount = 10, available = 10)
         val ticket = Ticket(eventId = "2")
