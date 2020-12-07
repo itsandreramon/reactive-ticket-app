@@ -38,10 +38,10 @@ class EventItemViewHolder(
 
     private fun determineColorByPercentage(percentage: Double): Int {
         return when (percentage) {
-            in 0.5..1.0 -> {
+            in 0.1..1.0 -> {
                 ContextCompat.getColor(context, R.color.green)
             }
-            in 0.25..0.5 -> {
+            in 0.05..0.1 -> {
                 ContextCompat.getColor(context, R.color.yellow)
             }
             else -> {
