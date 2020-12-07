@@ -1,5 +1,13 @@
+/*
+ * Copyright 2020 - André Thiele
+ *
+ * Department of Computer Science and Media
+ * University of Applied Sciences Brandenburg
+ */
+
 package com.saqs.app
 
+import kotlin.coroutines.ContinuationInterceptor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -7,7 +15,6 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
-import kotlin.coroutines.ContinuationInterceptor
 
 class MainCoroutineRule : TestWatcher(), TestCoroutineScope by TestCoroutineScope() {
 

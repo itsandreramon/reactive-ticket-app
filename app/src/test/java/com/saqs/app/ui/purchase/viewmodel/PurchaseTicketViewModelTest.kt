@@ -35,7 +35,7 @@ class PurchaseTicketViewModelTest {
     private val eventsRepository = mockk<EventsRepository>()
     private val ticketsRepository = mockk<TicketsRepository>()
 
-    private lateinit  var purchaseTicketViewModel: PurchaseTicketViewModel
+    private lateinit var purchaseTicketViewModel: PurchaseTicketViewModel
 
     @get:Rule val mainCoroutineRule = MainCoroutineRule()
 
