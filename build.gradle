@@ -69,7 +69,7 @@ subprojects {
         kotlin {
             ktlint()
             target "**/*.kt"
-            licenseHeaderFile project.rootProject.file('spotless/copyright.kt')
+            licenseHeaderFile rootProject.file('spotless/copyright.kt')
         }
     }
 
