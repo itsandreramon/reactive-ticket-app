@@ -108,7 +108,7 @@ class PurchaseTicketActivity : AppCompatActivity() {
         }.launchIn(lifecycleScope)
 
         viewModel.state.selectedEvent.filterNotNull().onEach { state ->
-            binding.tvAmountAvailable.text = "${state.available} of ${state.amount}"
+            binding.tvAmountAvailable.text = "${state.available} of ${state.amount} (${state.availableTicketsPercentage}%)"
             binding.collapsingToolbar.title = state.name
 
             binding.numberPickerAmount.apply {
@@ -116,9 +116,9 @@ class PurchaseTicketActivity : AppCompatActivity() {
                 minValue = 1
             }
 
-            binding.progressBar.progress = floor(state.availableTicketsPercentage * 100).toInt()
+            binding.progressBar.progress = floor(state.availableTicketsPercentage).toInt()
             binding.progressBar.progressTintList = ContextCompat.getColorStateList(
-                this, state.availableTicketsColor.color
+                this, state.availabilityColor.color
             )
         }.launchIn(lifecycleScope)
     }
