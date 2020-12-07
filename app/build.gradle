@@ -58,6 +58,7 @@ android {
     testOptions {
         unitTests.all {
             useJUnitPlatform()
+            maxHeapSize = "1024m"
         }
     }
 }
