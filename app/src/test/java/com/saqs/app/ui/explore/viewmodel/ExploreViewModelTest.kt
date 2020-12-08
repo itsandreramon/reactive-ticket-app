@@ -7,7 +7,6 @@
 
 package com.saqs.app.ui.explore.viewmodel
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
 import com.saqs.app.MainCoroutineRule
 import com.saqs.app.data.events.EventsRepository
