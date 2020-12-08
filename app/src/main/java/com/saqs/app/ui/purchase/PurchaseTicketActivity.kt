@@ -79,6 +79,14 @@ class PurchaseTicketActivity : AppCompatActivity() {
                 .setNegativeButton("Cancel") { _, _ -> }
                 .show()
         }.launchIn(lifecycleScope)
+
+        viewModel.effect.showErrorDialog.onEach { effect ->
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Error")
+                .setMessage("An error occurred while purchasing this ticket.")
+                .setNegativeButton("Cancel") { _, _ -> }
+                .show()
+        }.launchIn(lifecycleScope)
     }
 
     private fun initViewStates() {
