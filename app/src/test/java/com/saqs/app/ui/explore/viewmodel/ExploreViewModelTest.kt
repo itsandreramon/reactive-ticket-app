@@ -71,7 +71,7 @@ class ExploreViewModelTest {
         launch {
             exploreViewModel.effect.purchaseTicket.take(1).collect { effect ->
                 effect shouldBe expected
-                cancel() // would never complete
+                cancel() // cancel shared flow manually
             }
         }
 
