@@ -11,6 +11,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -21,6 +22,7 @@ import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.Init
 import com.saqs.app.ui.purchase.viewmodel.PurchaseTicketViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.floor
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
@@ -114,13 +116,23 @@ class PurchaseTicketActivity : AppCompatActivity() {
         }.launchIn(lifecycleScope)
 
         viewModel.state.selectedEvent.filterNotNull().onEach { state ->
-            binding.tvAmountAvailable.text = "${state.available} of ${state.amount}"
+            binding.tvAmountAvailable.text = if (state.available > 0) {
+                "${state.available} of ${state.amount} (${state.availableTicketsPercentage}%)"
+            } else {
+                "Sold out!"
+            }
+
             binding.collapsingToolbar.title = state.name
 
             binding.numberPickerAmount.apply {
                 maxValue = state.available
                 minValue = 1
             }
+
+            binding.progressBar.progress = floor(state.availableTicketsPercentage).toInt()
+            binding.progressBar.progressTintList = ContextCompat.getColorStateList(
+                this, state.availabilityColor.color
+            )
         }.launchIn(lifecycleScope)
     }
 }

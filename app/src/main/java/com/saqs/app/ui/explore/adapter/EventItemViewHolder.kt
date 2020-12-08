@@ -10,11 +10,11 @@ package com.saqs.app.ui.explore.adapter
 import android.content.Context
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.saqs.app.R
 import com.saqs.app.databinding.ViewHolderEventItemBinding
 import com.saqs.app.domain.Event
 import com.saqs.app.extensions.loadImageElsePlaceholder
 import com.saqs.app.util.DateUtils
+import com.saqs.app.util.EventAvailabilityHighlighterImpl
 
 class EventItemViewHolder(
     private val context: Context,
@@ -37,16 +37,9 @@ class EventItemViewHolder(
     }
 
     private fun determineColorByPercentage(percentage: Double): Int {
-        return when (percentage) {
-            in 0.1..1.0 -> {
-                ContextCompat.getColor(context, R.color.green)
-            }
-            in 0.05..0.1 -> {
-                ContextCompat.getColor(context, R.color.yellow)
-            }
-            else -> {
-                ContextCompat.getColor(context, R.color.red)
-            }
-        }
+        return ContextCompat.getColor(
+            context,
+            EventAvailabilityHighlighterImpl().computeAvailabilityColor(percentage).color
+        )
     }
 }
