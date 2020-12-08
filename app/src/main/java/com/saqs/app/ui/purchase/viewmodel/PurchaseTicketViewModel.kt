@@ -8,6 +8,7 @@
 package com.saqs.app.ui.purchase.viewmodel
 
 import android.view.View
+import androidx.annotation.VisibleForTesting
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -45,16 +46,24 @@ class PurchaseTicketViewModel @ViewModelInject constructor(
     }
 
     override fun init(event: Init) {
-        eventsRepository.getById(event.eventId).onEach {
-            _state._selectedEvent.value = it
-        }.launchIn(viewModelScope)
+        observeEventById(event)
+        setAvailabilityState()
+    }
 
+    private fun setAvailabilityState() {
         state.selectedEvent.filterNotNull().onEach {
             _state._layoutAmountVisible.value = if (it.available > 0) {
                 View.VISIBLE
             } else {
                 View.INVISIBLE
             }
+        }.launchIn(viewModelScope)
+    }
+
+    @VisibleForTesting
+    internal fun observeEventById(event: Init) {
+        eventsRepository.getById(event.eventId).onEach {
+            _state._selectedEvent.value = it
         }.launchIn(viewModelScope)
     }
 

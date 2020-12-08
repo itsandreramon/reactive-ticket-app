@@ -8,6 +8,7 @@
 package com.saqs.app.ui.explore.viewmodel
 
 import android.view.View
+import androidx.annotation.VisibleForTesting
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,6 +18,7 @@ import com.saqs.app.ui.explore.model.ExploreViewEffect
 import com.saqs.app.ui.explore.model.ExploreViewEffectType.PurchaseTicketEffect
 import com.saqs.app.ui.explore.model.ExploreViewEffectType.SetProgressBarState
 import com.saqs.app.ui.explore.model.ExploreViewEvent
+import com.saqs.app.ui.explore.model.ExploreViewEventType.Init
 import com.saqs.app.ui.explore.model.ExploreViewEventType.NavigateEventItem
 import com.saqs.app.ui.explore.model.ExploreViewState
 import com.saqs.app.ui.explore.model._ExploreViewEffect
@@ -39,11 +41,17 @@ class ExploreViewModel @ViewModelInject constructor(
     private val _effect = _ExploreViewEffect()
     val effect = ExploreViewEffect(_effect)
 
-    init {
-        viewModelScope.launch {
-            eventsRepository.getAllRemote().collect()
-        }
+    fun attachEvents(fragment: ExploreFragment) {
+        fragment.attachViewEvents(this)
+    }
 
+    override fun init(event: Init) {
+        observeEventsRemote()
+        observeEvents()
+    }
+
+    @VisibleForTesting
+    internal fun observeEvents() {
         eventsRepository.getAll().onEach { lce ->
             when (lce) {
                 is Lce.Loading -> {
@@ -62,8 +70,11 @@ class ExploreViewModel @ViewModelInject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun attachEvents(fragment: ExploreFragment) {
-        fragment.attachViewEvents(this)
+    @VisibleForTesting
+    internal fun observeEventsRemote() {
+        viewModelScope.launch {
+            eventsRepository.getAllRemote().collect()
+        }
     }
 
     override fun navigateEventItem(event: NavigateEventItem) {
