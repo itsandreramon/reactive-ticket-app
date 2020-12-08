@@ -12,12 +12,18 @@ import app.cash.turbine.test
 import com.saqs.app.MainCoroutineRule
 import com.saqs.app.data.events.EventsRepository
 import com.saqs.app.domain.Event
+import com.saqs.app.ui.explore.model.ExploreViewEffectType.PurchaseTicketEffect
+import com.saqs.app.ui.explore.model.ExploreViewEventType.NavigateEventItem
 import com.saqs.app.util.Lce
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import kotlin.time.ExperimentalTime
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
@@ -58,5 +64,20 @@ class ExploreViewModelTest {
         exploreViewModel.state.events.test {
             expectItem() shouldBe expected
         }
+    }
+
+    @Test
+    fun navigatePurchaseTicketEventEmitsNavigateEffect() = coroutineRule.runBlockingTest {
+        val expected = PurchaseTicketEffect(eventId = "2")
+
+        launch {
+            exploreViewModel.effect.purchaseTicket.take(1).collect { effect ->
+                cancel()
+
+                effect shouldBe expected
+            }
+        }
+
+        exploreViewModel.navigateEventItem(NavigateEventItem(Event(id = "2")))
     }
 }
