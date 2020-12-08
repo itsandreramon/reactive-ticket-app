@@ -50,8 +50,7 @@ class WalletViewModel @ViewModelInject constructor(
                 .mapNotNull { ticket ->
                     events.firstOrNull { event -> ticket.eventId == event.id }
                         ?.let { event ->
-                            val amountTicketsForEvent =
-                                tickets.count { it.eventId == event.id }
+                            val amountTicketsForEvent = tickets.count { it.eventId == event.id }
                             TicketWithEvent(ticket, event, amountTicketsForEvent)
                         }
                 }

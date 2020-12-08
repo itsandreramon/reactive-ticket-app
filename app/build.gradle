@@ -31,11 +31,9 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
-            testCoverageEnabled true
         }
         release {
             minifyEnabled false
-            testCoverageEnabled true
         }
     }
 

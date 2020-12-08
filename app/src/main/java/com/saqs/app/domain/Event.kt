@@ -7,13 +7,16 @@
 
 package com.saqs.app.domain
 
+import androidx.annotation.ColorRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.google.firebase.Timestamp
+import com.saqs.app.R
 import com.saqs.app.db.Converters
+import com.saqs.app.util.EventAvailabilityHighlighterImpl
 import com.saqs.app.util.round
 
 @Entity(
@@ -39,7 +42,18 @@ data class Event(
     val availableTicketsPercentage: Double
         get() = available.toDouble()
             .div(amount.toDouble())
+            .times(100)
             .round(2)
+
+    val availabilityColor: AvailabilityColor
+        get() = EventAvailabilityHighlighterImpl().computeAvailabilityColor(availableTicketsPercentage)
+}
+
+sealed class AvailabilityColor(@ColorRes val color: Int) {
+    object Green : AvailabilityColor(R.color.green)
+    object Yellow : AvailabilityColor(R.color.yellow)
+    object Red : AvailabilityColor(R.color.red)
+    object Unknown : AvailabilityColor(R.color.grey)
 }
 
 class EventDiffCallback : DiffUtil.ItemCallback<Event>() {
