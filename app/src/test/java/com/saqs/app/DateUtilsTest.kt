@@ -1,3 +1,10 @@
+/*
+ * Copyright 2020 - André Thiele, Allan Fodi, Hüseyin Celik, Bertin Junior Wagueu Nkepgang
+ *
+ * Department of Computer Science and Media
+ * University of Applied Sciences Brandenburg
+ */
+
 package com.saqs.app
 
 import com.saqs.app.util.DateUtils.fromTimestamp
@@ -13,7 +20,6 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
 
-
 class DateUtilsTest : FunSpec({
     test("toLocalFormattedDateTest") {
         val zoneId = ZoneId.of("Europe/Berlin")
@@ -27,7 +33,7 @@ class DateUtilsTest : FunSpec({
 
     test("toUtcStringTest") {
         val zoneId = ZoneId.of("Europe/Berlin")
-        val date = ZonedDateTime.of(2020,12,6,13,0,0,0,zoneId)
+        val date = ZonedDateTime.of(2020, 12, 6, 13, 0, 0, 0, zoneId)
 
         val expected = DateTimeFormatter
                 .ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
@@ -38,9 +44,9 @@ class DateUtilsTest : FunSpec({
         actual shouldBe expected
     }
 
-    test("fromUtcStringTest"){
+    test("fromUtcStringTest") {
         val zoneId = ZoneId.of("Europe/Berlin")
-        val expected = ZonedDateTime.of(2020,12,6,13,0,0,0,zoneId)
+        val expected = ZonedDateTime.of(2020, 12, 6, 13, 0, 0, 0, zoneId)
 
         val expectedAsString = DateTimeFormatter
                 .ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
@@ -51,11 +57,10 @@ class DateUtilsTest : FunSpec({
         actual shouldBe expected.toInstant()
     }
 
-    test("fromTimestampTest"){
-        val timestamp = com.google.firebase.Timestamp(Date(2020,12,6,14,13,50))
+    test("fromTimestampTest") {
+        val timestamp = com.google.firebase.Timestamp(Date(2020, 12, 6, 14, 13, 50))
         val actual = fromTimestamp(timestamp)
         val expected = timestamp.toDate().toInstant()
         actual shouldBe expected
     }
-
 })
