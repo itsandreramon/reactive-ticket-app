@@ -18,8 +18,11 @@ class EventAvailabilityHighlighterImpl : EventAvailabilityHighlighter {
             in 5.0..10.0 -> {
                 AvailabilityColor.Yellow
             }
-            else -> {
+            in 0.0..5.0 -> {
                 AvailabilityColor.Red
+            }
+            else -> {
+                AvailabilityColor.Unknown
             }
         }
     }

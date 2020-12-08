@@ -53,6 +53,7 @@ sealed class AvailabilityColor(@ColorRes val color: Int) {
     object Green : AvailabilityColor(R.color.green)
     object Yellow : AvailabilityColor(R.color.yellow)
     object Red : AvailabilityColor(R.color.red)
+    object Unknown : AvailabilityColor(R.color.grey)
 }
 
 class EventDiffCallback : DiffUtil.ItemCallback<Event>() {

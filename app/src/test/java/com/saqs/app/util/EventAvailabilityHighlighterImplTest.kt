@@ -51,12 +51,24 @@ class EventAvailabilityHighlighterImplTest {
     }
 
     @Test
-    fun correctlyDeterminesRedAvailabilityWhenInvalid() {
+    fun correctlyDeterminesUnknownAvailabilityWhenLessThanZero() {
         // Given
-        val expected = AvailabilityColor.Red
+        val expected = AvailabilityColor.Unknown
 
         // When
         val actual = Event(amount = 100, available = -1).availabilityColor
+
+        // Then
+        actual shouldBe expected
+    }
+
+    @Test
+    fun correctlyDeterminesUnknownAvailabilityWhenMoreThanHundred() {
+        // Given
+        val expected = AvailabilityColor.Unknown
+
+        // When
+        val actual = Event(amount = 100, available = 101).availabilityColor
 
         // Then
         actual shouldBe expected

@@ -11,4 +11,5 @@
     <color name="green">@android:color/holo_green_light</color>
     <color name="red">@android:color/holo_red_light</color>
     <color name="yellow">@android:color/holo_orange_light</color>
+    <color name="grey">@color/color_on_surface_emphasis_medium</color>
 </resources>
