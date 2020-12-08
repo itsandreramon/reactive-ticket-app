@@ -12,9 +12,11 @@ import com.saqs.app.ui.explore.model.ExploreViewEventType.NavigateEventItem
 import com.saqs.app.util.ViewEvent
 
 interface ExploreViewEvent : ViewEvent {
+    fun init(event: ExploreViewEventType.Init)
     fun navigateEventItem(event: NavigateEventItem)
 }
 
 sealed class ExploreViewEventType {
+    object Init : ExploreViewEventType()
     data class NavigateEventItem(val eventItem: Event) : ExploreViewEventType()
 }

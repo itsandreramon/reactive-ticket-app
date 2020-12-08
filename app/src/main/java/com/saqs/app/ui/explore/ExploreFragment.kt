@@ -22,6 +22,7 @@ import com.saqs.app.domain.Event
 import com.saqs.app.ui.explore.ExploreFragmentDirections.actionExploreFragmentToPurchaseTicketActivity
 import com.saqs.app.ui.explore.adapter.EventItemAdapter
 import com.saqs.app.ui.explore.model.ExploreViewEvent
+import com.saqs.app.ui.explore.model.ExploreViewEventType.Init
 import com.saqs.app.ui.explore.model.ExploreViewEventType.NavigateEventItem
 import com.saqs.app.ui.explore.viewmodel.ExploreViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,6 +58,7 @@ class ExploreFragment : Fragment(), EventItemAdapter.EventItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewEvent.init(Init)
         setupEventItemAdapter()
         initViewEffects()
         initViewStates()
