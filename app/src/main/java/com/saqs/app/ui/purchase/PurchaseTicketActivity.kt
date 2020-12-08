@@ -108,7 +108,12 @@ class PurchaseTicketActivity : AppCompatActivity() {
         }.launchIn(lifecycleScope)
 
         viewModel.state.selectedEvent.filterNotNull().onEach { state ->
-            binding.tvAmountAvailable.text = "${state.available} of ${state.amount} (${state.availableTicketsPercentage}%)"
+            binding.tvAmountAvailable.text = if (state.available > 0) {
+                "${state.available} of ${state.amount} (${state.availableTicketsPercentage}%)"
+            } else {
+                "Sold out!"
+            }
+
             binding.collapsingToolbar.title = state.name
 
             binding.numberPickerAmount.apply {
