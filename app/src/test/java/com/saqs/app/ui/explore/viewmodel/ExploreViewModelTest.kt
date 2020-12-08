@@ -36,8 +36,6 @@ class ExploreViewModelTest {
 
     @get:Rule val coroutineRule = MainCoroutineRule()
 
-    @get:Rule val instantExecutorRule = InstantTaskExecutorRule()
-
     @Before
     fun setupViewModel() {
         exploreViewModel = ExploreViewModel(eventsRepository)
@@ -72,9 +70,8 @@ class ExploreViewModelTest {
 
         launch {
             exploreViewModel.effect.purchaseTicket.take(1).collect { effect ->
-                cancel()
-
                 effect shouldBe expected
+                cancel() // would never complete
             }
         }
 
