@@ -54,4 +54,5 @@ jobs:
           path: app/build/test-results
       - run:
           name: Check code-coverage
-          command: ./gradlew clean jacocoTestReport
+          command: ./gradlew clean testDebugUnitTestCoverage
+      - <<: *upload_code_coverage
