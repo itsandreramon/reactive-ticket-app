@@ -1,0 +1,27 @@
+/*
+ * Copyright 2020 - André Thiele, Allan Fodi, Hüseyin Celik, Bertin Junior Wagueu Nkepgang
+ *
+ * Department of Computer Science and Media
+ * University of Applied Sciences Brandenburg
+ */
+
+package com.saqs.app.data
+
+import java.util.concurrent.Executors
+import javax.inject.Inject
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
+
+data class CoroutinesDispatcherProvider(
+    val main: CoroutineDispatcher,
+    val io: CoroutineDispatcher,
+    val db: CoroutineDispatcher
+) {
+    @Inject
+    constructor() : this(
+        main = Dispatchers.Main,
+        io = Dispatchers.IO,
+        db = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+    )
+}

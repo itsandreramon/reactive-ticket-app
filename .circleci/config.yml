@@ -1,0 +1,57 @@
+version: 2
+
+restore_cache: &restore_cache
+  restore_cache:
+    key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+
+save_cache: &save_cache
+  save_cache:
+    paths:
+      - ~/.gradle
+    key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+
+download_dependencies: &download_dependencies
+  run:
+    name: Download dependencies
+    command: |
+      sudo chmod +x ./gradlew
+      ./gradlew --max-workers 2 androidDependencies
+
+upload_code_coverage: &upload_code_coverage
+  run:
+    name: Upload code-coverage
+    command: |
+      bash <(curl -s https://codecov.io/bash)
+
+jobs:
+  build:
+    working_directory: ~/app
+    docker:
+      - image: circleci/android:api-30 # builds using Java 11
+    environment:
+      JAVA_TOOL_OPTIONS: "-Xmx1024m"
+    steps:
+      - checkout
+      - <<: *restore_cache
+      - <<: *download_dependencies
+      - run:
+          name: Run lint
+          command: ./gradlew app:lintDebug
+      - run:
+          name: Check code style
+          command: ./gradlew spotlessCheck
+      - run:
+          name: Assemble debug
+          command: ./gradlew assembleDebug --scan --stacktrace
+      - <<: *save_cache
+      - run:
+          name: Run Tests
+          command: ./gradlew lint test
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
+      - store_test_results:
+          path: app/build/test-results
+      - run:
+          name: Check code-coverage
+          command: ./gradlew clean jacocoTestReport
