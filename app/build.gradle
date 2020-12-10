@@ -8,8 +8,9 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+apply from: "../jacoco.gradle"
+
 android {
-    buildToolsVersion "30.0.2"
     compileSdkVersion buildConfig.compileSdk
 
     defaultConfig {
@@ -30,6 +31,7 @@ android {
 
     buildTypes {
         debug {
+            testCoverageEnabled true
             applicationIdSuffix ".debug"
         }
         release {
@@ -57,7 +59,6 @@ android {
     testOptions {
         unitTests.all {
             useJUnitPlatform()
-            maxHeapSize = "1024m"
         }
     }
 }

@@ -18,6 +18,8 @@ import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.purchase.PurchaseTicketActivity
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.NavigateExploreEffect
+import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.ShowErrorDialogEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEvent
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.BuyTicket
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEventType.Init
@@ -82,12 +84,12 @@ class PurchaseTicketViewModel @ViewModelInject constructor(
                         }
                         _state._dialogLoadingVisible.value = false
                         _state._buttonPurchaseEnabled.value = true
-                        _effect._navigateExplore.emit(PurchaseTicketViewEffectType.NavigateExploreEffect)
+                        _effect._navigateExplore.emit(NavigateExploreEffect)
                     }
                     is Result.Error -> {
                         _state._dialogLoadingVisible.value = false
                         _state._buttonPurchaseEnabled.value = true
-                        _effect._showErrorDialog.emit(PurchaseTicketViewEffectType.ShowErrorDialogEffect)
+                        _effect._showErrorDialog.emit(ShowErrorDialogEffect)
                     }
                 }
             }
