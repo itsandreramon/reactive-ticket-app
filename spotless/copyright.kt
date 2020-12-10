@@ -1,5 +1,5 @@
 /*
- * Copyright $YEAR - André Thiele, Allan Fodi, Hüseyin Celik, Bertin Junior Wagueu Nkepgang
+ * Copyright $YEAR - André Thiele
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
