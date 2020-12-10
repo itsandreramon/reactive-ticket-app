@@ -2,7 +2,7 @@
 
 ### Decrypt API keys
 ```
-$ KEY=secret
+$ export KEY=password
 $ chmod +x decrypt.sh
 $ ./decrypt.sh
 ```
