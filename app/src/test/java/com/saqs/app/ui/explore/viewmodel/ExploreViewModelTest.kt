@@ -43,8 +43,25 @@ class ExploreViewModelTest {
     }
 
     @Test
+    fun `event navigateEventItem emits purchaseTicketEffect`() = coroutinesTestExtension.runBlockingTest {
+            // Given
+            val expected = PurchaseTicketEffect(eventId = "2")
+
+            // Then
+            launch {
+                exploreViewModel!!.effect.purchaseTicket.take(1).collect { effect ->
+                    effect shouldBe expected
+                    cancel() // cancel shared flow manually
+                }
+            }
+
+            // When
+            exploreViewModel!!.navigateEventItem(NavigateEventItem(Event(id = "2")))
+        }
+
+    @Test
     @ExperimentalTime
-    fun stateIsSetCorrectly() = coroutinesTestExtension.runBlockingTest {
+    fun `state events are set`() = coroutinesTestExtension.runBlockingTest {
         // Given
         val expected = listOf(
             Event(id = "1", amount = 10, available = 10),
@@ -63,19 +80,5 @@ class ExploreViewModelTest {
         exploreViewModel!!.state.events.test {
             expectItem() shouldBe expected
         }
-    }
-
-    @Test
-    fun navigatePurchaseTicketEventEmitsNavigateEffect() = coroutinesTestExtension.runBlockingTest {
-        val expected = PurchaseTicketEffect(eventId = "2")
-
-        launch {
-            exploreViewModel!!.effect.purchaseTicket.take(1).collect { effect ->
-                effect shouldBe expected
-                cancel() // cancel shared flow manually
-            }
-        }
-
-        exploreViewModel!!.navigateEventItem(NavigateEventItem(Event(id = "2")))
     }
 }

@@ -27,6 +27,7 @@ import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 
@@ -46,51 +47,59 @@ class PurchaseTicketViewModelTest {
         purchaseTicketViewModel = PurchaseTicketViewModel(eventsRepository, ticketsRepository)
     }
 
-    @Test
-    @ExperimentalTime
-    fun selectedItemStateIsSetCorrectly() = coroutinesTestExtension.runBlockingTest {
-        // Given
-        val event = Event(id = "2", amount = 10, available = 10)
+    @Nested
+    inner class StateTests {
 
-        every {
-            eventsRepository.getById("2")
-        } returns flowOf(event)
+        @Test
+        @ExperimentalTime
+        fun `state selectedItem is set`() = coroutinesTestExtension.runBlockingTest {
+            // Given
+            val event = Event(id = "2", amount = 10, available = 10)
 
-        // When
-        purchaseTicketViewModel!!.init(Init(eventId = "2"))
+            every {
+                eventsRepository.getById("2")
+            } returns flowOf(event)
 
-        // Then
-        purchaseTicketViewModel!!.state.selectedEvent.test {
-            expectItem() shouldBe event
+            // When
+            purchaseTicketViewModel!!.init(Init(eventId = "2"))
+
+            // Then
+            purchaseTicketViewModel!!.state.selectedEvent.test {
+                expectItem() shouldBe event
+            }
         }
     }
 
-    @Test
-    @ExperimentalTime
-    fun bookingAnEventSavesTicket() = coroutinesTestExtension.runBlockingTest {
-        // Given
-        val event = Event(id = "2", amount = 10, available = 10)
-        val ticket = Ticket(eventId = "2")
+    @Nested
+    inner class EventTests {
 
-        every {
-            eventsRepository.getById("2")
-        } returns flowOf(event)
+        @Test
+        @ExperimentalTime
+        fun `event bookEvent inserts ticket`() = coroutinesTestExtension.runBlockingTest {
+            // Given
+            val event = Event(id = "2", amount = 10, available = 10)
+            val ticket = Ticket(eventId = "2")
 
-        coEvery {
-            eventsRepository.bookEventRemote(event, 1)
-        } returns Result.Success((9.0))
+            every {
+                eventsRepository.getById("2")
+            } returns flowOf(event)
 
-        coEvery {
-            ticketsRepository.insert(ticket)
-        } just Runs
+            coEvery {
+                eventsRepository.bookEventRemote(event, 1)
+            } returns Result.Success((9.0))
 
-        // When
-        purchaseTicketViewModel!!.init(Init(eventId = "2"))
-        purchaseTicketViewModel!!.buyTicket(BuyTicket(1))
+            coEvery {
+                ticketsRepository.insert(ticket)
+            } just Runs
 
-        // Then
-        coVerify {
-            ticketsRepository.insert(ticket)
+            // When
+            purchaseTicketViewModel!!.init(Init(eventId = "2"))
+            purchaseTicketViewModel!!.buyTicket(BuyTicket(1))
+
+            // Then
+            coVerify {
+                ticketsRepository.insert(ticket)
+            }
         }
     }
 }
