@@ -8,7 +8,7 @@
 package com.saqs.app.ui.explore.viewmodel
 
 import app.cash.turbine.test
-import com.saqs.app.MainCoroutineRule
+import com.saqs.app.CoroutinesTestExtension
 import com.saqs.app.data.events.EventsRepository
 import com.saqs.app.domain.Event
 import com.saqs.app.ui.explore.model.ExploreViewEffectType.PurchaseTicketEffect
@@ -24,25 +24,27 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 
 class ExploreViewModelTest {
 
     private val eventsRepository = mockk<EventsRepository>()
-    private lateinit var exploreViewModel: ExploreViewModel
+    private var exploreViewModel: ExploreViewModel? = null
 
-    @get:Rule val coroutineRule = MainCoroutineRule()
+    @JvmField
+    @RegisterExtension
+    val coroutinesTestExtension = CoroutinesTestExtension()
 
-    @Before
+    @BeforeEach
     fun setupViewModel() {
         exploreViewModel = ExploreViewModel(eventsRepository)
     }
 
     @Test
     @ExperimentalTime
-    fun stateIsSetCorrectly() = coroutineRule.runBlockingTest {
+    fun stateIsSetCorrectly() = coroutinesTestExtension.runBlockingTest {
         // Given
         val expected = listOf(
             Event(id = "1", amount = 10, available = 10),
@@ -55,25 +57,25 @@ class ExploreViewModelTest {
         } returns flowOf(Lce.Content(expected))
 
         // When
-        exploreViewModel.observeEvents()
+        exploreViewModel!!.observeEvents()
 
         // Then
-        exploreViewModel.state.events.test {
+        exploreViewModel!!.state.events.test {
             expectItem() shouldBe expected
         }
     }
 
     @Test
-    fun navigatePurchaseTicketEventEmitsNavigateEffect() = coroutineRule.runBlockingTest {
+    fun navigatePurchaseTicketEventEmitsNavigateEffect() = coroutinesTestExtension.runBlockingTest {
         val expected = PurchaseTicketEffect(eventId = "2")
 
         launch {
-            exploreViewModel.effect.purchaseTicket.take(1).collect { effect ->
+            exploreViewModel!!.effect.purchaseTicket.take(1).collect { effect ->
                 effect shouldBe expected
                 cancel() // cancel shared flow manually
             }
         }
 
-        exploreViewModel.navigateEventItem(NavigateEventItem(Event(id = "2")))
+        exploreViewModel!!.navigateEventItem(NavigateEventItem(Event(id = "2")))
     }
 }

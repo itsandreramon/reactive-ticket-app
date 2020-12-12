@@ -17,7 +17,6 @@ import com.saqs.app.data.tickets.TicketsRepository
 import com.saqs.app.domain.Ticket
 import com.saqs.app.ui.purchase.PurchaseTicketActivity
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffect
-import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.NavigateExploreEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEffectType.ShowErrorDialogEffect
 import com.saqs.app.ui.purchase.model.PurchaseTicketViewEvent
