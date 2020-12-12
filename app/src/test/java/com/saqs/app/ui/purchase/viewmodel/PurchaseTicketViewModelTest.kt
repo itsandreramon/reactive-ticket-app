@@ -52,20 +52,22 @@ class PurchaseTicketViewModelTest {
 
         @Test
         @ExperimentalTime
-        fun `state selectedItem is set`() = coroutinesTestExtension.runBlockingTest {
-            // Given
-            val event = Event(id = "2", amount = 10, available = 10)
+        fun `state selectedItem is set`() {
+            coroutinesTestExtension.runBlockingTest {
+                // Given
+                val event = Event(id = "2", amount = 10, available = 10)
 
-            every {
-                eventsRepository.getById("2")
-            } returns flowOf(event)
+                every {
+                    eventsRepository.getById("2")
+                } returns flowOf(event)
 
-            // When
-            purchaseTicketViewModel!!.init(Init(eventId = "2"))
+                // When
+                purchaseTicketViewModel!!.init(Init(eventId = "2"))
 
-            // Then
-            purchaseTicketViewModel!!.state.selectedEvent.test {
-                expectItem() shouldBe event
+                // Then
+                purchaseTicketViewModel!!.state.selectedEvent.test {
+                    expectItem() shouldBe event
+                }
             }
         }
     }
@@ -75,30 +77,32 @@ class PurchaseTicketViewModelTest {
 
         @Test
         @ExperimentalTime
-        fun `event bookEvent inserts ticket`() = coroutinesTestExtension.runBlockingTest {
-            // Given
-            val event = Event(id = "2", amount = 10, available = 10)
-            val ticket = Ticket(eventId = "2")
+        fun `event bookEvent inserts ticket`() {
+            coroutinesTestExtension.runBlockingTest {
+                // Given
+                val event = Event(id = "2", amount = 10, available = 10)
+                val ticket = Ticket(eventId = "2")
 
-            every {
-                eventsRepository.getById("2")
-            } returns flowOf(event)
+                every {
+                    eventsRepository.getById("2")
+                } returns flowOf(event)
 
-            coEvery {
-                eventsRepository.bookEventRemote(event, 1)
-            } returns Result.Success((9.0))
+                coEvery {
+                    eventsRepository.bookEventRemote(event, 1)
+                } returns Result.Success((9.0))
 
-            coEvery {
-                ticketsRepository.insert(ticket)
-            } just Runs
+                coEvery {
+                    ticketsRepository.insert(ticket)
+                } just Runs
 
-            // When
-            purchaseTicketViewModel!!.init(Init(eventId = "2"))
-            purchaseTicketViewModel!!.buyTicket(BuyTicket(1))
+                // When
+                purchaseTicketViewModel!!.init(Init(eventId = "2"))
+                purchaseTicketViewModel!!.buyTicket(BuyTicket(1))
 
-            // Then
-            coVerify {
-                ticketsRepository.insert(ticket)
+                // Then
+                coVerify {
+                    ticketsRepository.insert(ticket)
+                }
             }
         }
     }

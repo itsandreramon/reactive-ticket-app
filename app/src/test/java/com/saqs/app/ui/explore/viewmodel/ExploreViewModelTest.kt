@@ -17,6 +17,7 @@ import com.saqs.app.util.Lce
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
@@ -27,7 +28,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
-import kotlin.time.ExperimentalTime
 
 class ExploreViewModelTest {
 
@@ -47,7 +47,7 @@ class ExploreViewModelTest {
     inner class EventTests {
 
         @Test
-        fun `event navigateEventItem emits purchaseTicketEffect`() =
+        fun `event navigateEventItem emits purchaseTicketEffect`() {
             coroutinesTestExtension.runBlockingTest {
                 // Given
                 val expected = PurchaseTicketEffect(eventId = "2")
@@ -63,6 +63,7 @@ class ExploreViewModelTest {
                 // When
                 exploreViewModel!!.navigateEventItem(NavigateEventItem(Event(id = "2")))
             }
+        }
     }
 
     @Nested
@@ -70,24 +71,26 @@ class ExploreViewModelTest {
 
         @Test
         @ExperimentalTime
-        fun `state events are set`() = coroutinesTestExtension.runBlockingTest {
-            // Given
-            val expected = listOf(
-                Event(id = "1", amount = 10, available = 10),
-                Event(id = "2", amount = 20, available = 20),
-                Event(id = "3", amount = 30, available = 30)
-            )
+        fun `state events are set`() {
+            coroutinesTestExtension.runBlockingTest {
+                // Given
+                val expected = listOf(
+                    Event(id = "1", amount = 10, available = 10),
+                    Event(id = "2", amount = 20, available = 20),
+                    Event(id = "3", amount = 30, available = 30)
+                )
 
-            every {
-                eventsRepository.getAll()
-            } returns flowOf(Lce.Content(expected))
+                every {
+                    eventsRepository.getAll()
+                } returns flowOf(Lce.Content(expected))
 
-            // When
-            exploreViewModel!!.observeEvents()
+                // When
+                exploreViewModel!!.observeEvents()
 
-            // Then
-            exploreViewModel!!.state.events.test {
-                expectItem() shouldBe expected
+                // Then
+                exploreViewModel!!.state.events.test {
+                    expectItem() shouldBe expected
+                }
             }
         }
     }
