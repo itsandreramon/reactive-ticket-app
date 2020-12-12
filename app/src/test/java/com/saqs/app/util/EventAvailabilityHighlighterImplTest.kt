@@ -10,7 +10,7 @@ package com.saqs.app.util
 import com.saqs.app.domain.AvailabilityColor
 import com.saqs.app.domain.Event
 import io.kotest.matchers.shouldBe
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class EventAvailabilityHighlighterImplTest {
 

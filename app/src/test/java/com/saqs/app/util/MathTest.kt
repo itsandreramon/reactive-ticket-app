@@ -8,7 +8,7 @@
 package com.saqs.app.util
 
 import io.kotest.matchers.shouldBe
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class MathTest {
 

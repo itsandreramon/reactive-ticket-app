@@ -8,7 +8,7 @@
 package com.saqs.app.ui.purchase.viewmodel
 
 import app.cash.turbine.test
-import com.saqs.app.MainCoroutineRule
+import com.saqs.app.CoroutinesTestExtension
 import com.saqs.app.data.events.EventsRepository
 import com.saqs.app.data.tickets.TicketsRepository
 import com.saqs.app.domain.Event
@@ -26,69 +26,84 @@ import io.mockk.mockk
 import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 
 class PurchaseTicketViewModelTest {
 
     private val eventsRepository = mockk<EventsRepository>()
     private val ticketsRepository = mockk<TicketsRepository>()
 
-    private lateinit var purchaseTicketViewModel: PurchaseTicketViewModel
+    private var purchaseTicketViewModel: PurchaseTicketViewModel? = null
 
-    @get:Rule val coroutineRule = MainCoroutineRule()
+    @JvmField
+    @RegisterExtension
+    val coroutinesTestExtension = CoroutinesTestExtension()
 
-    @Before
+    @BeforeEach
     fun setupViewModel() {
         purchaseTicketViewModel = PurchaseTicketViewModel(eventsRepository, ticketsRepository)
     }
 
-    @Test
-    @ExperimentalTime
-    fun selectedItemStateIsSetCorrectly() = coroutineRule.runBlockingTest {
-        // Given
-        val event = Event(id = "2", amount = 10, available = 10)
+    @Nested
+    inner class StateTests {
 
-        every {
-            eventsRepository.getById("2")
-        } returns flowOf(event)
+        @Test
+        @ExperimentalTime
+        fun `state selectedItem is set`() {
+            coroutinesTestExtension.runBlockingTest {
+                // Given
+                val event = Event(id = "2", amount = 10, available = 10)
 
-        // When
-        purchaseTicketViewModel.init(Init(eventId = "2"))
+                every {
+                    eventsRepository.getById("2")
+                } returns flowOf(event)
 
-        // Then
-        purchaseTicketViewModel.state.selectedEvent.test {
-            expectItem() shouldBe event
+                // When
+                purchaseTicketViewModel!!.init(Init(eventId = "2"))
+
+                // Then
+                purchaseTicketViewModel!!.state.selectedEvent.test {
+                    expectItem() shouldBe event
+                }
+            }
         }
     }
 
-    @Test
-    @ExperimentalTime
-    fun bookingAnEventSavesTicket() = coroutineRule.runBlockingTest {
-        // Given
-        val event = Event(id = "2", amount = 10, available = 10)
-        val ticket = Ticket(eventId = "2")
+    @Nested
+    inner class EventTests {
 
-        every {
-            eventsRepository.getById("2")
-        } returns flowOf(event)
+        @Test
+        @ExperimentalTime
+        fun `event bookEvent inserts ticket`() {
+            coroutinesTestExtension.runBlockingTest {
+                // Given
+                val event = Event(id = "2", amount = 10, available = 10)
+                val ticket = Ticket(eventId = "2")
 
-        coEvery {
-            eventsRepository.bookEventRemote(event, 1)
-        } returns Result.Success((9.0))
+                every {
+                    eventsRepository.getById("2")
+                } returns flowOf(event)
 
-        coEvery {
-            ticketsRepository.insert(ticket)
-        } just Runs
+                coEvery {
+                    eventsRepository.bookEventRemote(event, 1)
+                } returns Result.Success((9.0))
 
-        // When
-        purchaseTicketViewModel.init(Init(eventId = "2"))
-        purchaseTicketViewModel.buyTicket(BuyTicket(1))
+                coEvery {
+                    ticketsRepository.insert(ticket)
+                } just Runs
 
-        // Then
-        coVerify {
-            ticketsRepository.insert(ticket)
+                // When
+                purchaseTicketViewModel!!.init(Init(eventId = "2"))
+                purchaseTicketViewModel!!.buyTicket(BuyTicket(1))
+
+                // Then
+                coVerify {
+                    ticketsRepository.insert(ticket)
+                }
+            }
         }
     }
 }
