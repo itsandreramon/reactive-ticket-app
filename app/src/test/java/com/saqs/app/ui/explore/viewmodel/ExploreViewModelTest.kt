@@ -17,7 +17,6 @@ import com.saqs.app.util.Lce
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
-import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
@@ -25,8 +24,10 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import kotlin.time.ExperimentalTime
 
 class ExploreViewModelTest {
 
@@ -42,43 +43,52 @@ class ExploreViewModelTest {
         exploreViewModel = ExploreViewModel(eventsRepository)
     }
 
-    @Test
-    fun `event navigateEventItem emits purchaseTicketEffect`() = coroutinesTestExtension.runBlockingTest {
-            // Given
-            val expected = PurchaseTicketEffect(eventId = "2")
+    @Nested
+    inner class EventTests {
 
-            // Then
-            launch {
-                exploreViewModel!!.effect.purchaseTicket.take(1).collect { effect ->
-                    effect shouldBe expected
-                    cancel() // cancel shared flow manually
+        @Test
+        fun `event navigateEventItem emits purchaseTicketEffect`() =
+            coroutinesTestExtension.runBlockingTest {
+                // Given
+                val expected = PurchaseTicketEffect(eventId = "2")
+
+                // Then
+                launch {
+                    exploreViewModel!!.effect.purchaseTicket.take(1).collect { effect ->
+                        effect shouldBe expected
+                        cancel() // cancel shared flow manually
+                    }
                 }
+
+                // When
+                exploreViewModel!!.navigateEventItem(NavigateEventItem(Event(id = "2")))
             }
+    }
+
+    @Nested
+    inner class StateTests {
+
+        @Test
+        @ExperimentalTime
+        fun `state events are set`() = coroutinesTestExtension.runBlockingTest {
+            // Given
+            val expected = listOf(
+                Event(id = "1", amount = 10, available = 10),
+                Event(id = "2", amount = 20, available = 20),
+                Event(id = "3", amount = 30, available = 30)
+            )
+
+            every {
+                eventsRepository.getAll()
+            } returns flowOf(Lce.Content(expected))
 
             // When
-            exploreViewModel!!.navigateEventItem(NavigateEventItem(Event(id = "2")))
-        }
+            exploreViewModel!!.observeEvents()
 
-    @Test
-    @ExperimentalTime
-    fun `state events are set`() = coroutinesTestExtension.runBlockingTest {
-        // Given
-        val expected = listOf(
-            Event(id = "1", amount = 10, available = 10),
-            Event(id = "2", amount = 20, available = 20),
-            Event(id = "3", amount = 30, available = 30)
-        )
-
-        every {
-            eventsRepository.getAll()
-        } returns flowOf(Lce.Content(expected))
-
-        // When
-        exploreViewModel!!.observeEvents()
-
-        // Then
-        exploreViewModel!!.state.events.test {
-            expectItem() shouldBe expected
+            // Then
+            exploreViewModel!!.state.events.test {
+                expectItem() shouldBe expected
+            }
         }
     }
 }
