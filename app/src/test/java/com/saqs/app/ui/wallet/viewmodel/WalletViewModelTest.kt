@@ -43,7 +43,7 @@ class WalletViewModelTest {
     }
 
     @Nested
-    inner class EventTests {
+    inner class StateTests {
 
         @Test
         @ExperimentalTime
