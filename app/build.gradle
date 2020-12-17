@@ -111,6 +111,6 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
 }
 
-if (file("google-services.json").exists()) {
+if (file("./google-services.json").exists()) {
     apply plugin: 'com.google.gms.google-services'
 }
