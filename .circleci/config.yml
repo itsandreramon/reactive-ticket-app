@@ -44,6 +44,7 @@ jobs:
     docker:
       - image: circleci/android:api-30 # builds using Java 11
     steps:
+      - checkout
       - run:
           name: Run Tests
           command: ./gradlew testDebugUnitTestCoverage
@@ -51,3 +52,9 @@ jobs:
           branch: [master]
           name: Upload Coverage
           command: bash <(curl -s https://codecov.io/bash)
+
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - test
