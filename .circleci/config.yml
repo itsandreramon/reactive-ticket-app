@@ -17,10 +17,6 @@ download_dependencies: &download_dependencies
       sudo chmod +x ./gradlew
       ./gradlew --max-workers 2 androidDependencies
 
-test:
-  override:
-    - ./gradlew testDebugUnitTestCoverage
-
 jobs:
   build:
     working_directory: ~/app
@@ -44,15 +40,8 @@ jobs:
       - <<: *save_cache
       - run:
           name: Run Tests
-          command: ./gradlew lint test
-      - store_artifacts:
-          path: app/build/reports
-          destination: reports
-      - store_test_results:
-          path: app/build/test-results
-
-deployment:
-  coverage:
-    branch: [master]
-    commands:
-      - bash <(curl -s https://codecov.io/bash)
+          command: ./gradlew testDebugUnitTestCoverage
+      - run:
+          name: Upload Coverage
+          command:
+            - bash <(curl -s https://codecov.io/bash)
