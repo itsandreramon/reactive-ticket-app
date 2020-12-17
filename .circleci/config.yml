@@ -38,10 +38,13 @@ jobs:
           name: Assemble debug
           command: ./gradlew assembleDebug --scan --stacktrace
       - <<: *save_cache
+
+  test:
+    steps:
       - run:
           name: Run Tests
           command: ./gradlew testDebugUnitTestCoverage
       - run:
+          branch: [master]
           name: Upload Coverage
-          command:
-            - bash <(curl -s https://codecov.io/bash)
+          command: bash <(curl -s https://codecov.io/bash)
