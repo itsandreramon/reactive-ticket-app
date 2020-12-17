@@ -17,11 +17,9 @@ download_dependencies: &download_dependencies
       sudo chmod +x ./gradlew
       ./gradlew --max-workers 2 androidDependencies
 
-upload_code_coverage: &upload_code_coverage
-  run:
-    name: Upload code-coverage
-    command: |
-      bash <(curl -s https://codecov.io/bash)
+test:
+  override:
+    - ./gradlew testDebugUnitTestCoverage
 
 jobs:
   build:
@@ -52,7 +50,9 @@ jobs:
           destination: reports
       - store_test_results:
           path: app/build/test-results
-      - run:
-          name: Check code-coverage
-          command: ./gradlew clean testDebugUnitTestCoverage
-      - <<: *upload_code_coverage
+
+deployment:
+  coverage:
+    branch: [master]
+    commands:
+      - bash <(curl -s https://codecov.io/bash)
