@@ -45,9 +45,10 @@ jobs:
       - image: circleci/android:api-30 # builds using Java 11
     steps:
       - checkout
+      - <<: *restore_cache
       - run:
           name: Run Tests
-          command: ./gradlew testDebugUnitTestCoverage
+          command: ./gradlew clean testDebugUnitTestCoverage
       - run:
           branch: [master]
           name: Upload Coverage
