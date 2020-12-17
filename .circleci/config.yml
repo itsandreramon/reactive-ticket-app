@@ -40,6 +40,9 @@ jobs:
       - <<: *save_cache
 
   test:
+    working_directory: ~/app
+    docker:
+      - image: circleci/android:api-30 # builds using Java 11
     steps:
       - run:
           name: Run Tests
